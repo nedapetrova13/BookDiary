@@ -24,4 +24,8 @@
     <ProjectReference Include="..\BookDiary.Models\BookDiary.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
 </Project>
