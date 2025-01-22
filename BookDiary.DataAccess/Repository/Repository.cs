@@ -52,7 +52,7 @@ namespace BookDiary.DataAccess.Repository
 
         public List<T> GetAll()
         {
-            return this.dbSet.;
+            throw new NotImplementedException();
         }
 
         public void Update(T entity)
