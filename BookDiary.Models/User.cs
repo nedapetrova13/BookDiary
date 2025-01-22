@@ -8,5 +8,6 @@ namespace BookDiary.Models
 {
     public class User
     {
+
     }
 }
