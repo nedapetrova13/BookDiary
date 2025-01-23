@@ -7,7 +7,7 @@ using BookDiary.Models;
 
 namespace BookDiary.Core.IServices
 {
-    public interface IShelfBook:IService<ShelfBook>
+    public interface IShelfBookService:IService<ShelfBook>
     {
     }
 }

@@ -1,12 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using BookDiary.Core.IServices;
+using BookDiary.DataAccess.Repository;
+using BookDiary.Models;
 
 namespace BookDiary.Core.Services
 {
-    internal class ShelfBookService
+    public class ShelfBookService : IShelfBookService
     {
+        private readonly IRepository<ShelfBook> _repo;
+        public ShelfBookService(IRepository<ShelfBook> repo)
+        {
+            this._repo = repo;
+        }
+        public void Add(Task entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<ShelfBook> Find(Expression<Func<ShelfBook, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<ShelfBook> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ShelfBook GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(ShelfBook entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
