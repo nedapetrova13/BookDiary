@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BookDiary.DataAccess\BookDiary.DataAccess.csproj" />
     <ProjectReference Include="..\BookDiary.Models\BookDiary.Models.csproj" />
+    <ProjectReference Include="..\BookDiary.Utility\BookDiary.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

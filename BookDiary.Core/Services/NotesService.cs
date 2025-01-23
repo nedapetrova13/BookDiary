@@ -13,33 +13,37 @@ namespace BookDiary.Core.Services
     public class NotesService : INotesService
     {
         private readonly IRepository<Notes> _repo;
-        public NotesService()
-        public void Add(Task entity)
+        public NotesService(IRepository<Notes> repo)
+        {
+            this._repo = repo;
+        }
+
+        public Task Add(Task entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(int id)
+        public Task Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        public List<Notes> Find(Expression<Func<Notes, bool>> filter)
+        public Task<List<Notes>> Find(Expression<Func<Notes, bool>> filter)
         {
             throw new NotImplementedException();
         }
 
-        public List<Notes> GetAll()
+        public Task<List<Notes>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Notes GetById(int id)
+        public Task<Notes> GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Notes entity)
+        public Task Update(Notes entity)
         {
             throw new NotImplementedException();
         }

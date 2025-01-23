@@ -1,10 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@using BookDiary.Utility
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BookDiary</title>
     <script type="importmap"></script>
+    <script src ="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src ="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src ="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BookDiary.styles.css" asp-append-version="true" />
@@ -26,6 +30,20 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if(User.IsInRole(SD.AdminRole))
+                        {
+                             <li class ="nav-item dropdown">
+                            <a class ="nav-link dropdown-toggle"  href="#"  id="navbarDropdown"  role="button“ data-toggle="dropdown"  aria-haspopup="true"  aria-expanded="false"> Content Management</a>                              
+                             <div class ="dropdown-menu"  aria-labelledby="navbarDropdown">
+                            <a class ="dropdown-item“ href="@Url.Action("AddProduct", "YourControllerName")"> Добави продукт</a>             
+                            <a class ="dropdown-item" href="@Url.Action("DeleteProduct", "YourControllerName")">Изтрий продукт</a>        
+                            <a class ="dropdown-item“ href="@Url.Action("Create", "Category")"> Въведи категория</a>        
+                            <a class ="dropdown-item“ href="@Url.Action("DeleteCategory", "Category")"> Изтрий категория</a>         
+                            <a class ="dropdown-item“ href="@Url.Action("Edit", "Category")">Редактирай категория</a>                  
+                           </div>
+                        </li>
+                        }
+                       
                     </ul>
                     <partial name="_LoginPartial"/>
                 </div>

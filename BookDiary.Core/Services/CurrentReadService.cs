@@ -18,32 +18,32 @@ namespace BookDiary.Core.Services
             this._repo = repo;
         }
 
-        public void Add(Task entity)
+        public Task Add(Task entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(int id)
+        public Task Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        public List<ICurrentReadService> Find(Expression<Func<ICurrentReadService, bool>> filter)
+        public Task<List<ICurrentReadService>> Find(Expression<Func<ICurrentReadService, bool>> filter)
         {
             throw new NotImplementedException();
         }
 
-        public List<ICurrentReadService> GetAll()
+        public Task<List<ICurrentReadService>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public ICurrentReadService GetById(int id)
+        public Task<ICurrentReadService> GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(ICurrentReadService entity)
+        public Task Update(ICurrentReadService entity)
         {
             throw new NotImplementedException();
         }

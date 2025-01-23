@@ -9,12 +9,12 @@ namespace BookDiary.Core
 {
     public interface IService<T> where T : class
     {
-        void Add(Task entity);
-        void Update(T entity);
-        void Delete(int id);
-        List<T> GetAll();
-        T GetById(int id);
-        List<T> Find(Expression<Func<T, bool>> filter);
+        Task Add(Task entity);
+        Task Update(T entity);
+        Task Delete(int id);
+        Task<List<T>> GetAll();
+        Task<T> GetById(int id);
+        Task<List<T>> Find(Expression<Func<T, bool>> filter);
     }
     
         

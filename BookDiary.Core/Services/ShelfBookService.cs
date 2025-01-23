@@ -17,32 +17,33 @@ namespace BookDiary.Core.Services
         {
             this._repo = repo;
         }
-        public void Add(Task entity)
+
+        public Task Add(Task entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(int id)
+        public Task Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        public List<ShelfBook> Find(Expression<Func<ShelfBook, bool>> filter)
+        public Task<List<ShelfBook>> Find(Expression<Func<ShelfBook, bool>> filter)
         {
             throw new NotImplementedException();
         }
 
-        public List<ShelfBook> GetAll()
+        public Task<List<ShelfBook>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public ShelfBook GetById(int id)
+        public Task<ShelfBook> GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(ShelfBook entity)
+        public Task Update(ShelfBook entity)
         {
             throw new NotImplementedException();
         }
