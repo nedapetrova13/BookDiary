@@ -12,7 +12,7 @@ namespace BookDiary.Models
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<QuestionGenre> questionGenres { get; set; }
-        public ICollection<Book> books { get; set; }
+        public ICollection<QuestionGenre> QuestionGenres { get; set; }
+        public ICollection<Book> Books { get; set; }
     }
 }

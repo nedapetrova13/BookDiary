@@ -18,7 +18,7 @@ namespace BookDiary.Models
         [ForeignKey(nameof(Author))]
         public int AuthorId { get; set; }
         public Author Author { get; set; }
-        public double Ratings { get; set; }
+        public double Rating { get; set; }
         [ForeignKey(nameof(Series))]
         public int SeriesId { get; set; }
         public Series Series { get; set; }
