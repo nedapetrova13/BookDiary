@@ -9,11 +9,12 @@ namespace BookDiary.DataAccess.Repository
 {
     public interface IRepository <T> where T : class
     {
-        void Add(T entity);
-        void Update(T entity);
-        void Delete(int id);
-        T Get(int id);
-        List<T> GetAll();
-        List<T> Find(Expression<Func<T, bool>> filter);
+        Task Add(T entity);
+        Task Update(T entity);
+        Task Delete(int id);
+        Task<T> Get(int id);
+        Task<List<T>> GetAll();
+        Task<T> GetById(int id);
+        Task< List<T>> Find(Expression<Func<T, bool>> filter);
     }
 }

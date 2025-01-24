@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using BookDiary.Core.IServices;
+using BookDiary.Core.Validators;
 using BookDiary.DataAccess.Repository;
 using BookDiary.Models;
 
@@ -18,7 +19,7 @@ namespace BookDiary.Core.Services
             this._repo= repo;
         }
 
-        public Task Add(Task entity)
+        public Task Add(Author entity)
         {
             throw new NotImplementedException();
         }
@@ -47,5 +48,23 @@ namespace BookDiary.Core.Services
         {
             throw new NotImplementedException();
         }
+
+        private bool ValidateAuthor(Author author)
+        {
+            if (!AuthorValidator.ValidateInput(author.Name, author.Email, author.ProfilePictureURL, author.Bio, author.WebSiteLink))
+            {
+                return false;
+            }
+            else if (!AuthorValidator.AuthorExists(author.Id))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+
+            }
+        }
+        
     }
 }

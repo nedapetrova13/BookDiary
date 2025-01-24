@@ -9,5 +9,6 @@ namespace BookDiary.Core.IServices
 {
     public interface IAuthorService:IService<Author>
     {
+        
     }
 }

@@ -4,39 +4,42 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using BookDiary.DataAccess.Repository;
 
 namespace BookDiary.Core
 {
     public class Service<T> : IService<T> where T : class
     {
-        public Task Add(Task entity)
+        private readonly IRepository<T> _repo;
+
+        public async Task Add(T entity)
         {
-            throw new NotImplementedException();
+            await _repo.Add(entity);
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            await _repo.Delete(id);
         }
 
-        public Task<List<T>> Find(Expression<Func<T, bool>> filter)
+        public async Task<List<T>> Find(Expression<Func<T, bool>> filter)
         {
-            throw new NotImplementedException();
+            return await _repo.Find(filter);
         }
 
-        public Task<List<T>> GetAll()
+        public async Task<List<T>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _repo.GetAll();
         }
 
-        public Task<T> GetById(int id)
+        public async Task<T> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await _repo.GetById(id);
         }
 
-        public Task Update(T entity)
+        public async Task Update(T entity)
         {
-            throw new NotImplementedException();
+             await _repo.Update(entity);
         }
     }
 }

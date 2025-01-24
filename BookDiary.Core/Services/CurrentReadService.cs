@@ -18,7 +18,7 @@ namespace BookDiary.Core.Services
             this._repo = repo;
         }
 
-        public Task Add(Task entity)
+        public Task Add(ICurrentReadService entity)
         {
             throw new NotImplementedException();
         }

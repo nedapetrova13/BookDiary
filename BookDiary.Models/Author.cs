@@ -18,7 +18,7 @@ namespace BookDiary.Models
         [Required]
        
         public string Name { get; set; }
-        public ICollection<Book> Books { get; set; }
+        public ICollection<Book>? Books { get; set; }
         [ForeignKey(nameof(City))]
         public int CityId { get; set; } 
         public City City { get; set; }
@@ -30,6 +30,6 @@ namespace BookDiary.Models
         public string? Gender { get; set; }
         public string Bio {  get; set; }
         public string WebSiteLink { get; set; }
-        public ICollection<Series> Series { get; set; }
+        public ICollection<Series>? Series { get; set; }
     }
 }

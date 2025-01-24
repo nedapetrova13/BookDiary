@@ -14,50 +14,60 @@ namespace BookDiary.DataAccess.Repository
         internal DbSet<T> dbSet;
         public Repository(ApplicationDbContext context)
         {
-            this._context = context;
-            this.dbSet = _context.Set<T>();
+             this._context = context;
+             this.dbSet = _context.Set<T>();
 
         }
-        public void Add(T entity)
+        public async Task Add(T entity)
         {
-            this.dbSet.Add(entity);
-            this._context.SaveChanges();
+            await dbSet.AddAsync(entity);
+             await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            if (id == null)
+            var entity = dbSet.Find(id);
+            if (entity == null)
             {
                 throw new ArgumentException("Id is null!");
             }
-            T entitiy= dbSet.Find(id);
-            this.dbSet.Remove(entitiy);
-            this._context.SaveChanges();
+            dbSet.Remove(entity);
+            await this._context.SaveChangesAsync();
         }
 
-        public List<T> Find(Expression<Func<T, bool>> filter)
+        public async Task<List<T>> Find(Expression<Func<T, bool>> filter)
         {
-            return dbSet.Where(filter).ToList();
+             return await dbSet.Where(filter).ToListAsync();
         }
 
-        public T Get(int id)
+        public async Task<T> Get(int id)
         {
-            if (id == null)
+            var entity = dbSet.Find(id);
+            if (entity == null)
             {
                 throw new ArgumentException("id is null");
             }
-            T entity = dbSet.Find(id);
             return entity;
         }
 
-        public List<T> GetAll()
+        public async Task<List<T>> GetAll()
         {
-            return dbSet.ToList();
+            return await dbSet.ToListAsync();
         }
-
-        public void Update(T entity)
+        public async Task<T> GetById(int id)
+        {
+            var entity = dbSet.Find(id);
+            if(entity == null)
+            {
+                throw new ArgumentException("id is null");
+            }
+            return entity;
+        }
+        public async Task Update(T entity)
         {
             dbSet.Update(entity);
+            await _context.SaveChangesAsync();
+
         }
     }
 }

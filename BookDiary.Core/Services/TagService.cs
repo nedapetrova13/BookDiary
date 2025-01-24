@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using BookDiary.Core.IServices;
+using BookDiary.Core.Validators;
 using BookDiary.DataAccess.Repository;
 using BookDiary.Models;
 
@@ -18,34 +19,50 @@ namespace BookDiary.Core.Services
             this._repo = repo;
         }
 
-        public Task Add(Task entity)
+        public async Task Add(Tag entity)
         {
-            throw new NotImplementedException();
+            await _repo.Add(entity);
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            await _repo.Delete(id);
         }
 
-        public Task<List<Tag>> Find(Expression<Func<Tag, bool>> filter)
+        public async Task<List<Tag>> Find(Expression<Func<Tag, bool>> filter)
         {
-            throw new NotImplementedException();
+            return await _repo.Find(filter);
+        }
+        public async Task<IEnumerable<Tag>> GetAllTags()
+        {
+            return await _repo.GetAll();
+        }
+        public async Task<List<Tag>> GetAll()
+        {
+            return await _repo.GetAll();
         }
 
-        public Task<List<Tag>> GetAll()
+        public async Task<Tag> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await _repo.GetById(id);
         }
 
-        public Task<Tag> GetById(int id)
+        public async Task Update(Tag entity)
         {
-            throw new NotImplementedException();
+            await _repo.Update(entity);
         }
 
-        public Task Update(Tag entity)
+        private bool ValidateTag(Tag tag)
         {
-            throw new NotImplementedException();
+            if (!TagValidator.ValidateInput(tag.Name))
+            {
+                return false;   
+            }
+            else
+            {
+                return true;
+            }
         }
+        
     }
 }
