@@ -17,7 +17,7 @@ namespace BookDiary.Models
         public Book Book { get; set; }
         public int CurrentPage { get; set; }
         [ForeignKey(nameof(User))]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
 
     }

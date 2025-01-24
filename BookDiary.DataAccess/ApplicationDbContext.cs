@@ -7,6 +7,7 @@ using BookDiary.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 namespace BookDiary.DataAccess
 {
     public class ApplicationDbContext:IdentityDbContext<User>
@@ -41,97 +42,187 @@ namespace BookDiary.DataAccess
             base.OnModelCreating(builder);
 
             builder.Entity<Book>()
-                .HasOne(a => a.Author)
-                .WithMany(b => b.Books)
-                .HasForeignKey(k => k.AuthorId);
+              .HasOne(a => a.Author)
+              .WithMany(b => b.Books)
+              .HasForeignKey(k => k.AuthorId)
+              .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<User>()
+                .HasOne(u => u.Book)
+                .WithMany(b => b.Users)
+                .HasForeignKey(u => u.FavouriteBookId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             builder.Entity<Author>()
-                .HasOne(a=>a.City)
-                .WithMany(x=>x.Authors)
-                .HasForeignKey(x=>x.CityId);
+                .HasOne(a => a.City)
+                .WithMany(x => x.Authors)
+                .HasForeignKey(x => x.CityId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<User>()
                 .HasOne(x => x.City)
                 .WithMany(x => x.Users)
-                .HasForeignKey(x => x.CityId);
+                .HasForeignKey(x => x.CityId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<Book>()
                 .HasOne(x => x.Genre)
                 .WithMany(x => x.Books)
-                .HasForeignKey(x => x.GenreId);
+                .HasForeignKey(x => x.GenreId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<Book>()
                 .HasOne(x => x.Series)
                 .WithMany(x => x.Books)
-                .HasForeignKey(x => x.SeriesId);
+                .HasForeignKey(x => x.SeriesId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<BookPublishingHouse>()
                 .HasOne(x => x.Language)
                 .WithMany(x => x.BookPublishingHouses)
-                .HasForeignKey(x => x.LanguageId);
+                .HasForeignKey(x => x.LanguageId)
+                 .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<Comment>()
                 .HasOne(x => x.User)
                 .WithMany(x => x.MyComments)
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<CurrentRead>()
-                .HasOne(x=>x.Book)
-                .WithMany(x=>x.CurrentReads)
-                .HasForeignKey(x=>x.BookId);
+                .HasOne(x => x.Book)
+                .WithMany(x => x.CurrentReads)
+                .HasForeignKey(x => x.BookId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<CurrentRead>()
                 .HasOne(x => x.User)
                 .WithMany(x => x.CurrentReads)
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<Notes>()
                 .HasOne(x => x.Book)
                 .WithMany(x => x.Notes)
-                .HasForeignKey(x => x.BookId);
+                .HasForeignKey(x => x.BookId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<Notes>()
-                .HasOne(x=>x.User)
+                .HasOne(x => x.User)
                 .WithMany(x => x.Notes)
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<Shelf>()
-                .HasOne(x=>x.User)
-                .WithMany(x=>x.Shelves)
-                .HasForeignKey(x=>x.UserId);
+                .HasOne(x => x.User)
+                .WithMany(x => x.Shelves)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<BookPublishingHouse>()
+                .HasKey(x => new { x.PublishingHouseId, x.BookId });
             builder.Entity<BookPublishingHouse>()
                 .HasOne(x => x.Book)
                 .WithMany(x => x.BookPublishingHouse)
-                .HasForeignKey(x => x.BookId);
+                .HasForeignKey(x => x.BookId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<BookPublishingHouse>()
                 .HasOne(x => x.PublishingHouse)
                 .WithMany(x => x.bookPublishingHouses)
-                .HasForeignKey(x => x.PublishingHouseId);
+                .HasForeignKey(x => x.PublishingHouseId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<QuestionGenre>()
+                .HasKey(x => new { x.QuestionId, x.GenreId });
             builder.Entity<QuestionGenre>()
                 .HasOne(x => x.Genre)
                 .WithMany(x => x.QuestionGenres)
-                .HasForeignKey(x => x.GenreId);
+                .HasForeignKey(x => x.GenreId)
+                .OnDelete(DeleteBehavior.NoAction);
             builder.Entity<QuestionGenre>()
                 .HasOne(x => x.Question)
                 .WithMany(x => x.QuestionGenres)
-                .HasForeignKey(x => x.QuestionId);
+                .HasForeignKey(x => x.QuestionId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<QuestionGenreBook>()
-                .HasOne(x => x.Book)
+                .HasKey(qgb => new { qgb.BookId, qgb.QuestionId, qgb.GenreId });
+            builder.Entity<QuestionGenreBook>()
+                .HasOne(qgb => qgb.QuestionGenre)
+                .WithMany(qg => qg.QuestionGenreBooks)
+                .HasForeignKey(qgb => new { qgb.QuestionId, qgb.GenreId })
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<QuestionGenreBook>()
+                .HasOne(qgb => qgb.Book)
+                .WithMany(b => b.QuestionGenreBooks)
+                .HasForeignKey(qgb => qgb.BookId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<QuestionGenreBook>()
+                .HasOne(x => x.User)
                 .WithMany(x => x.QuestionGenreBooks)
-                .HasForeignKey(x => x.BookId);
-            builder.Entity<QuestionGenreBook>()
-                .HasOne(x=>x.User)
-                .WithMany(x=>x.QuestionGenreBooks)
-                .HasForeignKey(x=>x.UserId);
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<BookTag>()
+                .HasKey(x => new { x.TagId, x.BookId });
             builder.Entity<BookTag>()
                 .HasOne(x => x.Tag)
                 .WithMany(x => x.BookTags)
-                .HasForeignKey(x => x.TagId);
+                .HasForeignKey(x => x.TagId)
+                .OnDelete(DeleteBehavior.NoAction);
             builder.Entity<BookTag>()
                 .HasOne(x => x.Book)
                 .WithMany(x => x.BookTags)
-                .HasForeignKey(x => x.BookId);
+                .HasForeignKey(x => x.BookId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<CommentBook>()
+                .HasKey(x => new { x.CommentId, x.BookId });
             builder.Entity<CommentBook>()
                 .HasOne(x => x.Comment)
                 .WithMany(x => x.CommentBooks)
-                .HasForeignKey(x => x.CommentId);
+                .HasForeignKey(x => x.CommentId)
+                .OnDelete(DeleteBehavior.NoAction);
             builder.Entity<CommentBook>()
                 .HasOne(x => x.Book)
                 .WithMany(x => x.Comments)
-                .HasForeignKey(x => x.BookId);
+                .HasForeignKey(x => x.BookId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<CommentNews>()
+                .HasKey(x => new { x.NewsId, x.CommentId });
             builder.Entity<CommentNews>()
                 .HasOne(x => x.News)
                 .WithMany(x => x.Comments)
-                .HasForeignKey(x => x.NewsId);
+                .HasForeignKey(x => x.NewsId)
+                .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<CommentNews>()
+                .HasOne(x => x.Comment)
+                .WithMany(x => x.CommentNews)
+                .HasForeignKey(x => x.CommentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<User>()
+                .HasOne(u => u.City)
+                .WithMany(c => c.Users)
+                .HasForeignKey(u => u.CityId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<ShelfBook>()
+                .HasKey(x => new { x.ShelfId, x.BookId });
+            builder.Entity<ShelfBook>()
+                .HasOne(x => x.Shelf)
+                .WithMany(x => x.ShelfBooks)
+                .HasForeignKey(x => x.ShelfId)
+                .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<ShelfBook>()
+                .HasOne(x => x.Book)
+                .WithMany(x => x.ShelfBooks)
+                .HasForeignKey(x => x.BookId)
+                .OnDelete(DeleteBehavior.NoAction);
+            base.OnModelCreating(builder);
         }
     }
 }
