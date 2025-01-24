@@ -180,6 +180,7 @@ namespace BookDiary.DataAccess
 
             builder.Entity<CommentBook>()
                 .HasKey(x => new { x.CommentId, x.BookId });
+
             builder.Entity<CommentBook>()
                 .HasOne(x => x.Comment)
                 .WithMany(x => x.CommentBooks)
@@ -193,6 +194,7 @@ namespace BookDiary.DataAccess
 
             builder.Entity<CommentNews>()
                 .HasKey(x => new { x.NewsId, x.CommentId });
+
             builder.Entity<CommentNews>()
                 .HasOne(x => x.News)
                 .WithMany(x => x.Comments)
@@ -212,6 +214,7 @@ namespace BookDiary.DataAccess
 
             builder.Entity<ShelfBook>()
                 .HasKey(x => new { x.ShelfId, x.BookId });
+
             builder.Entity<ShelfBook>()
                 .HasOne(x => x.Shelf)
                 .WithMany(x => x.ShelfBooks)
@@ -223,6 +226,12 @@ namespace BookDiary.DataAccess
                 .HasForeignKey(x => x.BookId)
                 .OnDelete(DeleteBehavior.NoAction);
             base.OnModelCreating(builder);
+      
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
         }
     }
 }
