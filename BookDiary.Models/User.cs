@@ -18,10 +18,10 @@ namespace BookDiary.Models
         [EnumDataType(typeof(GenderEnum))]
         public string? Gender { get; set; }
         [ForeignKey(nameof(City))]
-        public int CityId { get; set; }
+        public int? CityId { get; set; }
         public City City { get; set; }
         [ForeignKey(nameof(Book))]
-        public int FavouriteBookId { get; set; }
+        public int? FavouriteBookId { get; set; }
         public Book Book { get; set; }
         public ICollection<Shelf>? Shelves { get; set; }   
         public string? ProfilePictureURL { get; set; }   

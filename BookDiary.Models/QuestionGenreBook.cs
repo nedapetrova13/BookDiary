@@ -13,13 +13,14 @@ namespace BookDiary.Models
         [Key]
         public int Id { get; set; }
         [ForeignKey(nameof(QuestionGenre))]
-        public int QuestionGenreId {  get; set; }
+        public int QuestionId { get; set; }
+        public int GenreId { get; set; }
         public QuestionGenre QuestionGenre { get; set; }
         [ForeignKey(nameof(Book))]
         public int BookId { get; set; }
         public Book Book { get; set; }
         [ForeignKey(nameof(User))]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
         public int Rating { get;set; }
     }

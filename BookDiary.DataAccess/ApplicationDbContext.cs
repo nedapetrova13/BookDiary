@@ -7,6 +7,7 @@ using BookDiary.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 namespace BookDiary.DataAccess
 {
     public class ApplicationDbContext:IdentityDbContext<User>
@@ -41,15 +42,20 @@ namespace BookDiary.DataAccess
             base.OnModelCreating(builder);
 
             builder.Entity<Book>()
-                .HasOne(a => a.Author)
-                .WithMany(b => b.Books)
-                .HasForeignKey(k => k.AuthorId)
-                .OnDelete(DeleteBehavior.NoAction);
+              .HasOne(a => a.Author)
+              .WithMany(b => b.Books)
+              .HasForeignKey(k => k.AuthorId)
+              .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<User>()
+                .HasOne(u => u.Book)
+                .WithMany(b => b.Users)
+                .HasForeignKey(u => u.FavouriteBookId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.Entity<Author>()
-                .HasOne(a=>a.City)
-                .WithMany(x=>x.Authors)
-                .HasForeignKey(x=>x.CityId)
+                .HasOne(a => a.City)
+                .WithMany(x => x.Authors)
+                .HasForeignKey(x => x.CityId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<User>()
@@ -83,9 +89,9 @@ namespace BookDiary.DataAccess
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<CurrentRead>()
-                .HasOne(x=>x.Book)
-                .WithMany(x=>x.CurrentReads)
-                .HasForeignKey(x=>x.BookId)
+                .HasOne(x => x.Book)
+                .WithMany(x => x.CurrentReads)
+                .HasForeignKey(x => x.BookId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<CurrentRead>()
@@ -101,15 +107,15 @@ namespace BookDiary.DataAccess
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Notes>()
-                .HasOne(x=>x.User)
+                .HasOne(x => x.User)
                 .WithMany(x => x.Notes)
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Shelf>()
-                .HasOne(x=>x.User)
-                .WithMany(x=>x.Shelves)
-                .HasForeignKey(x=>x.UserId)
+                .HasOne(x => x.User)
+                .WithMany(x => x.Shelves)
+                .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<BookPublishingHouse>()
@@ -119,6 +125,7 @@ namespace BookDiary.DataAccess
                 .WithMany(x => x.BookPublishingHouse)
                 .HasForeignKey(x => x.BookId)
                 .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<BookPublishingHouse>()
                 .HasOne(x => x.PublishingHouse)
                 .WithMany(x => x.bookPublishingHouses)
@@ -126,7 +133,7 @@ namespace BookDiary.DataAccess
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<QuestionGenre>()
-                .HasKey(x => new {x.QuestionId,x.GenreId}); 
+                .HasKey(x => new { x.QuestionId, x.GenreId });
             builder.Entity<QuestionGenre>()
                 .HasOne(x => x.Genre)
                 .WithMany(x => x.QuestionGenres)
@@ -139,16 +146,23 @@ namespace BookDiary.DataAccess
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<QuestionGenreBook>()
-                .HasKey(x=>new {x.QuestionGenreId,x.BookId});
+                .HasKey(qgb => new { qgb.BookId, qgb.QuestionId, qgb.GenreId });
             builder.Entity<QuestionGenreBook>()
-                .HasOne(x => x.Book)
-                .WithMany(x => x.QuestionGenreBooks)
-                .HasForeignKey(x => x.BookId)
+                .HasOne(qgb => qgb.QuestionGenre)
+                .WithMany(qg => qg.QuestionGenreBooks)
+                .HasForeignKey(qgb => new { qgb.QuestionId, qgb.GenreId })
                 .OnDelete(DeleteBehavior.NoAction);
+
             builder.Entity<QuestionGenreBook>()
-                .HasOne(x=>x.User)
-                .WithMany(x=>x.QuestionGenreBooks)
-                .HasForeignKey(x=>x.UserId)
+                .HasOne(qgb => qgb.Book)
+                .WithMany(b => b.QuestionGenreBooks)
+                .HasForeignKey(qgb => qgb.BookId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<QuestionGenreBook>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.QuestionGenreBooks)
+                .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<BookTag>()
@@ -165,7 +179,8 @@ namespace BookDiary.DataAccess
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<CommentBook>()
-                .HasKey(x=> new {x.CommentId, x.BookId});
+                .HasKey(x => new { x.CommentId, x.BookId });
+
             builder.Entity<CommentBook>()
                 .HasOne(x => x.Comment)
                 .WithMany(x => x.CommentBooks)
@@ -178,7 +193,8 @@ namespace BookDiary.DataAccess
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<CommentNews>()
-                .HasKey (x => new { x.NewsId,x.CommentId});
+                .HasKey(x => new { x.NewsId, x.CommentId });
+
             builder.Entity<CommentNews>()
                 .HasOne(x => x.News)
                 .WithMany(x => x.Comments)
@@ -190,8 +206,15 @@ namespace BookDiary.DataAccess
                 .HasForeignKey(x => x.CommentId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            builder.Entity<User>()
+                .HasOne(u => u.City)
+                .WithMany(c => c.Users)
+                .HasForeignKey(u => u.CityId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             builder.Entity<ShelfBook>()
-                .HasKey(x => new {x.ShelfId,x.BookId});
+                .HasKey(x => new { x.ShelfId, x.BookId });
+
             builder.Entity<ShelfBook>()
                 .HasOne(x => x.Shelf)
                 .WithMany(x => x.ShelfBooks)
@@ -201,11 +224,14 @@ namespace BookDiary.DataAccess
                 .HasOne(x => x.Book)
                 .WithMany(x => x.ShelfBooks)
                 .HasForeignKey(x => x.BookId)
-                .OnDelete(DeleteBehavior.NoAction);   
+                .OnDelete(DeleteBehavior.NoAction);
+            base.OnModelCreating(builder);
+      
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
+
         }
     }
 }
