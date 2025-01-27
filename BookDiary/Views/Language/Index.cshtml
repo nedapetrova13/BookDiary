@@ -1,0 +1,30 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<BookDiary.Models.Language>
+<h1>See all languages</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var language in Model)
+        {
+            <tr>
+                <td scope="row">@language.Id</td>
+                <td>@language.Name</td>
+                <td>
+                    <a type="button" class="btn btn-success" asp-action="Edit" asp-controller="Language" asp-route-id="@language.Id">Edit</a>
+                    <form method="post" asp-controller="language" asp-action="Delete">
+                        <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="Language" asp-route-id="@language.Id">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

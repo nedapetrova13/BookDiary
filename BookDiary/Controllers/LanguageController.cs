@@ -1,54 +1,48 @@
 ﻿using BookDiary.Core.IServices;
 using BookDiary.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace BookDiary.Controllers
 {
-    public class TagController : Controller
+    public class LanguageController : Controller
     {
-        private readonly ITagService _tagService;
+        private readonly ILanguageService _service;
 
-        public TagController(ITagService tagService)
+        public LanguageController(ILanguageService service)
         {
-            _tagService = tagService;
+            _service = service;
         }
 
         public async Task<IActionResult> Index()
         {
-            var list = await _tagService.GetAllTags();
+            var list = await  _service.GetAllLanguages();
             return View(list);
         }
-
         public IActionResult Add()
         {
             return View();
         }
-
         [HttpPost]
-        public async Task<IActionResult> Add(Tag tag)
+        public async Task<IActionResult> Add(Language language)
         {
-            await _tagService.Add(tag);
+            await _service.Add(language);
             return RedirectToAction("Index");
         }
-
         public async Task<IActionResult> Edit(int id)
         {
-            var tag = await _tagService.GetById(id);
-            return View(tag);
+            var language = await _service.GetById(id);
+            return View(language);
         }
-
         [HttpPost]
-        public async Task<IActionResult> Edit(Tag tag)
+        public async Task<IActionResult> Edit(Language language)
         {
-            await _tagService.Update(tag);
+            await _service.Update(language);
             return RedirectToAction("Index");
         }
-
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            await _tagService.Delete(id);
+            await _service.Delete(id);  
             return RedirectToAction("Index");
         }
     }

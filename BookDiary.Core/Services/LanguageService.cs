@@ -18,34 +18,38 @@ namespace BookDiary.Core.Services
             this._repo = repo;
         }
 
-        public Task Add(Language entity)
+        public async Task Add(Language entity)
         {
-            throw new NotImplementedException();
+            await _repo.Add(entity);
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            await _repo.Delete(id);
         }
 
-        public Task<List<Language>> Find(Expression<Func<Language, bool>> filter)
+        public async Task<List<Language>> Find(Expression<Func<Language, bool>> filter)
         {
-            throw new NotImplementedException();
+            return await _repo.Find(filter);
         }
 
-        public Task<List<Language>> GetAll()
+        public async Task<List<Language>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _repo.GetAll();
         }
 
-        public Task<Language> GetById(int id)
+        public async Task<Language> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await _repo.GetById(id);
         }
 
-        public Task Update(Language entity)
+        public async Task Update(Language entity)
         {
-            throw new NotImplementedException();
+            await _repo.Update(entity);   
+        }
+        public async Task<IEnumerable<Language>> GetAllLanguages()
+        {
+            return await _repo.GetAll();
         }
     }
 }

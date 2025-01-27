@@ -9,5 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface ILanguageService:IService<Language>
     {
+        Task<IEnumerable<Language>> GetAllLanguages();
+
     }
 }

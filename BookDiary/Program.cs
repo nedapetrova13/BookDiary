@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+//builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection, b => b.MigrationsAssembly("BookDiary.DataAccess")));
 
@@ -28,7 +29,7 @@ builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IBookPublishingHouseService, BookPublishingHouseService>();
 builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddScoped<IBookTagService, BookTagService>();
+builder.Services.AddScoped<IBookTagService, BookTagService>(); 
 builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<ICommentBookService, CommentBookService>();
 builder.Services.AddScoped<ICommentNewsService, CommentNewsService>();

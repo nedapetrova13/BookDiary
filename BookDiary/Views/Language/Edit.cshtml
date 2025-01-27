@@ -3,11 +3,12 @@
 *@
 @{
 }
-@model BookDiary.Models.Tag;
-
+@model BookDiary.Models.Language;
 <form method="post">
     <label asp-for="Name">
+        Name
         <input type="text" asp-for="Name" />
     </label>
-    <button type="submit" asp-action="Add" asp-controller="Tag">Add</button>
+    <br />
+    <button type="submit" class="btn btn-primary" asp-action="Edit" asp-controller="Language" class="btn btn-success" asp-route-id="@Model.Id">Submit changes</button>
 </form>

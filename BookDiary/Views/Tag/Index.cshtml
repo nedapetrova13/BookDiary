@@ -4,7 +4,8 @@
 @{
 }
 @model IEnumerable<BookDiary.Models.Tag>
-<table class="table">
+<h1>See all tags</h1>
+<table class="table table-hover">
     <thead>
         <tr>
             <th scope="col">Id</th>
@@ -14,8 +15,14 @@
     <tbody>
         @foreach(var tag in Model){
             <tr>
-                <th scope="row">@tag.Id</th>
-                <th>@tag.Name</th>
+                <td scope="row">@tag.Id</td>
+                <td>@tag.Name</td>
+                <td>
+                    <a type="button" class="btn btn-success" asp-action="Edit" asp-controller="Tag" asp-route-id="@tag.Id">Edit</a>
+                    <form method="post" asp-controller="Tag" asp-action="Delete">
+                        <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="Tag" asp-route-id="@tag.Id">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>
