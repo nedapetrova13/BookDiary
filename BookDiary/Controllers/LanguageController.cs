@@ -30,14 +30,20 @@ namespace BookDiary.Controllers
         }
         public async Task<IActionResult> Edit(int id)
         {
+
             var language = await _service.GetById(id);
             return View(language);
         }
         [HttpPost]
         public async Task<IActionResult> Edit(Language language)
         {
-            await _service.Update(language);
-            return RedirectToAction("Index");
+            if(ModelState.IsValid)
+            {
+                await _service.Update(language);
+                return RedirectToAction("Index");
+            }
+            return View();
+            
         }
         [HttpPost]
         public async Task<IActionResult> Delete(int id)

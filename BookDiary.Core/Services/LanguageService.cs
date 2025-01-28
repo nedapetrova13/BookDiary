@@ -20,6 +20,7 @@ namespace BookDiary.Core.Services
 
         public async Task Add(Language entity)
         {
+
             await _repo.Add(entity);
         }
 

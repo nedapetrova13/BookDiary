@@ -15,15 +15,14 @@ namespace BookDiary.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
-       
+        [Required(ErrorMessage = "Името е заядължително")]
         public string Name { get; set; }
         public ICollection<Book>? Books { get; set; }
         [ForeignKey(nameof(City))]
         public int CityId { get; set; } 
         public City City { get; set; }
         public DateTime BirthDate { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Email е заядължителен")]
         public string Email {  get; set; }
         public string ProfilePictureURL { get; set; }
         [EnumDataType(typeof(GenderEnum))]

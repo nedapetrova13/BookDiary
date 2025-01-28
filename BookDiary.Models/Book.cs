@@ -13,7 +13,7 @@ namespace BookDiary.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Името е заядължително")]
         public string Title { get; set; }
         [ForeignKey(nameof(Author))]
         public int AuthorId { get; set; }
@@ -29,6 +29,7 @@ namespace BookDiary.Models
         public int BookPages { get; set; }
         [EnumDataType(typeof(BookFormatEnum))]
         public string? BookFormat { get; set; }
+        [Required(ErrorMessage = "Описанието е заядължително")]
         public string Description {  get; set; }
         public ICollection<CommentBook> Comments { get; set; }
         public ICollection<CurrentRead> CurrentReads { get; set; }

@@ -12,6 +12,7 @@ namespace BookDiary.Models
     {
         [Key]
         public int Id {  get; set; }
+        [Required(ErrorMessage = "Името е заядължително")]
         public string Title {  get; set; }
         [ForeignKey(nameof(User))]
         public string UserId { get; set; }

@@ -11,6 +11,7 @@ namespace BookDiary.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Заядължително поле")]
         public string Content { get; set; }
         public ICollection<QuestionGenre> QuestionGenres { get; set; }
 

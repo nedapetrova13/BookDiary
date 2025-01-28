@@ -11,6 +11,7 @@ namespace BookDiary.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Името е заядължително")]
         public string Title {  get; set; }  
         public ICollection<Book> Books { get; set; }
         public string Description { get; set; } 
