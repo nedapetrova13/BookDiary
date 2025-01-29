@@ -18,34 +18,39 @@ namespace BookDiary.Core.Services
             this._repo = repo;
         }
 
-        public Task Add(CommentBook entity)
+        public async Task Add(CommentBook entity)
         {
-            throw new NotImplementedException();
+            await _repo.Add(entity);
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            await _repo.Delete(id);
         }
 
-        public Task<List<CommentBook>> Find(Expression<Func<CommentBook, bool>> filter)
+        public async Task<List<CommentBook>> Find(Expression<Func<CommentBook, bool>> filter)
         {
-            throw new NotImplementedException();
+           return await _repo.Find(filter);
         }
 
-        public Task<List<CommentBook>> GetAll()
+        public async Task<List<CommentBook>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _repo.GetAll();
         }
 
-        public Task<CommentBook> GetById(int id)
+        public async Task<CommentBook> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await _repo.GetById(id);
         }
 
-        public Task Update(CommentBook entity)
+        public async Task Update(CommentBook entity)
         {
-            throw new NotImplementedException();
+             await _repo.Update(entity);
+        }
+
+        async Task<IEnumerable<CommentBook>> ICommentBookService.GetAllCommentBooks()
+        {
+            return await _repo.GetAll();
         }
     }
 }

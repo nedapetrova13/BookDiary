@@ -1,0 +1,16 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model BookDiary.Models.PublishingHouse;
+
+<form method="post">
+    <label asp-for="Name">Name
+        <input type="text" asp-for="Name" />
+    </label>
+    <label asp-for="YearFounded">Year founded
+        <input type="year" asp-for="YearFounded"/>
+    </label>
+    <button type="submit" asp-action="Add" asp-controller="PublishingHouse">Add</button>
+</form>

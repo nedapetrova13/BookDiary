@@ -1,0 +1,30 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<BookDiary.Models.Genre>
+<h1>See all genres</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var genre in Model)
+        {
+            <tr>
+                <td scope="row">@genre.Id</td>
+                <td>@genre.Name</td>
+                <td>
+                    <a type="button" class="btn btn-success" asp-action="Edit" asp-controller="Genre" asp-route-id="@genre.Id">Edit</a>
+                    <form method="post" asp-controller="Genre" asp-action="Delete">
+                        <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="Genre" asp-route-id="@genre.Id">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

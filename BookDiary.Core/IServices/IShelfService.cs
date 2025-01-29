@@ -9,5 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface IShelfService:IService<Shelf>
     {
+        Task<IEnumerable<Shelf>> GetAllShelves();
+
     }
 }

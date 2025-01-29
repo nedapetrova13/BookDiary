@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -18,34 +19,39 @@ namespace BookDiary.Core.Services
             this._repo = repo;
         }
 
-        public Task Add(ICurrentReadService entity)
+        public async Task Add(CurrentRead entity)
         {
-            throw new NotImplementedException();
+            await _repo.Add(entity);
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            await _repo.Delete(id);
         }
 
-        public Task<List<ICurrentReadService>> Find(Expression<Func<ICurrentReadService, bool>> filter)
+        public async Task<List<CurrentRead>> Find(Expression<Func<CurrentRead, bool>> filter)
         {
-            throw new NotImplementedException();
+            return await _repo.Find(filter);
         }
 
-        public Task<List<ICurrentReadService>> GetAll()
+        public async Task<List<CurrentRead>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _repo.GetAll();
         }
 
-        public Task<ICurrentReadService> GetById(int id)
+        public async  Task<CurrentRead> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await _repo.GetById(id);
         }
 
-        public Task Update(ICurrentReadService entity)
+        public async Task Update(CurrentRead entity)
         {
-            throw new NotImplementedException();
+           await _repo.Update(entity);
+        }
+
+        public async Task<IEnumerable<CurrentRead>> GetAllCurrentReads()
+        {
+            return await _repo.GetAll();
         }
     }
 }

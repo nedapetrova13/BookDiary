@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using BookDiary.Core.IServices;
@@ -18,34 +19,39 @@ namespace BookDiary.Core.Services
             this._repo = repo;
         }
 
-        public Task Add(Book entity)
+        public async Task Add(Book entity)
         {
-            throw new NotImplementedException();
+            await _repo.Add(entity);
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            await _repo.Delete(id);
         }
 
-        public Task<List<Book>> Find(Expression<Func<Book, bool>> filter)
+        public async Task<List<Book>> Find(Expression<Func<Book, bool>> filter)
         {
-            throw new NotImplementedException();
+            return await _repo.Find(filter);
         }
 
-        public Task<List<Book>> GetAll()
+        public async Task<List<Book>> GetAll()
         {
-            throw new NotImplementedException();
+           return await _repo.GetAll();
         }
 
         public Task<Book> GetById(int id)
         {
-            throw new NotImplementedException();
+            return _repo.GetById(id);
         }
 
-        public Task Update(Book entity)
+        public async Task Update(Book entity)
         {
-            throw new NotImplementedException();
+           await _repo.Update(entity);
+        }
+
+        public async Task<IEnumerable<Book>> GetAllBooks()
+        {
+            return await _repo.GetAll();
         }
     }
 }

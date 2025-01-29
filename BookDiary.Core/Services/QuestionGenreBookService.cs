@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using BookDiary.Core.IServices;
@@ -18,34 +19,39 @@ namespace BookDiary.Core.Services
             this._repo = repo;  
         }
 
-        public Task Add(QuestionGenreBook entity)
+        public async Task Add(QuestionGenreBook entity)
         {
-            throw new NotImplementedException();
+            await _repo.Add(entity);
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            await _repo.Delete(id);
         }
 
-        public Task<List<QuestionGenreBook>> Find(Expression<Func<QuestionGenreBook, bool>> filter)
+        public async Task<List<QuestionGenreBook>> Find(Expression<Func<QuestionGenreBook, bool>> filter)
         {
-            throw new NotImplementedException();
+            return await _repo.Find(filter);    
         }
 
-        public Task<List<QuestionGenreBook>> GetAll()
+        public async Task<List<QuestionGenreBook>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _repo.GetAll();
         }
 
-        public Task<QuestionGenreBook> GetById(int id)
+        public async Task<QuestionGenreBook> GetById(int id)
         {
-            throw new NotImplementedException();
+           return await _repo.GetById(id);
         }
 
-        public Task Update(QuestionGenreBook entity)
+        public async Task Update(QuestionGenreBook entity)
         {
-            throw new NotImplementedException();
+           await _repo.Update(entity);  
+        }
+
+        public async Task<IEnumerable<QuestionGenreBook>> GetAllQuestionGenreBooks()
+        {
+            return await _repo.GetAll();
         }
     }
 }

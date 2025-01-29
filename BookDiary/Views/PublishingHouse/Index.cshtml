@@ -1,0 +1,32 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<BookDiary.Models.PublishingHouse>
+<h1>See all cities</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Year Founded</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ph in Model)
+        {
+            <tr>
+                <td scope="row">@ph.Id</td>
+                <td>@ph.Name</td>
+                <td>@ph.YearFounded</td>
+                <td>
+                    <a type="button" class="btn btn-success" asp-action="Edit" asp-controller="PublishingHouse" asp-route-id="@ph.Id">Edit</a>
+                    <form method="post" asp-controller="PublishingHouse" asp-action="Delete">
+                        <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="PublishingHouse" asp-route-id="@ph.Id">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

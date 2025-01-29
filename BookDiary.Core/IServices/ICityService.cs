@@ -9,5 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface ICityService:IService<City>
     {
+        Task<IEnumerable<City>> GetAllCities();
+
     }
 }

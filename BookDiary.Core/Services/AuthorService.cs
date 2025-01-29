@@ -19,34 +19,39 @@ namespace BookDiary.Core.Services
             this._repo= repo;
         }
 
-        public Task Add(Author entity)
+        public async Task Add(Author entity)
         {
-            throw new NotImplementedException();
+            await _repo.Add(entity);
+
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            await _repo.Delete(id);
         }
 
-        public Task<List<Author>> Find(Expression<Func<Author, bool>> filter)
+        public async Task<List<Author>> Find(Expression<Func<Author, bool>> filter)
         {
-            throw new NotImplementedException();
+            return await _repo.Find(filter);
         }
 
-        public Task<List<Author>> GetAll()
+        public async Task<List<Author>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _repo.GetAll();
         }
 
-        public Task<Author> GetById(int id)
+        public async Task<Author> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await _repo.GetById(id);
         }
 
         public Task Update(Author entity)
         {
-            throw new NotImplementedException();
+            return _repo.Update(entity);
+        }
+        public async Task<IEnumerable<Author>> GetAllAuthors()
+        {
+            return await _repo.GetAll();
         }
 
         private bool ValidateAuthor(Author author)

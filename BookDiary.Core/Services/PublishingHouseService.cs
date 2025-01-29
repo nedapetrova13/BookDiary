@@ -18,34 +18,39 @@ namespace BookDiary.Core.Services
             this._repo = repo;
         }
 
-        public Task Add(PublishingHouse entity)
+        public async Task Add(PublishingHouse entity)
         {
-            throw new NotImplementedException();
+            await _repo.Add(entity);
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            await _repo.Delete(id);
         }
 
-        public Task<List<PublishingHouse>> Find(Expression<Func<PublishingHouse, bool>> filter)
+        public async Task<List<PublishingHouse>> Find(Expression<Func<PublishingHouse, bool>> filter)
         {
-            throw new NotImplementedException();
+            return await _repo.Find(filter);
         }
 
-        public Task<List<PublishingHouse>> GetAll()
+        public async Task<List<PublishingHouse>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _repo.GetAll();
         }
 
-        public Task<PublishingHouse> GetById(int id)
+        public async Task<PublishingHouse> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await _repo.GetById(id);
         }
 
-        public Task Update(PublishingHouse entity)
+        public async Task Update(PublishingHouse entity)
         {
-            throw new NotImplementedException();
+            await _repo.Update(entity);
+        }
+
+        public async Task<IEnumerable<PublishingHouse>> GetAllPublishingHouses()
+        {
+            return await _repo.GetAll();
         }
     }
 }

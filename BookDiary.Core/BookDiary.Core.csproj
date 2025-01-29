@@ -25,4 +25,8 @@
     <ProjectReference Include="..\BookDiary.Utility\BookDiary.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

@@ -9,5 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface ICommentNewsService:IService<CommentNews>
     {
+        Task<IEnumerable<CommentNews>> GetAllCommentNews();
+
     }
 }

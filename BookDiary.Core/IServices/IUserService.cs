@@ -9,5 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface IUserService:IService<User>
     {
+        Task<IEnumerable<User>> GetAllUsers();
+
     }
 }
