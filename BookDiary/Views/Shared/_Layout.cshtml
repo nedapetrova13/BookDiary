@@ -14,30 +14,40 @@
 <body>
     <div class="d-flex">
         <!-- Vertical Sidebar -->
-       
-        <nav class="navbar navbar-light bg-light flex-column p-3" style="width: 250px; height: 100vh; align-items: flex-start;">
+
+        <nav class="navbar navbar-light bg-light flex-column p-3" style="width: 250px; height: 100vh; align-items: flex-start; justify-content:flex-start;">
             <a class="navbar-brand mb-3" asp-area="" asp-controller="Home" asp-action="Index">BookDiary</a>
             <ul class="navbar-nav flex-column w-100">
                 <li class="nav-item">
                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
-
+                
                 @if (User.IsInRole(SD.AdminRole))
                 {
-                 
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Tag" asp-action="Add">AddTag</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Author" asp-action="Add">Add Author</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Language" asp-action="Add">AddLanguage</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Genre" asp-action="Add">Add Genre</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="City" asp-action="Add">AddCity</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Tag" asp-action="Add">Add Tag</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Language" asp-action="Add">Add Language</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="City" asp-action="Add">Add City</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="PublishingHouse" asp-action="Add">Add Publishing house</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="Add">Add News</a>
                     </li>
                 }
                 <li> <partial name="_LoginPartial" /></li>
             </ul>
-           
         </nav>
 
         <!-- Main Content -->

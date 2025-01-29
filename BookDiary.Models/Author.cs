@@ -18,9 +18,9 @@ namespace BookDiary.Models
         [Required(ErrorMessage = "Името е заядължително")]
         public string Name { get; set; }
         public ICollection<Book>? Books { get; set; }
-        [ForeignKey(nameof(City))]
+   /*     [ForeignKey(nameof(City))]
         public int CityId { get; set; } 
-        public City City { get; set; }
+        public City City { get; set; }*/
         public DateTime BirthDate { get; set; }
         [Required(ErrorMessage = "Email е заядължителен")]
         public string Email {  get; set; }

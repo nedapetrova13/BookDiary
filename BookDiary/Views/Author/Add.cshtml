@@ -1,5 +1,52 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@using BookDiary.Models.Enums
+@model BookDiary.Models.Author;
+
+<form method="post" enctype="multipart/form-data">
+    <div>
+        <label asp-for="Name">Name</label>
+        <input type="text" asp-for="Name" required />
+        <span asp-validation-for="Name"></span>
+    </div>
+
+    <div>
+        <label asp-for="BirthDate">Birth Date</label>
+        <input type="date" asp-for="BirthDate" required />
+        <span asp-validation-for="BirthDate"></span>
+    </div>
+
+    <div>
+        <label asp-for="Email">Email</label>
+        <input type="email" asp-for="Email" required />
+        <span asp-validation-for="Email"></span>
+    </div>
+
+    <div>
+        <label asp-for="ProfilePictureURL">Profile Picture URL</label>
+        <input type="text" asp-for="ProfilePictureURL" />
+    </div>
+
+   
+
+    <div>
+        <label asp-for="Gender">Gender</label>
+        <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()"></select>
+    </div>
+
+    <div>
+        <label asp-for="Bio">Biography</label>
+        <textarea asp-for="Bio"></textarea>
+    </div>
+
+    <div>
+        <label asp-for="WebSiteLink">Website</label>
+        <input type="url" asp-for="WebSiteLink" />
+    </div>
+
+    <button type="submit">Add Author</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

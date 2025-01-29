@@ -52,17 +52,17 @@ namespace BookDiary.DataAccess
                 .HasForeignKey(u => u.FavouriteBookId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            builder.Entity<Author>()
+            /*builder.Entity<Author>()
                 .HasOne(a => a.City)
                 .WithMany(x => x.Authors)
                 .HasForeignKey(x => x.CityId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.NoAction);*/
 
-            builder.Entity<User>()
+         /*   builder.Entity<User>()
                 .HasOne(x => x.City)
                 .WithMany(x => x.Users)
                 .HasForeignKey(x => x.CityId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.NoAction);*/
 
             builder.Entity<Book>()
                 .HasOne(x => x.Genre)
@@ -206,11 +206,11 @@ namespace BookDiary.DataAccess
                 .HasForeignKey(x => x.CommentId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.Entity<User>()
+          /*  builder.Entity<User>()
                 .HasOne(u => u.City)
                 .WithMany(c => c.Users)
                 .HasForeignKey(u => u.CityId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.SetNull);*/
 
             builder.Entity<ShelfBook>()
                 .HasKey(x => new { x.ShelfId, x.BookId });

@@ -1,23 +1,20 @@
 ﻿using BookDiary.Core.IServices;
-using BookDiary.Core.Services;
 using BookDiary.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.ObjectModel;
 
 namespace BookDiary.Controllers
 {
-    public class AuthorController : Controller
+    public class NewsController : Controller
     {
-        private readonly IAuthorService _authorService;
+        private readonly INewsService _newsService;
 
-        public AuthorController(IAuthorService authorService)
+        public NewsController(INewsService newsService)
         {
-            _authorService = authorService;
+            _newsService = newsService;
         }
-
         public async Task<IActionResult> Index()
         {
-            var list = await _authorService.GetAllAuthors();
+            var list = await _newsService.GetAllNews();
             return View(list);
         }
         public IActionResult Add()
@@ -25,23 +22,23 @@ namespace BookDiary.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Author au)
+        public async Task<IActionResult> Add(News news)
         {
-            await _authorService.Add(au);
+            await _newsService.Add(news);
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> Edit(int id)
         {
 
-            var au = await _authorService.GetById(id);
-            return View(au);
+            var news = await _newsService.GetById(id);
+            return View(news);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Author au)
+        public async Task<IActionResult> Edit(News news)
         {
             if (ModelState.IsValid)
             {
-                await _authorService.Update(au);
+                await _newsService.Update(news);
                 return RedirectToAction("Index");
             }
             return View();
@@ -50,7 +47,7 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            await _authorService.Delete(id);
+            await _newsService.Delete(id);
             return RedirectToAction("Index");
         }
     }
