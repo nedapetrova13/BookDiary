@@ -10,51 +10,53 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BookDiary.styles.css" asp-append-version="true" />
+    <style>
+        /* Apply soft beige background */
+        body {
+            background-color: #F5E6DA;
+            color: #5C4033; /* Deep brown text */
+        }
+
+        /* Navbar styling */
+        .custom-navbar {
+            background-color: #E3D5C5; /* Slightly darker beige */
+        }
+
+        /* Links */
+        .nav-link, .text-dark {
+            color: #5C4033 !important;
+        }
+
+            .nav-link:hover {
+                color: #3D2B1F !important; /* Slightly darker brown on hover */
+            }
+    </style>
 </head>
 <body>
     <div class="d-flex">
         <!-- Vertical Sidebar -->
-
-        <nav class="navbar navbar-light bg-light flex-column p-3" style="width: 250px; height: 100vh; align-items: flex-start; justify-content:flex-start;">
+        <nav class="navbar navbar-light custom-navbar flex-column p-3" style="width: 250px; height: 100vh; align-items: flex-start; justify-content:flex-start;">
             <a class="navbar-brand mb-3" asp-area="" asp-controller="Home" asp-action="Index">
-                <img src="https://w7.pngwing.com/pngs/425/805/png-transparent-computer-icons-book-book-cover-angle-recycling-logo.png"
+                <img src="~/lib/img/Brown Retro Book Store Logo (1)_processed.png"
                      alt="BookDiary Logo"
                      style="max-width: 150px; height: auto;">
             </a>
             <ul class="navbar-nav flex-column w-100">
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
-                
+
                 @if (User.IsInRole(SD.AdminRole))
                 {
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Author" asp-action="Add">Add Author</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Genre" asp-action="Add">Add Genre</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Tag" asp-action="Add">Add Tag</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Language" asp-action="Add">Add Language</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="City" asp-action="Add">Add City</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="PublishingHouse" asp-action="Add">Add Publishing house</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="Add">Add News</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Add">Add Book</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Series" asp-action="Add">Add Series</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Author" asp-action="Add">Add Author</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Genre" asp-action="Add">Add Genre</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Add">Add Tag</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Language" asp-action="Add">Add Language</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="City" asp-action="Add">Add City</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Add">Add Publishing house</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="News" asp-action="Add">Add News</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Book" asp-action="Add">Add Book</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Series" asp-action="Add">Add Series</a></li>
                 }
                 <li> <partial name="_LoginPartial" /></li>
             </ul>
@@ -73,6 +75,7 @@
             &copy; 2025 - BookDiary - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

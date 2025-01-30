@@ -29,21 +29,23 @@ namespace BookDiary.Controllers
         }
         public async Task<IActionResult> Edit(int id)
         {
-
             var news = await _newsService.GetById(id);
+            if (news == null)
+            {
+                return NotFound(); 
+            }
             return View(news);
         }
+
         [HttpPost]
         public async Task<IActionResult> Edit(News news)
         {
-            if (ModelState.IsValid)
-            {
+            
                 await _newsService.Update(news);
                 return RedirectToAction("Index");
-            }
-            return View();
-
+            
         }
+
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
