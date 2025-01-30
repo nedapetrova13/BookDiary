@@ -16,7 +16,11 @@
         <!-- Vertical Sidebar -->
 
         <nav class="navbar navbar-light bg-light flex-column p-3" style="width: 250px; height: 100vh; align-items: flex-start; justify-content:flex-start;">
-            <a class="navbar-brand mb-3" asp-area="" asp-controller="Home" asp-action="Index">BookDiary</a>
+            <a class="navbar-brand mb-3" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="https://w7.pngwing.com/pngs/425/805/png-transparent-computer-icons-book-book-cover-angle-recycling-logo.png"
+                     alt="BookDiary Logo"
+                     style="max-width: 150px; height: auto;">
+            </a>
             <ul class="navbar-nav flex-column w-100">
                 <li class="nav-item">
                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -44,6 +48,12 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="Add">Add News</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Add">Add Book</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Series" asp-action="Add">Add Series</a>
                     </li>
                 }
                 <li> <partial name="_LoginPartial" /></li>

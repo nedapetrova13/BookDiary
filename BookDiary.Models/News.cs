@@ -13,7 +13,7 @@ namespace BookDiary.Models
         public int Id { get; set; }
         [Required(ErrorMessage = "Името е заядължително")]
         public string Title {  get; set; }
-        public DateTime Created { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
         public string Content {  get; set; }
         public ICollection<CommentNews> Comments { get; set; }  
 

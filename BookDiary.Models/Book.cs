@@ -20,8 +20,8 @@ namespace BookDiary.Models
         public Author Author { get; set; }
         public double Rating { get; set; }
         [ForeignKey(nameof(Series))]
-        public int SeriesId { get; set; }
-        public Series Series { get; set; }
+        public int? SeriesId { get; set; }
+        public Series? Series { get; set; }
         public string CoverImageURL { get; set; }
         [ForeignKey(nameof(Genre))]
         public int GenreId { get; set; }

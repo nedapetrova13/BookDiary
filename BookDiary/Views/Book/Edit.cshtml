@@ -1,0 +1,88 @@
+﻿@using BookDiary.Models.Enums
+@model BookDiary.Models.Book
+
+<form method="post" enctype="multipart/form-data" class="p-4 border rounded shadow-sm bg-light">
+    <h2 class="mb-4">Edit Book</h2>
+
+    <!-- Title -->
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Title</label>
+        <input type="text" asp-for="Title" class="form-control" required />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <!-- Author -->
+    <div class="mb-3">
+        <label asp-for="AuthorId" class="form-label">Author</label>
+        <select asp-for="AuthorId" asp-items="@(new SelectList(ViewData["Authors"] as IEnumerable<BookDiary.Models.Author>, "Id", "Name"))" class="form-select" required>
+            <option value="">Select Author</option>
+        </select>
+        <span asp-validation-for="AuthorId" class="text-danger"></span>
+    </div>
+
+    <!-- Rating -->
+    <div class="mb-3">
+        <label asp-for="Rating" class="form-label">Rating</label>
+        <input type="number" asp-for="Rating" class="form-control" min="0" max="5" step="0.1" required />
+        <span asp-validation-for="Rating" class="text-danger"></span>
+    </div>
+
+    <!-- Series -->
+    <div class="mb-3">
+        <label asp-for="SeriesId" class="form-label">Series</label>
+        <select asp-for="SeriesId" asp-items="@(new SelectList(ViewData["Series"] as IEnumerable<BookDiary.Models.Series>, "Id", "Name"))" class="form-select">
+            <option value="">Select Series</option>
+        </select>
+    </div>
+
+    <!-- Cover Image URL -->
+    <div class="mb-3">
+        <label asp-for="CoverImageURL" class="form-label">Cover Image URL</label>
+        <input type="url" asp-for="CoverImageURL" class="form-control" />
+    </div>
+
+    <!-- Genre -->
+    <div class="mb-3">
+        <label asp-for="GenreId" class="form-label">Genre</label>
+        <select asp-for="GenreId" asp-items="@(new SelectList(ViewData["Genres"] as IEnumerable<BookDiary.Models.Genre>, "Id", "Name"))" class="form-select" required>
+            <option value="">Select Genre</option>
+        </select>
+        <span asp-validation-for="GenreId" class="text-danger"></span>
+    </div>
+
+    <!-- Book Format -->
+    <div class="mb-3">
+        <label asp-for="BookFormat" class="form-label">Book Format</label>
+        <select asp-for="BookFormat" asp-items="Html.GetEnumSelectList<BookFormatEnum>()" class="form-select">
+            <option value="">Select Book Format</option>
+        </select>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Description</label>
+        <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <!-- Number of Pages -->
+    <div class="mb-3">
+        <label asp-for="BookPages" class="form-label">Number of Pages</label>
+        <input type="number" asp-for="BookPages" class="form-control" required />
+    </div>
+
+    <!-- Chapters -->
+    <div class="mb-3">
+        <label asp-for="Chapters" class="form-label">Chapters</label>
+        <input type="number" asp-for="Chapters" class="form-control" required />
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary w-100">Update Book</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

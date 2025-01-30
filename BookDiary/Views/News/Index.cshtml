@@ -6,19 +6,18 @@
 @model IEnumerable<BookDiary.Models.News>
 <h1>See all news</h1>
 
-        @foreach (var news in Model)
-        {
-    <div class="card" style="width: 18rem;">
-        <div class="card-body" style="display:ruby">
-            <h5 class="card-title">@news.Title</h5>
-            <p class="card-text">@news.Content</p>
-            <a type="button" class="btn btn-success" asp-action="Edit" asp-controller="PublishingHouse" asp-route-id="@news.Id">Edit</a>
-            <form method="post" asp-controller="PublishingHouse" asp-action="Delete">
-                <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="PublishingHouse" asp-route-id="@news.Id">Delete</button>
-            </form>
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+    @foreach (var news in Model)
+    {
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">@news.Title</h5>
+                <p class="card-text">@news.Content</p>
+                <a type="button" class="btn btn-success" asp-action="Edit" asp-controller="News" asp-route-id="@news.Id">Edit</a>
+                <form method="post" asp-controller="News" asp-action="Delete">
+                    <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="News" asp-route-id="@news.Id">Delete</button>
+                </form>
+            </div>
         </div>
-    </div>
-   
-                
-        }
-   
+    }
+</div>

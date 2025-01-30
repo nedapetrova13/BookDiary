@@ -12,7 +12,7 @@ namespace BookDiary.Models
 {
     public class User : IdentityUser
     {
-        [Required(ErrorMessage = "Името е заядължително")]
+        [Required(ErrorMessage = "Името е задължително")]
         public string Name { get; set; }
         public DateTime Birthdate { get; set; }
         [EnumDataType(typeof(GenderEnum))]

@@ -52,5 +52,11 @@ namespace BookDiary.Core.Services
         {
             return await _repo.GetAll();
         }
+
+        public async Task<IEnumerable<News>> GetTop5Services()
+        {
+            var newsList = await _repo.GetAll(); // Await the list of news
+            return newsList.OrderByDescending(n => n.Created).Take(3);       
+         }
     }
 }
