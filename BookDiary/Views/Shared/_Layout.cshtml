@@ -43,20 +43,20 @@
             </a>
             <ul class="navbar-nav flex-column w-100">
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Главна страница</a>
                 </li>
 
                 @if (User.IsInRole(SD.AdminRole))
                 {
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Author" asp-action="Add">Add Author</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Genre" asp-action="Add">Add Genre</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Add">Add Tag</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Language" asp-action="Add">Add Language</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="City" asp-action="Add">Add City</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Add">Add Publishing house</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="News" asp-action="Add">Add News</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Book" asp-action="Add">Add Book</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Series" asp-action="Add">Add Series</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Author" asp-action="Add">Атори</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Genre" asp-action="Add">Жанрове</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Add">Тагове</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Language" asp-action="Add">Езици</a></li>
+                    //<li class="nav-item"><a class="nav-link" asp-area="" asp-controller="City" asp-action="Add">Add City</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Add">Издателски къщи</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="News" asp-action="Add">Новини</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Book" asp-action="Add">Книги</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Series" asp-action="Add">Поредици</a></li>
                 }
                 <li> <partial name="_LoginPartial" /></li>
             </ul>

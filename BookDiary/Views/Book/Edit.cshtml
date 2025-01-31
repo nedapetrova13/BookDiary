@@ -14,7 +14,7 @@
     <!-- Author -->
     <div class="mb-3">
         <label asp-for="AuthorId" class="form-label">Author</label>
-        <select asp-for="AuthorId" asp-items="@(new SelectList(ViewData["Authors"] as IEnumerable<BookDiary.Models.Author>, "Id", "Name"))" class="form-select" required>
+        <select asp-for="AuthorId" asp-items="@ViewBag.Authors" class="form-select" required>
             <option value="">Select Author</option>
         </select>
         <span asp-validation-for="AuthorId" class="text-danger"></span>
@@ -30,7 +30,7 @@
     <!-- Series -->
     <div class="mb-3">
         <label asp-for="SeriesId" class="form-label">Series</label>
-        <select asp-for="SeriesId" asp-items="@(new SelectList(ViewData["Series"] as IEnumerable<BookDiary.Models.Series>, "Id", "Name"))" class="form-select">
+        <select asp-for="SeriesId" asp-items="@ViewBag.Series" class="form-select">
             <option value="">Select Series</option>
         </select>
     </div>
@@ -44,7 +44,7 @@
     <!-- Genre -->
     <div class="mb-3">
         <label asp-for="GenreId" class="form-label">Genre</label>
-        <select asp-for="GenreId" asp-items="@(new SelectList(ViewData["Genres"] as IEnumerable<BookDiary.Models.Genre>, "Id", "Name"))" class="form-select" required>
+        <select asp-for="GenreId" asp-items="@ViewBag.Genres" class="form-select" required>
             <option value="">Select Genre</option>
         </select>
         <span asp-validation-for="GenreId" class="text-danger"></span>
@@ -55,6 +55,29 @@
         <label asp-for="BookFormat" class="form-label">Book Format</label>
         <select asp-for="BookFormat" asp-items="Html.GetEnumSelectList<BookFormatEnum>()" class="form-select">
             <option value="">Select Book Format</option>
+        </select>
+    </div>
+
+    <!-- Tags (Multiple Select) -->
+    <div class="mb-3">
+        <label class="form-label">Tags</label>
+        <select asp-for="TagIds" asp-items="@ViewBag.Tags" class="form-select" multiple>
+        </select>
+    </div>
+
+    <!-- Language -->
+    <div class="mb-3">
+        <label class="form-label">Language</label>
+        <select asp-for="LanguageId" asp-items="@ViewBag.Languages" class="form-select">
+            <option value="">Select Language</option>
+        </select>
+    </div>
+
+    <!-- Publishing House -->
+    <div class="mb-3">
+        <label class="form-label">Publishing House</label>
+        <select asp-for="PublishingHouseId" asp-items="@ViewBag.PublishingHouses" class="form-select">
+            <option value="">Select Publishing House</option>
         </select>
     </div>
 
@@ -78,7 +101,7 @@
     </div>
 
     <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary w-100">Update Book</button>
+    <button type="submit" class="btn btn-primary w-100" asp-action="Edit" asp-controller="Book" asp-route-id="@Model.Id">Update Book</button>
 </form>
 
 @section Scripts {

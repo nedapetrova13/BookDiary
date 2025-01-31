@@ -13,6 +13,7 @@
             <div class="card-body">
                 <h5 class="card-title">@series.Title</h5>
                 <p class="card-text">@series.Description</p>
+                
                 <a type="button" class="btn btn-success" asp-action="Edit" asp-controller="Series" asp-route-id="@series.Id">Edit</a>
                 <form method="post" asp-controller="Series" asp-action="Delete">
                     <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="Series" asp-route-id="@series.Id">Delete</button>
