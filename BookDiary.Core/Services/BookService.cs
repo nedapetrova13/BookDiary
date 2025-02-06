@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
@@ -14,9 +15,14 @@ namespace BookDiary.Core.Services
     public class BookService : IBookService
     {
         private readonly IRepository<Book> _repo;
-        public BookService(IRepository<Book> repo)
+        private readonly IRepository<BookTag> _btrepo;
+        private readonly IRepository<Tag> _tagrepo;
+        
+        public BookService(IRepository<Book> repo, IRepository<BookTag> btrepo, IRepository<Tag> tagrepo)
         {
             this._repo = repo;
+            this._btrepo = btrepo;
+            this._tagrepo = tagrepo;
         }
 
         public async Task Add(Book entity)
@@ -52,6 +58,10 @@ namespace BookDiary.Core.Services
         public async Task<IEnumerable<Book>> GetAllBooks()
         {
             return await _repo.GetAll();
+        }
+        public Task AddTagToBook(string bookname, string tagname)
+        {
+            throw new NotImplementedException();
         }
     }
 }

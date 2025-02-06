@@ -50,9 +50,9 @@ namespace BookDiary.DataAccess.Repository
             return entity;
         }
 
-        public async Task<List<T>> GetAll()
+        public  IQueryable<T> GetAll()
         {
-            return await dbSet.ToListAsync();
+            return  dbSet.AsQueryable();
         }
         public async Task<T> GetById(int id)
         {

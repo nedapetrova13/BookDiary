@@ -9,7 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface IAuthorService:IService<Author>
     {
-        Task<IEnumerable<Author>> GetAllAuthors();
+       
 
     }
 }

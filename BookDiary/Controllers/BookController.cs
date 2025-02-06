@@ -16,7 +16,7 @@
             private readonly ISeriesService _seriesService;
             private readonly ITagService _tagService; 
 
-            public BookController(IBookService bookService,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService
+            public BookController(IBookService bookService,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService)
             {
                 _bookService = bookService;
                 _authorService = authorService;
