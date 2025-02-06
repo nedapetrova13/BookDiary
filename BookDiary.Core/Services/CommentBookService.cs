@@ -30,12 +30,12 @@ namespace BookDiary.Core.Services
 
         public async Task<List<CommentBook>> Find(Expression<Func<CommentBook, bool>> filter)
         {
-           return await _repo.Find(filter);
+            return await _repo.Find(filter);
         }
 
-        public async Task<List<CommentBook>> GetAll()
+        public IQueryable<CommentBook> GetAll()
         {
-            return await _repo.GetAll();
+            return  _repo.GetAll();
         }
 
         public async Task<CommentBook> GetById(int id)
@@ -45,12 +45,8 @@ namespace BookDiary.Core.Services
 
         public async Task Update(CommentBook entity)
         {
-             await _repo.Update(entity);
+            await _repo.Update(entity);
         }
 
-        async Task<IEnumerable<CommentBook>> ICommentBookService.GetAllCommentBooks()
-        {
-            return await _repo.GetAll();
-        }
     }
 }

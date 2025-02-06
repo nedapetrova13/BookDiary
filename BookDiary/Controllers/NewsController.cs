@@ -1,6 +1,8 @@
 ﻿using BookDiary.Core.IServices;
 using BookDiary.Models;
+using BookDiary.Models.ViewModels.NewsViewModels;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Versioning;
 
 namespace BookDiary.Controllers
 {
@@ -12,18 +14,25 @@ namespace BookDiary.Controllers
         {
             _newsService = newsService;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var list = await _newsService.GetAllNews();
+            var list = _newsService.GetAll();
             return View(list);
         }
         public IActionResult Add()
         {
-            return View();
+            
+            var model = new NewsCreateViewModel();
+            return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Add(News news)
+        public async Task<IActionResult> Add(NewsCreateViewModel ncvm)
         {
+            var news = new News
+            {
+                Title = ncvm.Title,
+                Content = ncvm.Content,
+            };
             await _newsService.Add(news);
             return RedirectToAction("Index");
         }
@@ -34,14 +43,24 @@ namespace BookDiary.Controllers
             {
                 return NotFound(); 
             }
-            return View(news);
+            var model = new NewsCreateViewModel
+            {
+                Title = news.Title,
+                Content = news.Content
+            };
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(News news)
+        public async Task<IActionResult> Edit(NewsEditViewModel nevm)
         {
-            
-                await _newsService.Update(news);
+            var model = new News
+            {
+                Id = nevm.Id,
+                Title = nevm.Title,
+                Content = nevm.Content,
+            };
+                await _newsService.Update(model);
                 return RedirectToAction("Index");
             
         }

@@ -9,7 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface ICurrentReadService:IService<CurrentRead>
     {
-        Task<IEnumerable<CurrentRead>> GetAllCurrentReads();
+        //ask<IEnumerable<CurrentRead>> GetAllCurrentReads();
 
     }
 }

@@ -9,7 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface INewsService:IService<News>
     {
-        Task<IEnumerable<News>> GetAllNews();
+        //Task<IEnumerable<News>> GetAllNews();
         Task<IEnumerable<News>> GetTop5Services();
 
 

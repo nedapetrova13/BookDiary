@@ -33,9 +33,9 @@ namespace BookDiary.Core.Services
             return await _repo.Find(filter);    
         }
 
-        public async Task<List<Genre>> GetAll()
+        public IQueryable<Genre> GetAll()
         {
-            return await _repo.GetAll();
+            return  _repo.GetAll();
         }
 
         public async Task<Genre> GetById(int id)
@@ -48,9 +48,6 @@ namespace BookDiary.Core.Services
             await _repo.Update(entity); 
         }
 
-        public async Task<IEnumerable<Genre>> GetAllGenres()
-        {
-            return await _repo.GetAll();
-        }
+        
     }
 }

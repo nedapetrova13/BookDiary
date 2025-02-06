@@ -1,14 +1,15 @@
-﻿    using System.Data.Entity;
-    using BookDiary.Core.IServices;
-    using BookDiary.Core.Services;
-    using BookDiary.Models;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Data.Entity;
+using BookDiary.Core.IServices;
+using BookDiary.Core.Services;
+using BookDiary.Models;
+using BookDiary.Models.ViewModels.BookViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 
-    namespace BookDiary.Controllers
-    {
-        public class BookController : Controller
+namespace BookDiary.Controllers
+{
+    public class BookController : Controller
         {
             private readonly IBookService _bookService;
             private readonly IAuthorService _authorService;
@@ -25,9 +26,9 @@
                 _tagService = tagService; ;
             }
 
-            public async  Task<IActionResult> Index(BookViewModel? filter)
+            public async  Task<IActionResult> Index(BookFilterViewModel? filter)
             {
-                var books = await _bookService.GetAllBooks();
+                var books =  _bookService.GetAll();
                 var query = books.AsQueryable();
                 if ((filter.GenreId != null))
                 {
@@ -46,16 +47,16 @@
                     query = query.Where(b => b.BookPages <= filter.PageMaxCount);
                 }
 
-                var list = await _bookService.GetAllBooks();
+                var list =  _bookService.GetAll();
                 var testList = list.AsQueryable().Include(b => b.Genre).Include(b => b.Author).ToList();
-                var model = new BookViewModel
+                var model = new BookFilterViewModel
                 {
                     GenreId = filter.GenreId,
                     AuthorId = filter.AuthorId,
                     PageMaxCount = filter.PageMaxCount,
                     PageMinCount = filter.PageMinCount,
-                    Genres = new SelectList(await _genreService.GetAllGenres(), "Id", "Name"),
-                    Authors = new SelectList(await _authorService.GetAllAuthors(), "Id", "Name"),
+                    Genres = new SelectList( _genreService.GetAll(), "Id", "Name"),
+                    Authors = new SelectList( _authorService.GetAll(), "Id", "Name"),
                     Books = query.Include(b => b.Genre).Include(b => b.Author).ToList()
                     //Books = testList
                 };
@@ -63,9 +64,9 @@
             }
             public async Task<IActionResult> Add()
             {
-                var authors = await _authorService.GetAllAuthors();
-                var genres = await _genreService.GetAllGenres();
-                var series = await _seriesService.GetAllSeries();
+                var authors = _authorService.GetAll();
+                var genres =  _genreService.GetAll();
+                var series =  _seriesService.GetAll();
                 ViewBag.Genres = new SelectList(genres, "Id", "Name");
                 ViewBag.Authors = new SelectList(authors, "Id", "Name");
                 ViewBag.Series = new SelectList(series, "Id", "Title");
@@ -79,10 +80,10 @@
             }
             public async Task<IActionResult> Edit(int id)
             {
-                var authors = await _authorService.GetAllAuthors();
-                var genres = await _genreService.GetAllGenres();
-                var series = await _seriesService.GetAllSeries();
-                var tags = await _tagService.GetAllTags();
+                var authors = _authorService.GetAll();
+                var genres =  _genreService.GetAll();
+                var series =  _seriesService.GetAll();
+                var tags =  _tagService.GetAll();
                 ViewBag.Genres = new SelectList(genres, "Id", "Name");
                 ViewBag.Authors = new SelectList(authors, "Id", "Name");
                 ViewBag.Series = new SelectList(series, "Id", "Title");

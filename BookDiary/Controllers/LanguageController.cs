@@ -1,5 +1,7 @@
 ﻿using BookDiary.Core.IServices;
+using BookDiary.Core.Services;
 using BookDiary.Models;
+using BookDiary.Models.ViewModels.LanguageViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookDiary.Controllers
@@ -13,18 +15,23 @@ namespace BookDiary.Controllers
             _service = service;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var list = await  _service.GetAllLanguages();
+            var list = _service.GetAll();
             return View(list);
         }
         public IActionResult Add()
         {
-            return View();
+            var model = new LanguageCreateViewModel();
+            return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Language language)
+        public async Task<IActionResult> Add(LanguageCreateViewModel lcvm)
         {
+            var language = new Language
+            {
+                Name = lcvm.Name
+            };
             await _service.Add(language);
             return RedirectToAction("Index");
         }
@@ -32,18 +39,22 @@ namespace BookDiary.Controllers
         {
 
             var language = await _service.GetById(id);
-            return View(language);
+            var model = new LanguageEditViewModel
+            {
+                Name = language.Name
+            };
+            return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Language language)
+        public async Task<IActionResult> Edit(LanguageEditViewModel levm)
         {
-            if(ModelState.IsValid)
+            var model = new Language
             {
-                await _service.Update(language);
-                return RedirectToAction("Index");
-            }
-            return View();
-            
+                Id = levm.Id,
+                Name = levm.Name
+            };
+            await _service.Update(model);
+            return RedirectToAction("Index");
         }
         [HttpPost]
         public async Task<IActionResult> Delete(int id)

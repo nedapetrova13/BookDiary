@@ -40,11 +40,11 @@ namespace BookDiary.Core.Services
             return await _repo.Find(filter);
         }
 
-        public async Task<List<Book>> GetAll()
+       /* public async Task<List<Book>> GetAll()
         {
            return await _repo.GetAll();
         }
-
+*/
         public Task<Book> GetById(int id)
         {
             return _repo.GetById(id);
@@ -55,13 +55,18 @@ namespace BookDiary.Core.Services
            await _repo.Update(entity);
         }
 
-        public async Task<IEnumerable<Book>> GetAllBooks()
+        /*public async Task<IEnumerable<Book>> GetAllBooks()
         {
             return await _repo.GetAll();
-        }
+        }*/
         public Task AddTagToBook(string bookname, string tagname)
         {
             throw new NotImplementedException();
+        }
+
+        public IQueryable<Book> GetAll()
+        {
+            return  _repo.GetAll();
         }
     }
 }

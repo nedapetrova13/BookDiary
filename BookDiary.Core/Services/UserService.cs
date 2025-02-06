@@ -33,9 +33,9 @@ namespace BookDiary.Core.Services
             return await _repo.Find(filter);
         }
 
-        public async Task<List<User>> GetAll()
+        public IQueryable<User> GetAll()
         {
-            return await _repo.GetAll();
+            return  _repo.GetAll();
         }
 
         public async Task<User> GetById(int id)
@@ -48,9 +48,9 @@ namespace BookDiary.Core.Services
             await _repo.Update(entity);
         }
 
-        public async Task<IEnumerable<User>> GetAllUsers()
+       /* public async Task<IEnumerable<User>> GetAllUsers()
         {
             return await _repo.GetAll();
-        }
+        }*/
     }
 }

@@ -9,7 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface IQuestionGenreBookService:IService<QuestionGenreBook>
     {
-        Task<IEnumerable<QuestionGenreBook>> GetAllQuestionGenreBooks();
+       // Task<IEnumerable<QuestionGenreBook>> GetAllQuestionGenreBooks();
 
     }
 }

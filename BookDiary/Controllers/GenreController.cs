@@ -1,6 +1,7 @@
 ﻿using BookDiary.Core.IServices;
 using BookDiary.Core.Services;
 using BookDiary.Models;
+using BookDiary.Models.ViewModels.GenreViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookDiary.Controllers
@@ -14,20 +15,25 @@ namespace BookDiary.Controllers
             _genreService = genreService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var list = await _genreService.GetAllGenres();
+            var list =  _genreService.GetAll();
             return View(list);
         }
 
         public IActionResult Add()
         {
-            return View();
+            var model = new GenreCreateViewModel();
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Genre genre)
+        public async Task<IActionResult> Add(GenreCreateViewModel gcvm)
         {
+            var genre = new Genre
+            {
+                Name = gcvm.Name
+            };
             await _genreService.Add(genre);
             return RedirectToAction("Index");
         }
@@ -35,13 +41,22 @@ namespace BookDiary.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var tag = await _genreService.GetById(id);
-            return View(tag);
+            var model = new GenreEditViewModel
+            {
+                Name = tag.Name
+            };
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Genre genre) 
+        public async Task<IActionResult> Edit(GenreEditViewModel gevm) 
         {
-            await _genreService.Update(genre);
+            var model = new Genre
+            {
+                Id = gevm.Id,
+                Name = gevm.Name
+            };
+            await _genreService.Update(model);
             return RedirectToAction("Index");
         }
 

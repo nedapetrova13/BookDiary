@@ -1,6 +1,8 @@
 ﻿using BookDiary.Core.IServices;
 using BookDiary.Core.Services;
 using BookDiary.Models;
+using BookDiary.Models.ViewModels.TagViewModels;
+using BookDiary.Models.ViewModels.PublishingHouseViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookDiary.Controllers
@@ -14,34 +16,50 @@ namespace BookDiary.Controllers
             _publishingHouseService = publishingHouseService;
         }
 
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
-            var list = await _publishingHouseService.GetAllPublishingHouses();
+            var list =  _publishingHouseService.GetAll();
             return View(list);
         }
 
         public IActionResult Add()
         {
-            return View();
+            var model = new PublishingHouseCreateViewModel();
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(PublishingHouse ph)
+        public async Task<IActionResult> Add(PublishingHouseCreateViewModel phcvm)
         {
-            await _publishingHouseService.Add(ph);
+            var pubhouse = new PublishingHouse
+            {
+                Name = phcvm.Name,
+                YearFounded = phcvm.YearFounded,
+            };
+            await _publishingHouseService.Add(pubhouse);
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var ph = await _publishingHouseService.GetById(id);
-            return View(ph);
+            PublishingHouse phouse = await _publishingHouseService.GetById(id);
+            var model = new PublishingHouseEditViewModel
+            {
+                Name = phouse.Name,
+                YearFounded = phouse.YearFounded,
+            };
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(PublishingHouse ph)
+        public async Task<IActionResult> Edit(PublishingHouseEditViewModel phevm)
         {
-            await _publishingHouseService.Update(ph);
+            var model = new PublishingHouse
+            {
+                Id = phevm.Id,
+                Name = phevm.Name,
+            };
+            await _publishingHouseService.Update(model);
             return RedirectToAction("Index");
         }
 

@@ -9,7 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface IPublishingHouseService:IService<PublishingHouse>
     {
-        Task<IEnumerable<PublishingHouse>> GetAllPublishingHouses();
+        //Task<IEnumerable<PublishingHouse>> GetAllPublishingHouses();
 
     }
 }

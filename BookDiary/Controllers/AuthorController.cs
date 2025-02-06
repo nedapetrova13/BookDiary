@@ -1,6 +1,8 @@
 ﻿using BookDiary.Core.IServices;
 using BookDiary.Core.Services;
 using BookDiary.Models;
+using BookDiary.Models.ViewModels.AuthorViewModels;
+using BookDiary.Models.ViewModels.AuthorViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.ObjectModel;
 
@@ -15,26 +17,47 @@ namespace BookDiary.Controllers
             _authorService = authorService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var list = await _authorService.GetAllAuthors();
+            var list =  _authorService.GetAll();
             return View(list);
         }
         public IActionResult Add()
         {
-            return View();
+            var model = new AuthorCreateViewModel();
+            return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Author au)
+        public async Task<IActionResult> Add(AuthorCreateViewModel acvm)
         {
-            await _authorService.Add(au);
+            var author = new Author
+            {
+                Name = acvm.Name,
+                BirthDate = acvm.BirthDate,
+                Bio = acvm.Bio,
+                Email = acvm.Email,
+                ProfilePictureURL = acvm.ProfilePictureURL,
+                Gender = acvm.Gender,
+                WebSiteLink = acvm.WebSiteLink
+            };
+            await _authorService.Add(author);
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> Edit(int id)
         {
 
             var au = await _authorService.GetById(id);
-            return View(au);
+            var model = new AuthorEditViewModel
+            {
+                Name = au.Name,
+                BirthDate = au.BirthDate,
+                Bio = au.Bio,
+                Email = au.Email,
+                ProfilePictureURL = au.ProfilePictureURL,
+                Gender = au.Gender,
+                WebSiteLink = au.WebSiteLink
+            };
+            return View(model);
         }
         [HttpPost]
         public async Task<IActionResult> Edit(Author au)

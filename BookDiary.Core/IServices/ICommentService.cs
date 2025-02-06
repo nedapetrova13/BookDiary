@@ -9,7 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface ICommentService:IService<Comment>
     {
-        Task<IEnumerable<Comment>> GetAllComments();
+        //Task<IEnumerable<Comment>> GetAllComments();
 
     }
 }

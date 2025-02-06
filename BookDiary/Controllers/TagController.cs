@@ -1,5 +1,6 @@
 ﻿using BookDiary.Core.IServices;
 using BookDiary.Models;
+using BookDiary.Models.ViewModels.TagViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -14,34 +15,48 @@ namespace BookDiary.Controllers
             _tagService = tagService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var list = await _tagService.GetAllTags();
+            var list =  _tagService.GetAll();
             return View(list);
         }
 
         public IActionResult Add()
         {
-            return View();
+            var model = new TagCreateViewModel();
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Tag tag)
+        public async Task<IActionResult> Add(TagCreateViewModel tcvm)
         {
+            var tag = new Tag
+            {
+                Name = tcvm.Name,
+            };
             await _tagService.Add(tag);
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var tag = await _tagService.GetById(id);
-            return View(tag);
+            Tag tag = await _tagService.GetById(id);
+            var model = new TagEditViewModel
+            {
+                Name = tag.Name,
+            };
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Tag tag)
+        public async Task<IActionResult> Edit(TagEditViewModel tagModel)
         {
-            await _tagService.Update(tag);
+            var model = new Tag
+            {
+                Id = tagModel.Id,
+                Name = tagModel.Name,
+            };
+            await _tagService.Update(model);
             return RedirectToAction("Index");
         }
 

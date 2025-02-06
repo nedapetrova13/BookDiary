@@ -1,6 +1,8 @@
 ﻿using BookDiary.Core.IServices;
 using BookDiary.Core.Services;
 using BookDiary.Models;
+using BookDiary.Models.ViewModels.TagViewModels;
+using BookDiary.Models.ViewModels.SeriesViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookDiary.Controllers
@@ -14,36 +16,48 @@ namespace BookDiary.Controllers
             _seriesService = seriesService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var list = await _seriesService.GetAllSeries();
+            var list =  _seriesService.GetAll();
             return View(list);
         }
         public IActionResult Add()
         {
+            var model = new SeriesCreateViewModel();
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Series series)
+        public async Task<IActionResult> Add(SeriesCreateViewModel scvm)
         {
+            var series = new Series
+            {
+                Title = scvm.Title,
+                Description = scvm.Description,
+            };
             await _seriesService.Add(series);
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> Edit(int id)
         {
-
-            var series = await _seriesService.GetById(id);
-            return View(series);
+            Series series = await _seriesService.GetById(id);
+            var model = new SeriesEditViewModel
+            {
+                Title = series.Title,
+                Description = series.Description,
+            };
+            return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Series series)
+        public async Task<IActionResult> Edit(SeriesEditViewModel sevm)
         {
-            if (ModelState.IsValid)
+            var model = new Series
             {
-                await _seriesService.Update(series);
-                return RedirectToAction("Index");
-            }
-            return View();
+                Id = sevm.Id,
+                Title = sevm.Title,
+                Description = sevm.Description,
+            };
+            await _seriesService.Update(model);
+            return RedirectToAction("Index");
 
         }
         [HttpPost]

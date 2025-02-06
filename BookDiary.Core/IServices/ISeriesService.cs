@@ -9,7 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface ISeriesService:IService<Series>
     {
-        Task<IEnumerable<Series>> GetAllSeries();
+        //Task<IEnumerable<Series>> GetAllSeries();
 
     }
 }
