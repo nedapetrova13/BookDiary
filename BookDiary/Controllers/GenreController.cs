@@ -2,6 +2,7 @@
 using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.GenreViewModels;
+using BookDiary.Models.ViewModels.NewsViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookDiary.Controllers
@@ -17,8 +18,15 @@ namespace BookDiary.Controllers
 
         public IActionResult Index()
         {
-            var list =  _genreService.GetAll();
-            return View(list);
+            var genreList = _genreService.GetAll();
+
+            var viewModelList = genreList.Select(news => new GenreCreateViewModel
+            {
+                Name = news.Name,
+                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+            }).ToList();
+
+            return View(viewModelList);
         }
 
         public IActionResult Add()

@@ -4,6 +4,7 @@ using BookDiary.Models;
 using BookDiary.Models.ViewModels.TagViewModels;
 using BookDiary.Models.ViewModels.SeriesViewModels;
 using Microsoft.AspNetCore.Mvc;
+using BookDiary.Models.ViewModels.NewsViewModels;
 
 namespace BookDiary.Controllers
 {
@@ -18,8 +19,16 @@ namespace BookDiary.Controllers
 
         public IActionResult Index()
         {
-            var list =  _seriesService.GetAll();
-            return View(list);
+            var seriesList = _seriesService.GetAll();
+
+            var viewModelList = seriesList.Select(news => new SeriesCreateViewModel
+            {
+                Title = news.Title,
+                 Description = news.Description,
+                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+            }).ToList();
+
+            return View(viewModelList);
         }
         public IActionResult Add()
         {

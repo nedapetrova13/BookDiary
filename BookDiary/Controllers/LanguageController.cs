@@ -2,6 +2,7 @@
 using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.LanguageViewModels;
+using BookDiary.Models.ViewModels.NewsViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookDiary.Controllers
@@ -17,8 +18,15 @@ namespace BookDiary.Controllers
 
         public IActionResult Index()
         {
-            var list = _service.GetAll();
-            return View(list);
+            var languageList = _service.GetAll();
+
+            var viewModelList = languageList.Select(news => new LanguageCreateViewModel
+            {
+                Name = news.Name,
+                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+            }).ToList();
+
+            return View(viewModelList);
         }
         public IActionResult Add()
         {

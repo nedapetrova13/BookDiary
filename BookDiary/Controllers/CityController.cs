@@ -1,6 +1,8 @@
 ﻿using BookDiary.Core.IServices;
+using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.CityViewModels;
+using BookDiary.Models.ViewModels.NewsViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookDiary.Controllers
@@ -16,8 +18,15 @@ namespace BookDiary.Controllers
 
         public IActionResult Index()
         {
-            var list = _cityService.GetAll();
-            return View(list);
+            var cityList = _cityService.GetAll();
+
+            var viewModelList = cityList.Select(news => new CityCreateViewModel
+            {
+                Name = news.Name,
+                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+            }).ToList();
+
+            return View(viewModelList); 
         }
         public IActionResult Add()
         {

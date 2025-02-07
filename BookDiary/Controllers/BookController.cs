@@ -70,11 +70,24 @@ namespace BookDiary.Controllers
                 ViewBag.Genres = new SelectList(genres, "Id", "Name");
                 ViewBag.Authors = new SelectList(authors, "Id", "Name");
                 ViewBag.Series = new SelectList(series, "Id", "Title");
-                return View();
+                var model = new BookCreateViewModel();
+                return View(model);
             }
             [HttpPost]
-            public async Task<IActionResult> Add(Book book)
+            public async Task<IActionResult> Add(BookCreateViewModel bookcvm)
             {
+            var book = new Book
+            {
+                Title = bookcvm.Title,
+                Description = bookcvm.Description,
+                AuthorId = bookcvm.AuthorId,
+                GenreId = bookcvm.GenreId,
+                SeriesId = bookcvm.SeriesId,
+                CoverImageURL = bookcvm.CoverImageURL,
+                BookFormat = bookcvm.BookFormat,
+                BookPages = bookcvm.BookPages,
+                Chapters = bookcvm.Chapters
+            };
                 await _bookService.Add(book);
                 return RedirectToAction("Index");
             }

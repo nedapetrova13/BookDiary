@@ -1,5 +1,146 @@
-﻿@model BookFilterViewModel
+﻿@model BookDiary.Models.ViewModels.BookViewModels.BookFilterViewModel;
+<style>
+    /* From Uiverse.io by Madflows */
+    button {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        outline: none;
+        border: 0;
+        vertical-align: middle;
+        text-decoration: none;
+        font-family: inherit;
+        font-size: 15px;
+    }
 
+        button.learn-more {
+            font-weight: 600;
+            color: #382b22;
+            text-transform: uppercase;
+            padding: 1.25em 2em;
+            background: #fff0f0;
+            border: 2px solid #b18597;
+            border-radius: 0.75em;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            -webkit-transition: background 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1);
+            transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1);
+        }
+
+            button.learn-more::before {
+                position: absolute;
+                content: '';
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: #f9c4d2;
+                border-radius: inherit;
+                -webkit-box-shadow: 0 0 0 2px #b18597, 0 0.625em 0 0 #ffe3e2;
+                box-shadow: 0 0 0 2px #b18597, 0 0.625em 0 0 #ffe3e2;
+                -webkit-transform: translate3d(0, 0.75em, -1em);
+                transform: translate3d(0, 0.75em, -1em);
+                transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+            }
+
+            button.learn-more:hover {
+                background: #ffe9e9;
+                -webkit-transform: translate(0, 0.25em);
+                transform: translate(0, 0.25em);
+            }
+
+                button.learn-more:hover::before {
+                    -webkit-box-shadow: 0 0 0 2px #b18597, 0 0.5em 0 0 #ffe3e2;
+                    box-shadow: 0 0 0 2px #b18597, 0 0.5em 0 0 #ffe3e2;
+                    -webkit-transform: translate3d(0, 0.5em, -1em);
+                    transform: translate3d(0, 0.5em, -1em);
+                }
+
+            button.learn-more:active {
+                background: #ffe9e9;
+                -webkit-transform: translate(0em, 0.75em);
+                transform: translate(0em, 0.75em);
+            }
+
+                button.learn-more:active::before {
+                    -webkit-box-shadow: 0 0 0 2px #b18597, 0 0 #ffe3e2;
+                    box-shadow: 0 0 0 2px #b18597, 0 0 #ffe3e2;
+                    -webkit-transform: translate3d(0, 0, -1em);
+                    transform: translate3d(0, 0, -1em);
+                }
+    /* From Uiverse.io by eslam-hany */
+    .book {
+        position: relative;
+        border-radius: 10px;
+        width: 220px;
+        height: 300px;
+        background-color: whitesmoke;
+        box-shadow: 1px 1px 12px #000;
+        transform: preserve-3d;
+        perspective: 2000px;
+        display: flex;
+        flex-direction: column; /* Ensures vertical stacking */
+        align-items: center;
+        justify-content: flex-start; /* Align items to the top */
+        color: #000;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+        .book p {
+            margin: 5px 0;
+        }
+
+
+    .cover {
+        top: 0;
+        position: absolute;
+        background-color: lightgray;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        cursor: pointer;
+        -webkit-transition: all 0.5s;
+        transition: all 0.5s;
+        -webkit-transform-origin: 0;
+        -ms-transform-origin: 0;
+        transform-origin: 0;
+        -webkit-box-shadow: 1px 1px 12px #000;
+        box-shadow: 1px 1px 12px #000;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+    }
+
+    .book:hover .cover {
+        -webkit-transition: all 0.5s;
+        transition: all 0.5s;
+        -webkit-transform: rotatey(-80deg);
+        -ms-transform: rotatey(-80deg);
+        transform: rotatey(-80deg);
+    }
+
+    .book p:first-of-type {
+        text-align: center;
+        font-size: 24px; /* Optional: Make the title stand out */
+        font-weight: bold; /* Optional: Emphasize the title */
+        margin-bottom: 10px; /* Add spacing below the title */
+    }
+
+
+    p {
+        font-size: 20px;
+        font-weight: bolder;
+    }
+</style>
 <h2>Book List</h2>
 
 <!-- Filter Form -->
@@ -30,6 +171,11 @@
         </div>
     </div>
 </form>
+<form asp-action="Add" asp-controller="Book" >
+    <button class="learn-more">
+        Add book
+    </button>
+</form>
 
 <hr />
 
@@ -37,18 +183,30 @@
 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
     @foreach (var book in Model.Books)
     {
-        <div class="card" style="width: 18rem;">
-            <img src="@book.CoverImageURL" class="card-img-top" alt="Book Cover">
-            <div class="card-body">
-                <h5 class="card-title">@book.Title</h5>
-                <p class="card-text">Genre: @book.Genre.Name</p>
-                <p class="card-text">Author: @book.Author.Name</p>
-                <p class="card-text">Pages: @book.BookPages</p>
+        <div class="book">
+            <p>@book.Title</p>
+            <p>@book.Author.Name</p>
+            <p>@book.Genre.Name</p>
+            <div style="margin-top: auto;">
                 <a class="btn btn-primary" asp-action="Edit" asp-route-id="@book.Id">Edit</a>
                 <form method="post" asp-action="Delete" asp-route-id="@book.Id" style="display: inline;">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </div>
+            <div class="cover">
+                <img src="@book.CoverImageURL" class="card-img-top" alt="Book Cover">
+            </div>
         </div>
+
+
+      @*   <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">@book.Title</h5>
+                <p class="card-text">Genre: @book.Genre.Name</p>
+                <p class="card-text">Author: @book.Author.Name</p>
+                <p class="card-text">Pages: @book.BookPages</p>
+                
+            </div>
+        </div> *@
     }
 </div>

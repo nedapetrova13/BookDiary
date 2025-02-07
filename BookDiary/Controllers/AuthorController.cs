@@ -3,6 +3,7 @@ using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.AuthorViewModels;
 using BookDiary.Models.ViewModels.AuthorViewModels;
+using BookDiary.Models.ViewModels.NewsViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.ObjectModel;
 
@@ -19,8 +20,21 @@ namespace BookDiary.Controllers
 
         public IActionResult Index()
         {
-            var list =  _authorService.GetAll();
-            return View(list);
+            var auList = _authorService.GetAll();
+
+            var viewModelList = auList.Select(news => new AuthorCreateViewModel
+            {
+                Name = news.Name,
+                BirthDate = news.BirthDate,
+                Bio = news.Bio,
+                Email = news.Email,
+                Gender = news.Gender,
+                ProfilePictureURL = news.ProfilePictureURL,
+                WebSiteLink = news.WebSiteLink,
+                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+            }).ToList();
+
+            return View(viewModelList);
         }
         public IActionResult Add()
         {
@@ -60,14 +74,20 @@ namespace BookDiary.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Author au)
+        public async Task<IActionResult> Edit(AuthorEditViewModel aevm)
         {
-            if (ModelState.IsValid)
+            var author = new Author
             {
-                await _authorService.Update(au);
-                return RedirectToAction("Index");
-            }
-            return View();
+                Name = aevm.Name,
+                BirthDate = aevm.BirthDate,
+                Bio = aevm.Bio,
+                Email = aevm.Email,
+                ProfilePictureURL = aevm.ProfilePictureURL,
+                Gender = aevm.Gender,
+                WebSiteLink = aevm.WebSiteLink
+            };
+            await _authorService.Update(author);
+            return RedirectToAction("Index");
 
         }
         [HttpPost]

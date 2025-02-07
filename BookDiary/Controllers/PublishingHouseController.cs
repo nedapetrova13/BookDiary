@@ -4,6 +4,7 @@ using BookDiary.Models;
 using BookDiary.Models.ViewModels.TagViewModels;
 using BookDiary.Models.ViewModels.PublishingHouseViewModels;
 using Microsoft.AspNetCore.Mvc;
+using BookDiary.Models.ViewModels.NewsViewModels;
 
 namespace BookDiary.Controllers
 {
@@ -18,8 +19,16 @@ namespace BookDiary.Controllers
 
         public  IActionResult Index()
         {
-            var list =  _publishingHouseService.GetAll();
-            return View(list);
+            var pubhouseList = _publishingHouseService.GetAll();
+
+            var viewModelList = pubhouseList.Select(news => new PublishingHouseCreateViewModel
+            {
+                Name = news.Name,
+                YearFounded = news.YearFounded,
+                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+            }).ToList();
+
+            return View(viewModelList);
         }
 
         public IActionResult Add()

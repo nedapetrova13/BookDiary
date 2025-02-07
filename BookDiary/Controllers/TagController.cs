@@ -1,5 +1,7 @@
 ﻿using BookDiary.Core.IServices;
+using BookDiary.Core.Services;
 using BookDiary.Models;
+using BookDiary.Models.ViewModels.NewsViewModels;
 using BookDiary.Models.ViewModels.TagViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -17,8 +19,15 @@ namespace BookDiary.Controllers
 
         public IActionResult Index()
         {
-            var list =  _tagService.GetAll();
-            return View(list);
+            var tagList = _tagService.GetAll();
+
+            var viewModelList = tagList.Select(news => new TagCreateViewModel
+            {
+                Name = news.Name,
+                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+            }).ToList();
+
+            return View(viewModelList);
         }
 
         public IActionResult Add()

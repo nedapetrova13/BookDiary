@@ -16,8 +16,16 @@ namespace BookDiary.Controllers
         }
         public IActionResult Index()
         {
-            var list = _newsService.GetAll();
-            return View(list);
+            var newsList = _newsService.GetAll();
+
+            var viewModelList = newsList.Select(news => new NewsCreateViewModel
+            {
+                Title = news.Title,
+                Content = news.Content,
+                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+            }).ToList();
+
+            return View(viewModelList);
         }
         public IActionResult Add()
         {
@@ -43,7 +51,7 @@ namespace BookDiary.Controllers
             {
                 return NotFound(); 
             }
-            var model = new NewsCreateViewModel
+            var model = new NewsEditViewModel
             {
                 Title = news.Title,
                 Content = news.Content

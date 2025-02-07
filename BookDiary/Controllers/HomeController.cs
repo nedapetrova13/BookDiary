@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Linq.Expressions;
 using BookDiary.Core.IServices;
 using BookDiary.Models;
+using BookDiary.Models.ViewModels.NewsViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookDiary.Controllers
@@ -20,8 +21,19 @@ namespace BookDiary.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var list = await _newsService.GetTop5Services();
-            return View(list);
+           
+            var newsList = await _newsService.GetTop5Services();
+
+            var viewModelList = newsList.Select(news => new NewsCreateViewModel
+            {
+                Title = news.Title,
+                Content = news.Content,
+               
+                
+            }).ToList();
+
+            return View(viewModelList);
+        
         }
 
         public IActionResult Privacy()
