@@ -5,64 +5,70 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BookDiary</title>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BookDiary.styles.css" asp-append-version="true" />
     <style>
-        /* Apply soft beige background */
         body {
             background-color: #F5E6DA;
-            color: #5C4033; /* Deep brown text */
+            color: #5C4033;
         }
 
-        /* Navbar styling */
         .custom-navbar {
-            background-color: #E3D5C5; /* Slightly darker beige */
+            background-color: #E3D5C5;
         }
 
-        /* Links */
         .nav-link, .text-dark {
             color: #5C4033 !important;
         }
 
             .nav-link:hover {
-                color: #3D2B1F !important; /* Slightly darker brown on hover */
+                color: #3D2B1F !important;
             }
     </style>
 </head>
 <body>
     <div class="d-flex">
-        <!-- Vertical Sidebar -->
-        <nav class="navbar navbar-light custom-navbar flex-column p-3" style="width: 250px; height: 100vh; align-items: flex-start; justify-content:flex-start;">
+        <nav class="navbar navbar-light custom-navbar flex-column p-3" style="width: 20%; height: 100%; align-items: flex-start;">
             <a class="navbar-brand mb-3" asp-area="" asp-controller="Home" asp-action="Index">
-                <img src="~/lib/img/Brown Retro Book Store Logo (1)_processed.png"
-                     alt="BookDiary Logo"
-                     style="max-width: 150px; height: auto;">
+                <img src="~/img/Untitled_design-removebg-preview.png" alt="BookDiary Logo" style="max-width: 150px; height: auto;">
             </a>
             <ul class="navbar-nav flex-column w-100">
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Главна страница</a>
                 </li>
-
+                <li> <partial name="_LoginPartial" /></li>
                 @if (User.IsInRole(SD.AdminRole))
                 {
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Author" asp-action="Index">Автори</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Genre" asp-action="Index">Жанрове</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Index">Тагове</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Language" asp-action="Index">Езици</a></li>
-                    //<li class="nav-item"><a class="nav-link" asp-area="" asp-controller="City" asp-action="Add">Add City</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Index">Издателски къщи</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="News" asp-action="Index">Новини</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Book" asp-action="Index">Книги</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Series" asp-action="Index">Поредици</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="collapse" data-bs-target="#adminMenu" aria-expanded="false">
+                            Администрация
+                        </a>
+                        <div class="collapse" id="adminMenu">
+                            <ul class="list-unstyled ps-3">
+                                @foreach (var item in new[] { "Author", "Genre", "Tag", "Language", "PublishingHouse", "News", "Book", "Series" })
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-bs-toggle="collapse" href="#collapse-@item">@item</a>
+                                        <div class="collapse ps-3" id="collapse-@item">
+                                            <ul class="list-unstyled">
+                                                <li><a class="nav-link" asp-area="" asp-controller="@item" asp-action="Add">Add</a></li>
+                                                <li><a class="nav-link" asp-area="" asp-controller="@item" asp-action="Edit">Edit</a></li>
+                                                <li><a class="nav-link" asp-area="" asp-controller="@item" asp-action="Index">Index</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </li>
                 }
-                <li> <partial name="_LoginPartial" /></li>
+              
             </ul>
         </nav>
 
-        <!-- Main Content -->
         <div class="flex-grow-1 p-4">
             <main role="main" class="pb-3">
                 @RenderBody()
@@ -75,10 +81,7 @@
             &copy; 2025 - BookDiary - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

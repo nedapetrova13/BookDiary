@@ -19,7 +19,7 @@ namespace BookDiary.Controllers
             _newsService = newsService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> LoggedIndex()
         {
            
             var newsList = await _newsService.GetTop5Services();
@@ -34,6 +34,10 @@ namespace BookDiary.Controllers
 
             return View(viewModelList);
         
+        }
+        public IActionResult Index()
+        {
+            return View();  
         }
 
         public IActionResult Privacy()
