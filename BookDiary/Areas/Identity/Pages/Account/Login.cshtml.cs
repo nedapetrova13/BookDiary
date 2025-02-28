@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using BookDiary.Models;
+using BookDiary.Models.ViewModels.Account;
+using Microsoft.AspNet.Identity;
 
 namespace BookDiary.Areas.Identity.Pages.Account
 {
@@ -22,6 +24,7 @@ namespace BookDiary.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        public LoginViewModel Input { get; set; } = new LoginViewModel(); // Using the ViewModel
 
         public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger)
         {
@@ -34,8 +37,8 @@ namespace BookDiary.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         [BindProperty]
-        public InputModel Input { get; set; }
-
+/*        public InputModel Input { get; set; }
+*/
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -84,7 +87,11 @@ namespace BookDiary.Areas.Identity.Pages.Account
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
         }
-
+        public void OnGet()
+        {
+            // Initialize if needed
+            Input = new LoginViewModel();
+        }
         public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
@@ -101,8 +108,12 @@ namespace BookDiary.Areas.Identity.Pages.Account
 
             ReturnUrl = returnUrl;
         }
+        public IActionResult OnGetPartial()
+        {
+            return Partial("_LoginPartial2", this);
+        }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        /*public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
 
@@ -136,6 +147,26 @@ namespace BookDiary.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }*/
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("User logged in.");
+                return RedirectToPage("/Index"); // Redirect to the home page after successful login
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return Page();
+            }
         }
     }
 }
