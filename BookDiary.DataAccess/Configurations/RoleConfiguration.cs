@@ -31,7 +31,7 @@ namespace BookDiary.DataAccess.Configurations
                 {
                     Id = "bf6a1a7e-3b94-4076-90f3-511fd2ed8a66" ,
                     Name = "User"
-                },
+                }
 
             };
 

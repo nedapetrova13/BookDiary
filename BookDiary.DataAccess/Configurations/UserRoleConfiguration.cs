@@ -13,7 +13,10 @@ namespace BookDiary.DataAccess.Configurations
     {
         public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
         {
-            builder.HasData(GetUserRoles());
+            if (!builder.Metadata.GetDefaultTableName().Contains("AspNetRoles"))
+            {
+                builder.HasData(GetUserRoles());
+            }
         }
         private List<IdentityUserRole<string>> GetUserRoles()
         {
