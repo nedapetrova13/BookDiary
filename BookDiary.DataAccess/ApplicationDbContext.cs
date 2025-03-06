@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BookDiary.DataAccess.Configurations;
 using BookDiary.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -12,7 +13,21 @@ namespace BookDiary.DataAccess
 {
     public class ApplicationDbContext:IdentityDbContext<User>
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options) { }
+        private bool seedDb;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, bool seedDb = true) : base(options)
+        {
+            if (this.Database.IsRelational())
+            {
+                this.Database.Migrate();
+            }
+            else
+            {
+                this.Database.EnsureCreated();
+            }
+
+            this.seedDb = seedDb;
+        }
        
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
@@ -226,7 +241,14 @@ namespace BookDiary.DataAccess
                 .HasForeignKey(x => x.BookId)
                 .OnDelete(DeleteBehavior.NoAction);
             base.OnModelCreating(builder);
-      
+            if (seedDb)
+            {
+                builder.ApplyConfiguration(new RoleConfiguration());
+                builder.ApplyConfiguration(new UserConfiguration());
+                builder.ApplyConfiguration(new UserRoleConfiguration());
+            }
+
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
