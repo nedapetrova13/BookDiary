@@ -18,7 +18,7 @@ namespace BookDiary.DataAccess.Configurations
         {
             builder.HasData(GetUsers());
         }
-        private List<User> GetUsers()
+        public List<User> GetUsers()
         {
             var users = new List<User>();
             var passwordHasher = new PasswordHasher<User>();

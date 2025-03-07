@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookDiary.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSetup : Migration
+    public partial class setup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

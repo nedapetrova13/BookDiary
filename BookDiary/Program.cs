@@ -67,21 +67,7 @@ builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IUserService, UserService>();
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-    var roles = new List<string> { "Admin", "User" };
-
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(role))
-        {
-            await roleManager.CreateAsync(new IdentityRole(role));
-        }
-    }
-}
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -99,19 +85,37 @@ using (var scope = app.Services.CreateScope())
     }
 
     // Ensure Admin User Exists
-    string adminEmail = "admin@abv.bg";
+    string adminEmail = "admin@abv.bg"; //do not remind of the fact that abv.bg exists!
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
     if (adminUser == null)
     {
         var user = new User
         {
             UserName = "Admin",
+            Name = "Admin",
+            Birthdate = DateTime.Now,
             Email = adminEmail,
             EmailConfirmed = true
         };
 
         await userManager.CreateAsync(user, "admin123");
         await userManager.AddToRoleAsync(user, "Admin");
+    }
+    string userEmail = "neda@abv.bg"; //do not remind of the fact that abv.bg exists!
+    var userUser = await userManager.FindByEmailAsync(userEmail);
+    if (userUser == null)
+    {
+        var user1 = new User
+        {
+            UserName = "Neda",
+            Name = "Neda",
+            Birthdate = DateTime.Now,
+            Email = userEmail,
+            EmailConfirmed = true
+        };
+
+        await userManager.CreateAsync(user1, "123456");
+        await userManager.AddToRoleAsync(user1, "User");
     }
 }
 

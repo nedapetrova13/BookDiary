@@ -17,8 +17,8 @@
         }
 
         .custom-navbar {
-/*             background-color: #E3D5C5;
- */        }
+            /* background-color: #E3D5C5; */
+        }
 
         .nav-link, .text-dark {
             color: #5C4033 !important;
@@ -32,7 +32,7 @@
 <body>
     <div class="d-flex">
         <nav class="navbar navbar-light custom-navbar flex-column p-3" style=" height: 100%; align-items: flex-start;">
-            <a class="navbar-brand mb-3" asp-area="" asp-controller="Home" asp-action="Index">
+            <a class="navbar-brand mb-3" asp-area="" asp-controller="Home" asp-action="LoggedIndex">
                 <img src="~/img/Untitled_design-removebg-preview.png" alt="BookDiary Logo" style="max-width: 150px; height: auto;">
             </a>
             <ul class="navbar-nav flex-column w-100">
@@ -48,24 +48,82 @@
                         </a>
                         <div class="collapse" id="adminMenu">
                             <ul class="list-unstyled ps-3">
-                                @foreach (var item in new[] { "Author", "Genre", "Tag", "Language", "PublishingHouse", "News", "Book", "Series" })
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-bs-toggle="collapse" href="#collapse-@item">@item</a>
-                                        <div class="collapse ps-3" id="collapse-@item">
-                                            <ul class="list-unstyled">
-                                                <li><a class="nav-link" asp-area="" asp-controller="@item" asp-action="Add">Add</a></li>
-                                                <li><a class="nav-link" asp-area="" asp-controller="@item" asp-action="Edit">Edit</a></li>
-                                                <li><a class="nav-link" asp-area="" asp-controller="@item" asp-action="Index">Index</a></li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                }
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-Author">Автори</a>
+                                    <div class="collapse ps-3" id="collapse-Author">
+                                        <ul class="list-unstyled">
+                                            <li><a class="nav-link" asp-area="" asp-controller="Author" asp-action="Add">Добави</a></li>
+                                            <li><a class="nav-link" asp-area="" asp-controller="Author" asp-action="Index">Всички</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-Genre">Жанрове</a>
+                                    <div class="collapse ps-3" id="collapse-Genre">
+                                        <ul class="list-unstyled">
+                                            <li><a class="nav-link" asp-area="" asp-controller="Genre" asp-action="Add">Добави</a></li>
+                                            <li><a class="nav-link" asp-area="" asp-controller="Genre" asp-action="Index">Всички</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-Tag">Характеристики</a>
+                                    <div class="collapse ps-3" id="collapse-Tag">
+                                        <ul class="list-unstyled">
+                                            <li><a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Add">Добави</a></li>
+                                            <li><a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Index">Всички</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-Language">Езици</a>
+                                    <div class="collapse ps-3" id="collapse-Language">
+                                        <ul class="list-unstyled">
+                                            <li><a class="nav-link" asp-area="" asp-controller="Language" asp-action="Add">Добави</a></li>
+                                            <li><a class="nav-link" asp-area="" asp-controller="Language" asp-action="Index">Всички</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-PublishingHouse">Издателски къщи</a>
+                                    <div class="collapse ps-3" id="collapse-PublishingHouse">
+                                        <ul class="list-unstyled">
+                                            <li><a class="nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Add">Добави</a></li>
+                                            <li><a class="nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Index">Всички</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-News">Новини</a>
+                                    <div class="collapse ps-3" id="collapse-News">
+                                        <ul class="list-unstyled">
+                                            <li><a class="nav-link" asp-area="" asp-controller="News" asp-action="Add">Добави</a></li>
+                                            <li><a class="nav-link" asp-area="" asp-controller="News" asp-action="Index">Всички</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-Book">Книги</a>
+                                    <div class="collapse ps-3" id="collapse-Book">
+                                        <ul class="list-unstyled">
+                                            <li><a class="nav-link" asp-area="" asp-controller="Book" asp-action="Add">Добави</a></li>
+                                            <li><a class="nav-link" asp-area="" asp-controller="Book" asp-action="Index">Всички</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-Series">Поредици</a>
+                                    <div class="collapse ps-3" id="collapse-Series">
+                                        <ul class="list-unstyled">
+                                            <li><a class="nav-link" asp-area="" asp-controller="Series" asp-action="Add">Добави</a></li>
+                                            <li><a class="nav-link" asp-area="" asp-controller="Series" asp-action="Index">Всички</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                     </li>
                 }
-              
             </ul>
         </nav>
 
@@ -76,12 +134,7 @@
         </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - BookDiary - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>

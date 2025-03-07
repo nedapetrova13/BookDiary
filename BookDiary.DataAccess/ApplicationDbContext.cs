@@ -17,7 +17,7 @@
 
             public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, bool seedDb = true) : base(options)
             {
-                if (this.Database.IsRelational())
+                /*if (this.Database.IsRelational())
                 {
                     this.Database.Migrate();
                 }
@@ -26,9 +26,9 @@
                     this.Database.EnsureCreated();
                 }
 
-                this.seedDb = seedDb;
+                this.seedDb = seedDb;*/
             }
-           protected ApplicationDbContext() { }
+          
             public DbSet<Author> Authors { get; set; }
             public DbSet<Book> Books { get; set; }
             public DbSet<BookPublishingHouse> BooksPublishingHouses {  get; set; }

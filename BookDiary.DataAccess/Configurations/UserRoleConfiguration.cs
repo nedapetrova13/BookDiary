@@ -16,9 +16,9 @@ namespace BookDiary.DataAccess.Configurations
             if (!builder.Metadata.GetDefaultTableName().Contains("AspNetRoles"))
             {
                 builder.HasData(GetUserRoles());
-            }
+            } 
         }
-        private List<IdentityUserRole<string>> GetUserRoles()
+        public List<IdentityUserRole<string>> GetUserRoles()
         {
             var userRoles = new List<IdentityUserRole<string>>()
             {

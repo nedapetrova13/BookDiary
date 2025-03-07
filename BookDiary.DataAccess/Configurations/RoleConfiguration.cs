@@ -17,7 +17,7 @@ namespace BookDiary.DataAccess.Configurations
             builder.HasData(GetRoles());
         }
 
-        private List<IdentityRole> GetRoles()
+        public List<IdentityRole> GetRoles()
         {
             var roles = new List<IdentityRole>()
             {
@@ -37,7 +37,5 @@ namespace BookDiary.DataAccess.Configurations
 
             return roles;
         }
-
-        
     }
 }
