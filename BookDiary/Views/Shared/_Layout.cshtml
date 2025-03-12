@@ -10,113 +10,388 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BookDiary.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
+        :root {
+            --primary-color: #5C4033;
+            --hover-color: #8B6B4F;
+            --bg-color: #F5E6DA;
+            --sidebar-bg: #E3D5C5;
+            --menu-hover: #D7C4AF;
+            --transition-speed: 0.3s;
+        }
+
         body {
-            background-color: #F5E6DA;
-            color: #5C4033;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color var(--transition-speed);
         }
 
-        .custom-navbar {
-            /* background-color: #E3D5C5; */
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            min-height: 100vh;
+            width: 250px;
+            transition: width var(--transition-speed), transform var(--transition-speed);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
         }
 
-        .nav-link, .text-dark {
-            color: #5C4033 !important;
+        .sidebar-collapsed {
+            width: 80px;
+        }
+
+        .sidebar-toggle {
+            position: absolute;
+            top: 10px;
+            right: -15px;
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            z-index: 101;
+            transition: transform var(--transition-speed);
+        }
+
+        .sidebar-collapsed .sidebar-toggle {
+            transform: rotate(180deg);
+        }
+
+        .logo-container {
+            padding: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-img {
+            max-width: 120px;
+            transition: max-width var(--transition-speed);
+        }
+
+        .sidebar-collapsed .logo-img {
+            max-width: 50px;
+        }
+
+        .nav-item {
+            margin: 5px 0;
+        }
+
+        .nav-link {
+            color: var(--primary-color) !important;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all var(--transition-speed);
+            display: flex;
+            align-items: center;
         }
 
             .nav-link:hover {
-                color: #3D2B1F !important;
+                background-color: var(--menu-hover);
+                color: var(--hover-color) !important;
+                transform: translateX(5px);
             }
+
+            .nav-link i {
+                margin-right: 10px;
+                width: 20px;
+                text-align: center;
+            }
+
+        .sidebar-collapsed .nav-text {
+            display: none;
+        }
+
+        .submenu {
+            padding-left: 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-speed);
+        }
+
+            .submenu.show {
+                max-height: 500px;
+            }
+
+        .dropdown-toggle::after {
+            transition: transform var(--transition-speed);
+            margin-left: auto;
+        }
+
+        .dropdown-toggle[aria-expanded="true"]::after {
+            transform: rotate(180deg);
+        }
+
+        .content-wrapper {
+            padding: 20px;
+            transition: margin-left var(--transition-speed);
+            flex-grow: 1;
+        }
+
+        media (max-width: 768px) {
+            .sidebar
+
+        {
+            transform: translateX(-100%);
+            top: 0;
+            left: 0;
+            height: 100%;
+        }
+
+        .sidebar.show {
+            transform: translateX(0);
+        }
+
+        .sidebar-toggle {
+            right: -15px;
+        }
+
+        .content-wrapper {
+            margin-left: 0 !important;
+        }
+
+        .mobile-menu-toggle {
+            display: block !important;
+        }
+
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 99;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+        }
+
+        /* Active link styling */
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white !important;
+        }
     </style>
 </head>
 <body>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <div class="d-flex">
-        <nav class="navbar navbar-light custom-navbar flex-column p-3" style=" height: 100%; align-items: flex-start;">
-            <a class="navbar-brand mb-3" asp-area="" asp-controller="Home" asp-action="LoggedIndex">
-                <img src="~/img/Untitled_design-removebg-preview.png" alt="BookDiary Logo" style="max-width: 150px; height: auto;">
-            </a>
-            <ul class="navbar-nav flex-column w-100">
+        <nav class="sidebar" id="sidebar">
+            @* <div class="sidebar-toggle" id="sidebarToggle"> *@
+            @*     <i class="fas fa-chevron-left"></i> *@
+            @* </div> *@
+
+            <div class="logo-container">
+                <a asp-area="" asp-controller="Home" asp-action="LoggedIndex">
+                    <img src="~/img/Untitled_design-removebg-preview.png" alt="BookDiary Logo" class="logo-img">
+                </a>
+            </div>
+
+            <ul class="navbar-nav w-100">
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="LoggedIndex">Главна страница</a>
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="LoggedIndex">
+                        <i class="fas fa-home"></i>
+                        <span class="nav-text">Главна страница</span>
+                    </a>
                 </li>
-                <li> <partial name="_LoginPartial" /></li>
+                <li class="nav-item">
+                    <partial name="_LoginPartial" />
+                </li>
                 @if (User.IsInRole(SD.AdminRole))
                 {
-                    <li class="nav-item dropdown">
+                    <li class="nav-item">
                         <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="collapse" data-bs-target="#adminMenu" aria-expanded="false">
-                            Администрация
+                            <i class="fas fa-user-shield"></i>
+                            <span class="nav-text">Администрация</span>
                         </a>
-                        <div class="collapse" id="adminMenu">
-                            <ul class="list-unstyled ps-3">
+                        <div class="collapse submenu" id="adminMenu">
+                            <ul class="list-unstyled">
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-Author">Автори</a>
-                                    <div class="collapse ps-3" id="collapse-Author">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-Author">
+                                        <i class="fas fa-user-edit"></i>
+                                        <span class="nav-text">Автори</span>
+                                    </a>
+                                    <div class="collapse submenu" id="collapse-Author">
                                         <ul class="list-unstyled">
-                                            <li><a class="nav-link" asp-area="" asp-controller="Author" asp-action="Add">Добави</a></li>
-                                            <li><a class="nav-link" asp-area="" asp-controller="Author" asp-action="Index">Всички</a></li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="Author" asp-action="Add">
+                                                    <i class="fas fa-plus"></i>
+                                                    <span class="nav-text">Добави</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="Author" asp-action="Index">
+                                                    <i class="fas fa-list"></i>
+                                                    <span class="nav-text">Всички</span>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-Genre">Жанрове</a>
-                                    <div class="collapse ps-3" id="collapse-Genre">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-Genre">
+                                        <i class="fas fa-theater-masks"></i>
+                                        <span class="nav-text">Жанрове</span>
+                                    </a>
+                                    <div class="collapse submenu" id="collapse-Genre">
                                         <ul class="list-unstyled">
-                                            <li><a class="nav-link" asp-area="" asp-controller="Genre" asp-action="Add">Добави</a></li>
-                                            <li><a class="nav-link" asp-area="" asp-controller="Genre" asp-action="Index">Всички</a></li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="Genre" asp-action="Add">
+                                                    <i class="fas fa-plus"></i>
+                                                    <span class="nav-text">Добави</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="Genre" asp-action="Index">
+                                                    <i class="fas fa-list"></i>
+                                                    <span class="nav-text">Всички</span>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-Tag">Характеристики</a>
-                                    <div class="collapse ps-3" id="collapse-Tag">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-Tag">
+                                        <i class="fas fa-tags"></i>
+                                        <span class="nav-text">Характеристики</span>
+                                    </a>
+                                    <div class="collapse submenu" id="collapse-Tag">
                                         <ul class="list-unstyled">
-                                            <li><a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Add">Добави</a></li>
-                                            <li><a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Index">Всички</a></li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Add">
+                                                    <i class="fas fa-plus"></i>
+                                                    <span class="nav-text">Добави</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Index">
+                                                    <i class="fas fa-list"></i>
+                                                    <span class="nav-text">Всички</span>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-Language">Езици</a>
-                                    <div class="collapse ps-3" id="collapse-Language">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-Language">
+                                        <i class="fas fa-language"></i>
+                                        <span class="nav-text">Езици</span>
+                                    </a>
+                                    <div class="collapse submenu" id="collapse-Language">
                                         <ul class="list-unstyled">
-                                            <li><a class="nav-link" asp-area="" asp-controller="Language" asp-action="Add">Добави</a></li>
-                                            <li><a class="nav-link" asp-area="" asp-controller="Language" asp-action="Index">Всички</a></li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="Language" asp-action="Add">
+                                                    <i class="fas fa-plus"></i>
+                                                    <span class="nav-text">Добави</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="Language" asp-action="Index">
+                                                    <i class="fas fa-list"></i>
+                                                    <span class="nav-text">Всички</span>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-PublishingHouse">Издателски къщи</a>
-                                    <div class="collapse ps-3" id="collapse-PublishingHouse">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-PublishingHouse">
+                                        <i class="fas fa-building"></i>
+                                        <span class="nav-text">Издателски къщи</span>
+                                    </a>
+                                    <div class="collapse submenu" id="collapse-PublishingHouse">
                                         <ul class="list-unstyled">
-                                            <li><a class="nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Add">Добави</a></li>
-                                            <li><a class="nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Index">Всички</a></li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Add">
+                                                    <i class="fas fa-plus"></i>
+                                                    <span class="nav-text">Добави</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Index">
+                                                    <i class="fas fa-list"></i>
+                                                    <span class="nav-text">Всички</span>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-News">Новини</a>
-                                    <div class="collapse ps-3" id="collapse-News">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-News">
+                                        <i class="fas fa-newspaper"></i>
+                                        <span class="nav-text">Новини</span>
+                                    </a>
+                                    <div class="collapse submenu" id="collapse-News">
                                         <ul class="list-unstyled">
-                                            <li><a class="nav-link" asp-area="" asp-controller="News" asp-action="Add">Добави</a></li>
-                                            <li><a class="nav-link" asp-area="" asp-controller="News" asp-action="Index">Всички</a></li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="News" asp-action="Add">
+                                                    <i class="fas fa-plus"></i>
+                                                    <span class="nav-text">Добави</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="News" asp-action="Index">
+                                                    <i class="fas fa-list"></i>
+                                                    <span class="nav-text">Всички</span>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-Book">Книги</a>
-                                    <div class="collapse ps-3" id="collapse-Book">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-Book">
+                                        <i class="fas fa-book"></i>
+                                        <span class="nav-text">Книги</span>
+                                    </a>
+                                    <div class="collapse submenu" id="collapse-Book">
                                         <ul class="list-unstyled">
-                                            <li><a class="nav-link" asp-area="" asp-controller="Book" asp-action="Add">Добави</a></li>
-                                            <li><a class="nav-link" asp-area="" asp-controller="Book" asp-action="Index">Всички</a></li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="Book" asp-action="Add">
+                                                    <i class="fas fa-plus"></i>
+                                                    <span class="nav-text">Добави</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="Book" asp-action="Index">
+                                                    <i class="fas fa-list"></i>
+                                                    <span class="nav-text">Всички</span>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#collapse-Series">Поредици</a>
-                                    <div class="collapse ps-3" id="collapse-Series">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-Series">
+                                        <i class="fas fa-layer-group"></i>
+                                        <span class="nav-text">Поредици</span>
+                                    </a>
+                                    <div class="collapse submenu" id="collapse-Series">
                                         <ul class="list-unstyled">
-                                            <li><a class="nav-link" asp-area="" asp-controller="Series" asp-action="Add">Добави</a></li>
-                                            <li><a class="nav-link" asp-area="" asp-controller="Series" asp-action="Index">Всички</a></li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="Series" asp-action="Add">
+                                                    <i class="fas fa-plus"></i>
+                                                    <span class="nav-text">Добави</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" asp-area="" asp-controller="Series" asp-action="Index">
+                                                    <i class="fas fa-list"></i>
+                                                    <span class="nav-text">Всички</span>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
@@ -127,14 +402,76 @@
             </ul>
         </nav>
 
-        <div class="flex-grow-1 p-4">
+        <div class="content-wrapper" id="contentWrapper">
             <main role="main" class="pb-3">
                 @RenderBody()
             </main>
         </div>
     </div>
 
-    
+    <script>
+        $(document).ready(function() {
+            // Sidebar toggle functionality
+            $("#sidebarToggle").click(function() {
+                $("#sidebar").toggleClass("sidebar-collapsed");
+                adjustContentMargin();
+            });
+
+            // Mobile menu toggle
+            $("#mobileMenuToggle").click(function() {
+                $("#sidebar").toggleClass("show");
+            });
+
+            // Detect current page and set active class
+            const currentUrl = window.location.pathname;
+            $('.nav-link').each(function() {
+                const linkUrl = $(this).attr('href');
+                if (linkUrl && currentUrl.includes(linkUrl) && linkUrl !== '/') {
+                    $(this).addClass('active');
+
+                    // Open parent collapses if needed
+                    const parentCollapses = $(this).parents('.collapse');
+                    parentCollapses.each(function() {
+                        const collapseId = $(this).attr('id');
+                        $(`[data-bs-target="#${collapseId}"]`).click();
+                    });
+                }
+            });
+
+            // Adjust content margin based on sidebar state
+            function adjustContentMargin() {
+                if ($("#sidebar").hasClass("sidebar-collapsed")) {
+                    $("#contentWrapper").css("margin-left", "80px");
+                } else {
+                    $("#contentWrapper").css("margin-left", "0");
+                }
+            }
+
+            // Initial adjustment
+            adjustContentMargin();
+
+            // Adjust on window resize
+            $(window).resize(function() {
+                if (window.innerWidth <= 768) {
+                    $("#contentWrapper").css("margin-left", "0");
+                } else {
+                    adjustContentMargin();
+                }
+            });
+
+            // Close sidebar when clicking outside on mobile
+            $(document).click(function(event) {
+                if (window.innerWidth <= 768) {
+                    if (!$(event.target).closest('#sidebar').length &&
+                        !$(event.target).closest('#mobileMenuToggle').length &&
+                        $('#sidebar').hasClass('show')) {
+                        $('#sidebar').removeClass('show');
+                    }
+                }
+            });
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

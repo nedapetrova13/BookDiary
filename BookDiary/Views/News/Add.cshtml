@@ -1,15 +1,63 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model BookDiary.Models.ViewModels.NewsViewModels.NewsCreateViewModel;
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
+                    <h2 class="mb-0 fw-bold"><i class="fas fa-newspaper me-2"></i>Добавяне на новина</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        <div class="row g-4">
+                            <!-- News Title -->
+                            <div class="col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="text" asp-for="Title" class="form-control border-0 border-bottom rounded-0" required placeholder="Заглавие на новината" />
+                                    <label asp-for="Title">Заглавие</label>
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- News Content -->
+                            <div class="col-12">
+                                <div class="form-floating mb-3">
+                                    <textarea asp-for="Content" class="form-control border-0 shadow-sm" style="min-height: 120px;" required placeholder="Съдържание на новината..."></textarea>
+                                    <label asp-for="Content">Съдържание</label>
+                                    <span asp-validation-for="Content" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- Submit Button -->
+                            <div class="col-12 mt-3">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a href="javascript:history.back()" class="btn btn-outline-secondary px-4 py-2">
+                                        <i class="fas fa-times me-2"></i>Отказ
+                                    </a>
+                                    <button type="submit" asp-action="Add" asp-controller="News" class="btn text-white px-4 py-2" style="background-color: #5C4033;">
+                                        <i class="fas fa-plus-circle me-2"></i>Добави новина
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function() {
+            $(".form-control, .form-select").focus(function() {
+                $(this).parent().addClass("border-bottom-0");
+                $(this).addClass("shadow-sm");
+            }).blur(function() {
+                $(this).parent().removeClass("border-bottom-0");
+                $(this).removeClass("shadow-sm");
+            });
+        });
+    </script>
 }
-@model BookDiary.Models.ViewModels.NewsViewModels.NewsCreateViewModel;
-<form method="post">
-    <label asp-for="Title">Name
-        <input type="text" asp-for="Title" />
-    </label>
-    <label asp-for="Content">
-        <input type="text" asp-for="Content"/>
-    </label>
-    <button type="submit" asp-action="Add" asp-controller="News">Add</button>
-</form>

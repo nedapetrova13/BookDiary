@@ -80,7 +80,9 @@
                 <span>@au.Name</span>
             </div>
             <button class="cart-button">
-                <span>Виж още</span>
+                <span>
+                    <a asp-area="" asp-controller="Author" asp-action="Info" asp-route-AuthorName="@au.Name">Виж още</a>
+                </span>
             </button>
         </div>
     }

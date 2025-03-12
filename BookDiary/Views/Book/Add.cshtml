@@ -1,81 +1,127 @@
-﻿@using BookDiary.Models.Enums
-@model BookDiary.Models.ViewModels.BookViewModels.BookCreateViewModel
+﻿@using BookDiary.Models.Enums;
+@model BookDiary.Models.ViewModels.BookViewModels.BookCreateViewModel;
 
-<form method="post" enctype="multipart/form-data" class="p-4 border rounded shadow-sm bg-light">
-    <h2 class="mb-4">Add Book</h2>
-
-    <!-- Title -->
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label">Title</label>
-        <input type="text" asp-for="Title" class="form-control" required />
-        <span asp-validation-for="Title" class="text-danger"></span>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
+                    <h2 class="mb-0 fw-bold"><i class="fas fa-book me-2"></i>Добавяне на книга</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="row g-4">
+                            <!-- Title -->
+                            <div class="col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="text" asp-for="Title" class="form-control border-0 border-bottom rounded-0" required placeholder="Заглавие" />
+                                    <label asp-for="Title">Заглавие</label>
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- Author -->
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="AuthorId" asp-items="@ViewBag.Authors" class="form-select border-0 border-bottom rounded-0" required>
+                                        <option value="">Изберете автор</option>
+                                    </select>
+                                    <label asp-for="AuthorId">Автор</label>
+                                    <span asp-validation-for="AuthorId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- Series -->
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="SeriesId" asp-items="@ViewBag.Series" class="form-select border-0 border-bottom rounded-0">
+                                        <option value="">null</option>
+                                    </select>
+                                    <label asp-for="SeriesId">Серия</label>
+                                    <span asp-validation-for="SeriesId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- Cover Image URL -->
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <label asp-for="CoverImageURL" class="form-label fw-bold mb-2">Корица (URL)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="fas fa-image"></i></span>
+                                        <input type="url" asp-for="CoverImageURL" class="form-control border-0 border-bottom rounded-0" placeholder="https://example.com/image.jpg" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Genre -->
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="GenreId" asp-items="@ViewBag.Genres" class="form-select border-0 border-bottom rounded-0" required>
+                                        <option value="">Изберете жанр</option>
+                                    </select>
+                                    <label asp-for="GenreId">Жанр</label>
+                                    <span asp-validation-for="GenreId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- Book Format -->
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="BookFormat" asp-items="Html.GetEnumSelectList<BookFormatEnum>()" class="form-select border-0 border-bottom rounded-0">
+                                        <option value="">Изберете формат</option>
+                                    </select>
+                                    <label asp-for="BookFormat">Формат</label>
+                                </div>
+                            </div>
+                            <!-- Description -->
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <label asp-for="Description" class="form-label fw-bold mb-2">Описание</label>
+                                    <textarea asp-for="Description" class="form-control border-0 shadow-sm" style="min-height: 120px;" placeholder="Въведете описание на книгата..." required></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- Number of Pages -->
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" asp-for="BookPages" class="form-control border-0 border-bottom rounded-0" required placeholder="Брой страници" />
+                                    <label asp-for="BookPages">Брой страници</label>
+                                </div>
+                            </div>
+                            <!-- Chapters -->
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" asp-for="Chapters" class="form-control border-0 border-bottom rounded-0" required placeholder="Брой глави" />
+                                    <label asp-for="Chapters">Брой глави</label>
+                                </div>
+                            </div>
+                            <!-- Submit Button -->
+                            <div class="col-12 mt-3">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a href="javascript:history.back()" class="btn btn-outline-secondary px-4 py-2">
+                                        <i class="fas fa-times me-2"></i>Отказ
+                                    </a>
+                                    <button type="submit" asp-action="Add" asp-controller="Book" class="btn text-white px-4 py-2" style="background-color: #5C4033;">
+                                        <i class="fas fa-plus-circle me-2"></i>Добави книга
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- Author -->
-    <div class="mb-3">
-        <label asp-for="AuthorId" class="form-label">Author</label>
-        <select asp-for="AuthorId" asp-items="@ViewBag.Authors" class="form-select" required>
-            <option value="">Select Author</option>
-        </select>
-        <span asp-validation-for="AuthorId" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="SeriesId" class="form-label">Series</label>
-        <select asp-for="SeriesId" asp-items="@ViewBag.Series" class="form-select" >
-            <option value="">null</option>
-        </select>
-        <span asp-validation-for="SeriesId" class="text-danger"></span>
-    </div>
-
-    <!-- Cover Image URL -->
-    <div class="mb-3">
-        <label asp-for="CoverImageURL" class="form-label">Cover Image URL</label>
-        <input type="url" asp-for="CoverImageURL" class="form-control" />
-    </div>
-
-    <!-- Genre -->
-    <div class="mb-3">
-        <label asp-for="GenreId" class="form-label">Genre</label>
-        <select asp-for="GenreId" asp-items="@ViewBag.Genres" class="form-select" required>
-            <option value="">Select Genre</option>
-        </select>
-        <span asp-validation-for="GenreId" class="text-danger"></span>
-    </div>
-
-    <!-- Book Format -->
-    <div class="mb-3">
-        <label asp-for="BookFormat" class="form-label">Book Format</label>
-        <select asp-for="BookFormat" asp-items="Html.GetEnumSelectList<BookFormatEnum>()" class="form-select">
-            <option value="">Select Book Format</option>
-        </select>
-    </div>
-
-    <!-- Description -->
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label">Description</label>
-        <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <!-- Number of Pages -->
-    <div class="mb-3">
-        <label asp-for="BookPages" class="form-label">Number of Pages</label>
-        <input type="number" asp-for="BookPages" class="form-control" required />
-    </div>
-
-    <!-- Chapters -->
-    <div class="mb-3">
-        <label asp-for="Chapters" class="form-label">Chapters</label>
-        <input type="number" asp-for="Chapters" class="form-control" required />
-    </div>
-
-    <!-- Submit Button -->
-    <button type="submit" asp-action="Add" asp-controller="Book" class="btn btn-primary w-100">Add Book</button>
-</form>
+</div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        $(document).ready(function() {
+            $(".form-control, .form-select").focus(function() {
+                $(this).parent().addClass("border-bottom-0");
+                $(this).addClass("shadow-sm");
+            }).blur(function() {
+                $(this).parent().removeClass("border-bottom-0");
+                $(this).removeClass("shadow-sm");
+            });
+        });
+    </script>
 }

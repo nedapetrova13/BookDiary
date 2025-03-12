@@ -1,51 +1,113 @@
 ﻿@using BookDiary.Models.Enums;
 @model BookDiary.Models.ViewModels.AuthorViewModels.AuthorCreateViewModel;
 
-<form method="post" enctype="multipart/form-data" class="p-4 border rounded shadow-sm bg-light">
-    <h2 class="mb-4">Add Author</h2>
-    <div class="mb-3">
-        <label asp-for="Name" class="form-label">Name</label>
-        <input type="text" asp-for="Name" class="form-control" required />
-        <span asp-validation-for="Name" class="text-danger"></span>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
+                    <h2 class="mb-0 fw-bold"><i class="fas fa-user-edit me-2"></i>Добавяне на автор</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" asp-for="Name" class="form-control border-0 border-bottom rounded-0" required placeholder="Име на автора" />
+                                    <label asp-for="Name">Име</label>
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="date" asp-for="BirthDate" class="form-control border-0 border-bottom rounded-0" required placeholder="Дата на раждане" />
+                                    <label asp-for="BirthDate">Дата на раждане</label>
+                                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="email" asp-for="Email" class="form-control border-0 border-bottom rounded-0" required placeholder="Имейл адрес" />
+                                    <label asp-for="Email">Имейл</label>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="form-select border-0 border-bottom rounded-0"></select>
+                                    <label asp-for="Gender">Пол</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <label asp-for="ProfilePictureURL" class="form-label fw-bold mb-2">Профилна снимка</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="fas fa-image"></i></span>
+                                        <input type="text" asp-for="ProfilePictureURL" class="form-control border-0 border-bottom rounded-0" placeholder="URL адрес на снимката" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <label asp-for="Bio" class="form-label fw-bold mb-2">Биография</label>
+                                    <textarea asp-for="Bio" class="form-control border-0 shadow-sm" style="min-height: 120px;" placeholder="Въведете биография на автора..."></textarea>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <label asp-for="WebSiteLink" class="form-label fw-bold mb-2">Уебсайт</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="fas fa-globe"></i></span>
+                                        <input type="url" asp-for="WebSiteLink" class="form-control border-0 border-bottom rounded-0" placeholder="https://example.com" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a href="javascript:history.back()" class="btn btn-outline-secondary px-4 py-2">
+                                        <i class="fas fa-times me-2"></i>Отказ
+                                    </a>
+                                    <button type="submit" class="btn text-white px-4 py-2" style="background-color: #5C4033;">
+                                        <i class="fas fa-plus-circle me-2"></i>Добави автор
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="BirthDate" class="form-label">Birth Date</label>
-        <input type="date" asp-for="BirthDate" class="form-control" required />
-        <span asp-validation-for="BirthDate" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label">Email</label>
-        <input type="email" asp-for="Email" class="form-control" required />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="ProfilePictureURL" class="form-label">Profile Picture URL</label>
-        <input type="text" asp-for="ProfilePictureURL" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Gender" class="form-label">Gender</label>
-        <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="form-select"></select>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Bio" class="form-label">Biography</label>
-        <textarea asp-for="Bio" class="form-control" rows="4"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="WebSiteLink" class="form-label">Website</label>
-        <input type="url" asp-for="WebSiteLink" class="form-control" />
-    </div>
-
-    <button type="submit" class="btn btn-primary w-100">Add Author</button>
-</form>
+</div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        $(document).ready(function() {
+            // Добавяне на анимация при фокус на полетата
+            $(".form-control, .form-select").focus(function() {
+                $(this).parent().addClass("border-bottom-0");
+                $(this).addClass("shadow-sm");
+            }).blur(function() {
+                $(this).parent().removeClass("border-bottom-0");
+                $(this).removeClass("shadow-sm");
+            });
+
+            // Превю на снимката при въвеждане на URL
+            $("#ProfilePictureURL").on("change", function() {
+                var url = $(this).val();
+                if (url) {
+                    if (!$("#imagePreview").length) {
+                        $(this).parent().after('<div id="imagePreview" class="mt-2 text-center"><img src="' + url + '" class="img-thumbnail" style="max-height: 200px;" /></div>');
+                    } else {
+                        $("#imagePreview img").attr("src", url);
+                    }
+                } else {
+                    $("#imagePreview").remove();
+                }
+            });
+        });
+    </script>
 }

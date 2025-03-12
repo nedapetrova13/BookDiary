@@ -13,6 +13,12 @@
         public int BookPages { get; set; }
         public int Chapters { get; set; }
         public List<string>? SelectedTags { get; set; } = new List<string>();
+        public List<BookDiary.Models.PublishingHouse> PHList { get; set; } = new List<BookDiary.Models.PublishingHouse>();
+
+        public string? PublishingHouse { get; set; }
+        public List<BookDiary.Models.Language> LanguageList { get; set; } = new List<BookDiary.Models.Language>();
+
+        public string? Language { get; set; }
     }
 
 }
