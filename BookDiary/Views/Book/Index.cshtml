@@ -180,11 +180,14 @@
     @foreach (var book in Model.Books)
     {
         <div class="book">
+            <p>@book.Id</p>
             <p>@book.Title</p>
             <p>@book.Author.Name</p>
             <p>@book.Genre.Name</p>
             <div style="margin-top: auto;">
-                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@book.Id">Edit</a>
+               
+
+                                 <a  class="btn btn-primary" asp-action="AssignTags" asp-route-BookId="@book.Id">Edit</a>
                 <form method="post" asp-action="Delete" asp-route-id="@book.Id" style="display: inline;">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>

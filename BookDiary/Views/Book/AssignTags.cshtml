@@ -1,0 +1,87 @@
+﻿@using BookDiary.Models.ViewModels.BookViewModels
+@model BookDiary.Models.ViewModels.BookViewModels.AssignTagsToBookViewModel
+
+
+<div class="form-container">
+    <h2>Добави характеристики към книга</h2>
+    <form method="post">
+        <input type="hidden" name="BookId" value="@Model.BookId" />
+        
+        <div class="checkbox-group">
+            @foreach (var tag in Model.TagList) 
+            {
+                <label for="@tag.Id" class="checkbox-label">
+                    <input id="@tag.Id" type="checkbox" class="peer hidden" name="SelectedTagIds" value="@tag.Id" />
+                    <div class="checkbox-custom">
+                        <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
+                    <span class="checkbox-text">@tag.Name</span>
+                </label>
+            }
+        </div>
+
+        <button class="btn btn-info" type="submit" asp-action="AssignTags" asp-controller="Book" asp-route-id="@Model.BookId">Добави</button>
+    </form>
+</div>
+
+<style>
+    .peer.hidden {
+        appearance: none; /* Скрива стандартния чекбокс */
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .checkbox-group {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr); /* 5 per row */
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        color: #ffffff; /* Light text */
+    }
+
+    .checkbox-custom {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        border: 2px solid #a2a1a8;
+        background-color: #e8e8e8;
+        transition: all 0.3s ease-in-out;
+    }
+
+    input:checked + .checkbox-custom {
+        background-color: #7152f3;
+        border-color: #7152f3;
+    }
+
+    .checkbox-icon {
+        width: 20px;
+        height: 20px;
+        stroke: #ffffff;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    input:checked + .checkbox-custom .checkbox-icon {
+        opacity: 1;
+    }
+
+    .checkbox-text {
+        flex-grow: 1;
+    }
+</style>

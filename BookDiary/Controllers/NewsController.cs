@@ -68,8 +68,8 @@ namespace BookDiary.Controllers
                 Title = nevm.Title,
                 Content = nevm.Content,
             };
-                await _newsService.Update(model);
-                return RedirectToAction("Index");
+            await _newsService.Update(model);
+            return RedirectToAction("Index");
             
         }
 

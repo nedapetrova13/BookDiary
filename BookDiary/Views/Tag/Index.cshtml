@@ -4,26 +4,45 @@
 @{
 }
 @model IEnumerable<BookDiary.Models.ViewModels.TagViewModels.TagCreateViewModel>
-<h1>See all tags</h1>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var tag in Model){
-            <tr>
-                <td scope="row">@tag.Id</td>
-                <td>@tag.Name</td>
-                <td>
-                    <a type="button" class="btn btn-success" asp-action="Edit" asp-controller="Tag" asp-route-id="@tag.Id">Edit</a>
-                    <form method="post" asp-controller="Tag" asp-action="Delete">
-                        <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="Tag" asp-route-id="@tag.Id">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table> 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tags</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+
+    <div class="container-box">
+        <h1>See all tags</h1>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var tag in Model)
+                {
+                    <tr>
+                        <td scope="row">@tag.Id</td>
+                        <td>@tag.Name</td>
+                        <td>
+                            <a class="btn btn-edit" asp-action="Edit" asp-controller="Tag" asp-route-id="@tag.Id">Edit</a>
+                            <form method="post" asp-controller="Tag" asp-action="Delete" style="display:inline;">
+                                <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="Tag" asp-route-id="@tag.Id">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+</html>

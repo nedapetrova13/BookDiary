@@ -27,7 +27,7 @@
                 }
 
                 this.seedDb = seedDb;*/
-            }
+             }
           
             public DbSet<Author> Authors { get; set; }
             public DbSet<Book> Books { get; set; }
@@ -181,20 +181,22 @@
                     .OnDelete(DeleteBehavior.NoAction);
 
                 builder.Entity<BookTag>()
-                    .HasKey(x => new { x.TagId, x.BookId });
+                .HasKey(bt => new { bt.BookId, bt.TagId }); // Composite Key
+
                 builder.Entity<BookTag>()
-                    .HasOne(x => x.Tag)
-                    .WithMany(x => x.BookTags)
-                    .HasForeignKey(x => x.TagId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .HasOne(bt => bt.Book)
+                    .WithMany(b => b.BookTags)
+                    .HasForeignKey(bt => bt.BookId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
                 builder.Entity<BookTag>()
-                    .HasOne(x => x.Book)
-                    .WithMany(x => x.BookTags)
-                    .HasForeignKey(x => x.BookId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .HasOne(bt => bt.Tag)
+                    .WithMany(t => t.BookTags)
+                    .HasForeignKey(bt => bt.TagId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 builder.Entity<CommentBook>()
-                    .HasKey(x => new { x.CommentId, x.BookId });
+                        .HasKey(x => new { x.CommentId, x.BookId });
 
                 builder.Entity<CommentBook>()
                     .HasOne(x => x.Comment)

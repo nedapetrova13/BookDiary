@@ -4,6 +4,7 @@ namespace BookDiary.Models.ViewModels.BookViewModels
 {
     public class BookFilterViewModel
     {
+        public int BookId { get; set; }
         public int? GenreId { get; set; }
         public int? AuthorId { get; set; }
         public int? PageMinCount { get; set; }

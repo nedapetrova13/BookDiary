@@ -10,20 +10,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace BookDiary.Controllers
 {
     public class BookController : Controller
-        {
+    {
             private readonly IBookService _bookService;
             private readonly IAuthorService _authorService;
             private readonly IGenreService _genreService;
             private readonly ISeriesService _seriesService;
             private readonly ITagService _tagService; 
+            private readonly IBookTagService _bookTagService;
 
-            public BookController(IBookService bookService,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService)
+            public BookController(IBookService bookService,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService)
             {
                 _bookService = bookService;
                 _authorService = authorService;
                 _genreService = genreService;
                 _seriesService = seriesService;
-                _tagService = tagService; ;
+                _tagService = tagService;
+                _bookTagService = bookTagService;
             }
 
             public async  Task<IActionResult> Index(BookFilterViewModel? filter)
@@ -51,6 +53,7 @@ namespace BookDiary.Controllers
                 var testList = list.AsQueryable().Include(b => b.Genre).Include(b => b.Author).ToList();
                 var model = new BookFilterViewModel
                 {
+                    BookId=filter.BookId,
                     GenreId = filter.GenreId,
                     AuthorId = filter.AuthorId,
                     PageMaxCount = filter.PageMaxCount,
@@ -58,7 +61,7 @@ namespace BookDiary.Controllers
                     Genres = new SelectList( _genreService.GetAll(), "Id", "Name"),
                     Authors = new SelectList( _authorService.GetAll(), "Id", "Name"),
                     Books = query.Include(b => b.Genre).Include(b => b.Author).ToList()
-                    //Books = testList
+
                 };
                 return View(model);
             }
@@ -118,5 +121,34 @@ namespace BookDiary.Controllers
                 await _bookService.Delete(id);
                 return RedirectToAction("Index");
             }
+        [HttpGet]
+        public IActionResult AssignTags(int BookId)
+        {
+            var tags = _tagService.GetAll();
+            var model = new AssignTagsToBookViewModel
+            {
+               BookId= BookId,
+               TagList = tags.ToList(),
+            };
+
+            return View("AssignTags", model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignTags(AssignTagsToBookViewModel model)
+        {
+            foreach (var tag in model.SelectedTagIds)
+            {
+                var booktag = new BookTag()
+                {
+                    TagId = tag,
+                    BookId = model.BookId
+                };
+
+                await _bookTagService.Add(booktag);
+            }
+            return RedirectToAction("Index");
+        }
+
     }
+}

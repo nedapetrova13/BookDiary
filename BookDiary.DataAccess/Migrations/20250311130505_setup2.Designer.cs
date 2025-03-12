@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookDiary.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250307091552_setup")]
-    partial class setup
+    [Migration("20250311130505_setup2")]
+    partial class setup2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -149,18 +149,18 @@ namespace BookDiary.DataAccess.Migrations
 
             modelBuilder.Entity("BookDiary.Models.BookTag", b =>
                 {
-                    b.Property<int>("TagId")
+                    b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BookId")
+                    b.Property<int>("TagId")
                         .HasColumnType("int");
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.HasKey("TagId", "BookId");
+                    b.HasKey("BookId", "TagId");
 
-                    b.HasIndex("BookId");
+                    b.HasIndex("TagId");
 
                     b.ToTable("BooksTags");
                 });
@@ -831,13 +831,13 @@ namespace BookDiary.DataAccess.Migrations
                     b.HasOne("BookDiary.Models.Book", "Book")
                         .WithMany("BookTags")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BookDiary.Models.Tag", "Tag")
                         .WithMany("BookTags")
                         .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");

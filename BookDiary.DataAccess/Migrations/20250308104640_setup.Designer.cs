@@ -4,6 +4,7 @@ using BookDiary.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookDiary.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250308104640_setup")]
+    partial class setup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,18 +149,18 @@ namespace BookDiary.DataAccess.Migrations
 
             modelBuilder.Entity("BookDiary.Models.BookTag", b =>
                 {
-                    b.Property<int>("BookId")
+                    b.Property<int>("TagId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TagId")
+                    b.Property<int>("BookId")
                         .HasColumnType("int");
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.HasKey("BookId", "TagId");
+                    b.HasKey("TagId", "BookId");
 
-                    b.HasIndex("TagId");
+                    b.HasIndex("BookId");
 
                     b.ToTable("BooksTags");
                 });
@@ -828,13 +831,13 @@ namespace BookDiary.DataAccess.Migrations
                     b.HasOne("BookDiary.Models.Book", "Book")
                         .WithMany("BookTags")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BookDiary.Models.Tag", "Tag")
                         .WithMany("BookTags")
                         .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Book");
