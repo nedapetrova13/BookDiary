@@ -35,6 +35,12 @@ namespace BookDiary.Core.Services
             return await _repo.Find(filter);
         }
 
+        public async Task<Author> Get(Expression<Func<Author, bool>> filter)
+        {
+            return await _repo.Get(filter);
+
+        }
+
         public IQueryable<Author> GetAll()
         {
             return  _repo.GetAll();
@@ -49,7 +55,9 @@ namespace BookDiary.Core.Services
         {
             return _repo.Update(entity);
         }
-       
+
+        
+
         private bool ValidateAuthor(Author author)
         {
             if (!AuthorValidator.ValidateInput(author.Name, author.Email, author.ProfilePictureURL, author.Bio, author.WebSiteLink))

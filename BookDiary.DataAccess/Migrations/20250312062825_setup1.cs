@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookDiary.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class setup : Migration
+    public partial class setup1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -328,17 +328,19 @@ namespace BookDiary.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BooksTags", x => new { x.TagId, x.BookId });
+                    table.PrimaryKey("PK_BooksTags", x => new { x.BookId, x.TagId });
                     table.ForeignKey(
                         name: "FK_BooksTags_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_BooksTags_Tags_TagId",
                         column: x => x.TagId,
                         principalTable: "Tags",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -698,9 +700,9 @@ namespace BookDiary.DataAccess.Migrations
                 column: "LanguageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BooksTags_BookId",
+                name: "IX_BooksTags_TagId",
                 table: "BooksTags",
-                column: "BookId");
+                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",

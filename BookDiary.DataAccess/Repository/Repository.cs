@@ -50,6 +50,11 @@ namespace BookDiary.DataAccess.Repository
             return entity;
         }
 
+        public async Task<T> Get(Expression<Func<T, bool>> filter)
+        {
+            return await dbSet.FirstOrDefaultAsync(filter);
+        }
+
         public  IQueryable<T> GetAll()
         {
             return  dbSet.AsQueryable();
@@ -57,7 +62,7 @@ namespace BookDiary.DataAccess.Repository
         public async Task<T> GetById(int id)
         {
             var entity = dbSet.Find(id);
-            if(entity == null)
+            if (entity == null)
             {
                 throw new ArgumentException("id is null");
             }
@@ -69,5 +74,6 @@ namespace BookDiary.DataAccess.Repository
             await _context.SaveChangesAsync();
 
         }
+        
     }
 }

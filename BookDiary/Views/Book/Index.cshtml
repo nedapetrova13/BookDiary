@@ -185,12 +185,12 @@
             <p>@book.Author.Name</p>
             <p>@book.Genre.Name</p>
             <div style="margin-top: auto;">
-               
 
-                                 <a  class="btn btn-primary" asp-action="AssignTags" asp-route-BookId="@book.Id">Edit</a>
+                <a class="btn btn-primary" asp-area="" asp-controller="Book" asp-action="Info" asp-route-bookId="@book.Id">Детайли</a>
+               @*  <a  class="btn btn-primary" asp-action="AssignTags" asp-route-BookId="@book.Id">Edit</a>
                 <form method="post" asp-action="Delete" asp-route-id="@book.Id" style="display: inline;">
                     <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
+                </form> *@
             </div>
             <div class="cover">
                 <img src="@book.CoverImageURL" class="card-img-top" alt="Book Cover">

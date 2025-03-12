@@ -68,5 +68,10 @@ namespace BookDiary.Core.Services
         {
             return  _repo.GetAll();
         }
+
+        public Task<Book> Get(Expression<Func<Book, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

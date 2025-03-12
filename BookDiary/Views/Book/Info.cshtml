@@ -1,0 +1,398 @@
+﻿@model BookDiary.Models.ViewModels.BookViewModels.BookAdminViewModel;
+
+<div class="book-admin-container">
+    <!-- Book Cover & Details Row -->
+    <div class="book-main-row">
+        <!-- Book Cover -->
+        <div class="book-cover-container">
+            <div class="book-cover-wrapper">
+                <img src="@Model.CoverImageURL" alt="Cover of @Model.Title" class="book-cover-image" onerror="this.src='/images/placeholder-cover.jpg'" />
+            </div>
+        </div>
+        <!-- Book Details -->
+        <div class="book-details-container">
+            <h1 class="book-title">@Model.Title</h1>
+            <div class="book-metadata">
+                <span class="author-link">
+                    <a asp-area="" asp-controller="Author" asp-action="Info" asp-route-AuthorName="@Model.AuthorName" class="author-name">👤 @Model.AuthorName</a>
+                </span>
+                <span class="genre-name">📖 @Model.GenreName</span>
+            </div>
+            @if (Model.SeriesName != null)
+            {
+                <p class="series-info">
+                    📚 Part of: <a asp-area="" asp-controller="Series" asp-action="Info" asp-route-SeriesName="@Model.SeriesName" class="series-link">@Model.SeriesName</a>
+                </p>
+            }
+            <div class="book-stats">
+                <div class="stat-item">
+                    <div class="stat-label">Pages</div>
+                    <div class="stat-value">@Model.BookPages</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Chapters</div>
+                    <div class="stat-value">@Model.Chapters</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Tags & Description -->
+    <div class="book-tags-section">
+        <h2 class="section-title">Tags</h2>
+        <div class="tags-container">
+            @if (Model.SelectedTags != null && Model.SelectedTags.Any())
+            {
+                @foreach (var tag in Model.SelectedTags)
+                {
+                    <div class="book-tag">@tag</div>
+                }
+            }
+            else
+            {
+                <p class="no-tags">No tags available</p>
+            }
+        </div>
+    </div>
+    <div class="book-description-section">
+        <h2 class="section-title">Description</h2>
+        <p class="book-description">@Model.Description</p>
+    </div>
+</div>
+
+<style>
+    /* Base styles */
+    .book-admin-container {
+        max-width: 1200px;
+        width: 85%;
+        margin: 1.5rem auto;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .book-admin-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc, #6a11cb);
+            background-size: 200% 100%;
+            animation: gradientMove 8s infinite linear;
+        }
+
+    keyframes gradientMove {
+        0%
+
+    {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+
+    }
+
+    .book-admin-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Book main row */
+    .book-main-row {
+        display: flex;
+        gap: 2.5rem;
+        align-items: flex-start;
+        margin-bottom: 2rem;
+    }
+
+    /* Book cover */
+    .book-cover-container {
+        margin: 35px;
+    }
+
+    .book-cover-wrapper {
+        width: 12rem;
+        height: 18rem;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        position: relative;
+    }
+
+        .book-cover-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            z-index: 2;
+        }
+
+        .book-cover-wrapper:hover {
+            transform: scale(1.05) rotate(1deg);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+    .book-cover-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .book-cover-wrapper:hover .book-cover-image {
+        transform: scale(1.1);
+    }
+
+    /* Book details */
+    .book-details-container {
+        flex: 1;
+        margin: 40px;
+    }
+
+    .book-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a202c;
+        margin-bottom: 0.5rem;
+        position: relative;
+        display: inline-block;
+    }
+
+        .book-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            transition: width 0.3s ease;
+        }
+
+    .book-admin-container:hover .book-title::after {
+        width: 100%;
+    }
+
+    .book-metadata {
+        display: flex;
+        align-items: center;
+        color: #4a5568;
+        margin-top: 0.75rem;
+        font-size: 1.05rem;
+    }
+
+    .author-link {
+        margin-right: 1rem;
+    }
+
+    .author-name {
+        color: #4a5568;
+        text-decoration: underline;
+        transition: color 0.2s ease;
+    }
+
+        .author-name:hover {
+            color: #2b6cb0;
+        }
+
+    .series-info {
+        margin-top: 0.75rem;
+        color: #3182ce;
+        font-size: 1.05rem;
+    }
+
+    .series-link {
+        color: #3182ce;
+        text-decoration: underline;
+        transition: color 0.2s ease;
+    }
+
+        .series-link:hover {
+            color: #2c5282;
+        }
+
+    /* Book stats */
+    .book-stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .stat-item {
+        background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+        padding: 1rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+        }
+
+    .stat-label {
+        font-weight: 600;
+        color: #4b5563;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-value {
+        font-size: 1.25rem;
+        color: #1f2937;
+    }
+
+    /* Tags section */
+    .book-tags-section {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1a202c;
+        margin-bottom: 1rem;
+        position: relative;
+        display: inline-block;
+    }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 2rem;
+            height: 2px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            transition: width 0.3s ease;
+        }
+
+        .section-title:hover::after {
+            width: 100%;
+        }
+
+    .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .book-tag {
+        background: linear-gradient(to right, #e0f2fe, #bfdbfe);
+        color: #1e40af;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+        .book-tag:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to right, #bfdbfe, #93c5fd);
+        }
+
+    .no-tags {
+        color: #6b7280;
+        font-style: italic;
+    }
+
+    /* Description section */
+    .book-description-section {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .book-description {
+        color: #4b5563;
+        line-height: 1.7;
+        max-width: 100%;
+        position: relative;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+        .book-description:hover {
+            background-color: #f9fafb;
+        }
+
+    /* Responsive adjustments */
+    media (max-width: 768px) {
+        .book-main-row
+
+    {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .book-cover-container {
+        margin: 1rem 0;
+    }
+
+    .book-details-container {
+        margin: 1rem 0;
+        text-align: center;
+    }
+
+    .book-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .book-metadata {
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .author-link {
+        margin-right: 0;
+    }
+
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Dynamic hover effect for tags
+        const tags = document.querySelectorAll('.book-tag');
+
+        tags.forEach(tag => {
+            tag.addEventListener('mouseenter', function() {
+                const hue = Math.floor(Math.random() * 60) + 200; // Blue range hues
+                this.style.boxShadow = `0 4px 8px rgba(${hue - 200}, ${hue - 100}, ${hue}, 0.2)`;
+            });
+
+            tag.addEventListener('mouseleave', function() {
+                this.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+            });
+        });
+
+        // Subtle animation for the book cover on page load
+        const bookCover = document.querySelector('.book-cover-wrapper');
+        setTimeout(() => {
+            bookCover.style.transform = 'translateY(0) rotate(0)';
+            bookCover.style.opacity = '1';
+        }, 300);
+    });
+</script>

@@ -55,5 +55,10 @@ namespace BookDiary.Core.Services
             var newsList =  _repo.GetAll();
             return newsList.OrderByDescending(n => n.Created).Take(3);       
          }
+
+        public Task<News> Get(Expression<Func<News, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -33,6 +33,11 @@ namespace BookDiary.Core.Services
             return await _repo.Find(filter);
         }
 
+        public Task<Shelf> Get(Expression<Func<Shelf, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
         public IQueryable<Shelf> GetAll()
         {
             return  _repo.GetAll();

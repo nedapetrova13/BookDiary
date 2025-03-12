@@ -1,10 +1,15 @@
 ﻿using System.Data.Entity;
+using System.Net;
+using System.Reflection;
 using BookDiary.Core.IServices;
 using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.BookViewModels;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using NuGet.Packaging.Signing;
 
 
 namespace BookDiary.Controllers
@@ -149,6 +154,50 @@ namespace BookDiary.Controllers
             }
             return RedirectToAction("Index");
         }
-
+        public async Task<IActionResult> Info(int bookId)
+        {
+            var bookcvm = await _bookService.GetById(bookId);
+            var tags = _bookService.GetAll()
+             .Where(b => b.Id == bookId)
+             .SelectMany(b => b.BookTags.Select(bt => bt.Tag.Name))
+             .ToList();
+            var author = _bookService.GetAll()
+             .Where(b => b.Id == bookId)
+             .Include(bt => bt.Author)
+             .Select(a => a.Author.Name)
+             .FirstOrDefault();
+            var genre = _bookService.GetAll()
+           .Where(b => b.Id == bookId)
+           .Include(bt => bt.Genre)
+           .Select(a => a.Genre.Name)
+           .FirstOrDefault();
+            var series = _bookService.GetAll()
+           .Where(b => b.Id == bookId)
+           .Include(bt => bt.Series)
+           .Select(a => a.Series.Title)
+           .FirstOrDefault();
+            var format = _bookService.GetAll()
+             .Where(b => b.Id == bookId)
+             .Select(b => b.BookFormat.ToString()) // Convert the enum to a string
+             .FirstOrDefault();
+            var seriesview = _seriesService.Get(x => x.Title == series);
+            
+            var book = new BookAdminViewModel()
+            {
+                Id = bookcvm.Id,
+                Title = bookcvm.Title,
+                Description = bookcvm.Description,
+                AuthorName = author,
+                GenreName = genre,
+                SeriesName = series,
+                SeriesId = seriesview.Id,
+                CoverImageURL = bookcvm.CoverImageURL,
+                BookFormat = format,
+                BookPages = bookcvm.BookPages,
+                Chapters = bookcvm.Chapters,
+                SelectedTags = tags
+            };
+            return View(book);
+        }
     }
 }

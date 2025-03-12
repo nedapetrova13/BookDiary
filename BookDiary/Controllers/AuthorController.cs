@@ -3,7 +3,9 @@ using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.AuthorViewModels;
 using BookDiary.Models.ViewModels.AuthorViewModels;
+using BookDiary.Models.ViewModels.BookViewModels;
 using BookDiary.Models.ViewModels.NewsViewModels;
+using BookDiary.Models.ViewModels.SeriesViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.ObjectModel;
 
@@ -95,6 +97,40 @@ namespace BookDiary.Controllers
         {
             await _authorService.Delete(id);
             return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Info(string authorName)
+        {
+            var authormodel = await _authorService.Get(x => x.Name == authorName);
+            var books = _authorService.GetAll()
+             .Where(b => b.Id == authormodel.Id)
+             .SelectMany(b => b.Books)
+             .ToList();
+            List<BookSeriesViewModel> list = new List<BookSeriesViewModel>();
+            foreach (var b in books)
+            {
+              
+                var bookvm = new BookSeriesViewModel
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Author = authormodel.Name,
+                    CoverImageURL = b.CoverImageURL,
+                };
+                list.Add(bookvm);
+            }
+
+            var au = new AuthorAdminViewModel()
+            {
+                Id=authormodel.Id,
+                Name=authormodel.Name,
+                BirthDate=authormodel.BirthDate,
+                Bio=authormodel.Bio,
+                Email=authormodel.Email,
+                ProfilePictureURL=authormodel.ProfilePictureURL,
+                WebSiteLink=authormodel.WebSiteLink,
+                Books = list,
+            };
+            return View(au);
         }
     }
 }

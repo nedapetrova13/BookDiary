@@ -33,6 +33,11 @@ namespace BookDiary.Core.Services
             return await _repo.Find(filter);
         }
 
+        public Task<City> Get(Expression<Func<City, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
         public  IQueryable<City> GetAll()
         {
             return _repo.GetAll();

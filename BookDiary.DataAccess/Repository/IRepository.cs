@@ -16,5 +16,6 @@ namespace BookDiary.DataAccess.Repository
         IQueryable<T> GetAll();
         Task<T> GetById(int id);
         Task< List<T>> Find(Expression<Func<T, bool>> filter);
+        Task<T> Get(Expression<Func<T, bool>> filter);
     }
 }

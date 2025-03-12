@@ -27,6 +27,11 @@ namespace BookDiary.Core
             return await _repo.Find(filter);
         }
 
+        public async Task<T> Get(Expression<Func<T, bool>> filter)
+        {
+            return await _repo.Get(filter);
+        }
+
         public IQueryable<T> GetAll()
         {
             return _repo.GetAll();

@@ -5,16 +5,21 @@ using BookDiary.Models.ViewModels.TagViewModels;
 using BookDiary.Models.ViewModels.SeriesViewModels;
 using Microsoft.AspNetCore.Mvc;
 using BookDiary.Models.ViewModels.NewsViewModels;
+using BookDiary.Models.ViewModels.BookViewModels;
+using System.Net;
+using System.Data.Entity;
 
 namespace BookDiary.Controllers
 {
     public class SeriesController : Controller
     {
         private readonly ISeriesService _seriesService;
+        private readonly IBookService _bookService;
 
-        public SeriesController(ISeriesService seriesService)
+        public SeriesController(ISeriesService seriesService,IBookService bookService)
         {
             _seriesService = seriesService;
+            _bookService = bookService;
         }
 
         public IActionResult Index()
@@ -74,6 +79,39 @@ namespace BookDiary.Controllers
         {
             await _seriesService.Delete(id);
             return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Info(string seriesName)
+        {
+            var seriesmodel = await _seriesService.Get(x=>x.Title == seriesName);
+            var books = _seriesService.GetAll()
+             .Where(b => b.Id == seriesmodel.Id)
+             .SelectMany(b => b.Books)
+             .ToList();
+            List<BookSeriesViewModel> list = new List<BookSeriesViewModel>();
+            foreach(var b in books)
+            {
+                var author = _bookService.GetAll()
+             .Where(bo => bo.Id == b.Id)
+             .Include(bt => bt.Author)
+             .Select(a => a.Author.Name)
+             .FirstOrDefault();
+                var bookvm = new BookSeriesViewModel
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Author = author,
+                    CoverImageURL = b.CoverImageURL,
+                };
+                list.Add(bookvm);
+            }
+            
+            var book = new SeriesAdminViewModel()
+            {
+                Title=seriesmodel.Title,
+                Description=seriesmodel.Description,
+                Books=list,
+            };
+            return View(book);
         }
     }
 }
