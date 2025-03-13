@@ -3,9 +3,11 @@
     public class AssignTagsToBookViewModel
     {
         public int BookId { get; set; }
+        public List<Tag> SelectedTags { get; set; } = new List<Tag>(); // Already assigned tags
+        public List<Tag> AvailableTags { get; set; } = new List<Tag>(); // Tags that can be added
+        public List<int> SelectedTagIds { get; set; } = new List<int>(); // Tags to be assigned
 
-        public List<int> SelectedTagIds { get; set; } = new List<int>();
-
-        public List<BookDiary.Models.Tag> TagList { get; set; } = new List<BookDiary.Models.Tag>();
     }
+   
+
 }

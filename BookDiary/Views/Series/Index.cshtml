@@ -1,24 +1,164 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model IEnumerable<BookDiary.Models.ViewModels.SeriesViewModels.SeriesCreateViewModel>
-<h1>See all series</h1>
+﻿@model IEnumerable<BookDiary.Models.ViewModels.SeriesViewModels.SeriesCreateViewModel>
 
-<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
-    @foreach (var series in Model)
-    {
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">@series.Title</h5>
-                <p class="card-text">@series.Description</p>
-                
-                <a type="button" class="btn btn-success" asp-action="Edit" asp-controller="Series" asp-route-id="@series.Id">Edit</a>
-                <form method="post" asp-controller="Series" asp-action="Delete">
-                    <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="Series" asp-route-id="@series.Id">Delete</button>
-                </form>
+<div class="container py-4">
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+                <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0 fw-bold"><i class="fas fa-layer-group me-2"></i>Всички поредици</h2>
+                        <a asp-action="Add" asp-controller="Series" class="btn btn-light btn-sm">
+                            <i class="fas fa-plus-circle me-1"></i> Добави поредица
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-    }
+    </div>
+
+    <div class="row g-4">
+        @foreach (var series in Model)
+        {
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="series-card">
+                    <div class="series-card-header">
+                        <h5 class="series-card-title">@series.Title</h5>
+                    </div>
+                    <div class="series-card-body">
+                        <p class="series-card-text">@series.Description</p>
+                    </div>
+                    <div class="series-card-footer">
+                        <div class="d-flex gap-2">
+                            <a type="button" class="btn btn-edit" asp-action="Edit" asp-controller="Series" asp-route-id="@series.Id">
+                                <i class="fas fa-edit me-1"></i> Редактирай
+                            </a>
+                            <form method="post" asp-controller="Series" asp-action="Delete">
+                                <button type="submit" class="btn btn-delete" asp-action="Delete" asp-controller="Series" asp-route-id="@series.Id" >
+                                    <i class="fas fa-trash-alt me-1"></i> Изтрий
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div style="margin-top: auto; width: 100%; text-align: center;">
+                        <a class="btn details-button" asp-area="" asp-controller="Series" asp-action="Info" asp-route-seriesname="@series.Title">Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+<style>
+    /* Series card styling */
+    .series-card {
+        --primary-color: #8B6B4F;
+        --primary-light: #A0855C;
+        --primary-dark: #5C4033;
+        --accent-color: #E6D5B8;
+        --danger-color: #A05C5C;
+        --success-color: #5C8B4F;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        border: none;
+    }
+
+        .series-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+    .series-card-header {
+        padding: 1.25rem 1.5rem;
+        background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+        color: white;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .series-card-title {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.1rem;
+        line-height: 1.4;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+    }
+
+    .series-card-body {
+        padding: 1.5rem;
+        flex: 1;
+    }
+
+    .series-card-text {
+        color: #555;
+        margin: 0;
+        line-height: 1.6;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .series-card-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    /* Action button styling */
+    .btn-edit {
+        background-color: var(--success-color);
+        border-color: var(--success-color);
+        color: white;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+    }
+
+        .btn-edit:hover {
+            background-color: #4A7241;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .btn-delete {
+        background-color: var(--danger-color);
+        border-color: var(--danger-color);
+        color: white;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+    }
+
+        .btn-delete:hover {
+            background-color: #834A4A;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    /* Responsive adjustments */
+    media (max-width: 767.98px) {
+        .series-card-footer .d-flex
+
+    {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .series-card-footer .btn {
+        width: 100%;
+    }
+
+    }
+</style>

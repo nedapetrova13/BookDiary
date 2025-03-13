@@ -1,36 +1,40 @@
 ﻿@model IEnumerable<BookDiary.Models.ViewModels.GenreViewModels.GenreCreateViewModel>
-
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <div class="card border-0 shadow-lg">
+            <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
                 <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
-                    <h2 class="mb-0 fw-bold"><i class="fas fa-bookmark me-2"></i>Всички жанрове</h2>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0 fw-bold"><i class="fas fa-bookmark me-2"></i>Всички жанрове</h2>
+                        <a asp-action="Add" asp-controller="Genre" class="btn btn-light btn-sm">
+                            <i class="fas fa-plus-circle me-1"></i> Добави жанр
+                        </a>
+                    </div>
                 </div>
-                <div class="card-body p-4">
+                <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-hover table-bordered align-middle">
-                            <thead class="table-dark">
+                        <table class="table table-hover align-middle mb-0 genre-table">
+                            <thead>
                                 <tr>
-                                    <th scope="col" class="text-center">#</th>
+                                    <th scope="col" class="text-center" width="80">#</th>
                                     <th scope="col">Име</th>
-                                    <th scope="col" class="text-center">Действия</th>
+                                    <th scope="col" class="text-center" width="250">Действия</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var genre in Model)
                                 {
                                     <tr>
-                                        <td class="text-center">@genre.Id</td>
+                                        <td class="text-center fw-bold">@genre.Id</td>
                                         <td>@genre.Name</td>
-                                        <td class="text-center">
+                                        <td>
                                             <div class="d-flex justify-content-center gap-2">
-                                                <a class="btn btn-success btn-sm" asp-action="Edit" asp-controller="Genre" asp-route-id="@genre.Id">
-                                                    <i class="fas fa-edit"></i> Редактирай
+                                                <a class="btn btn-edit btn-sm" asp-action="Edit" asp-controller="Genre" asp-route-id="@genre.Id">
+                                                    <i class="fas fa-edit me-1"></i> Редактирай
                                                 </a>
                                                 <form method="post" asp-controller="Genre" asp-action="Delete">
-                                                    <button type="submit" class="btn btn-danger btn-sm" asp-route-id="@genre.Id" onclick="return confirm('Сигурни ли сте, че искате да изтриете този жанр?');">
-                                                        <i class="fas fa-trash"></i> Изтрий
+                                                    <button type="submit" class="btn btn-delete btn-sm" asp-route-id="@genre.Id" >
+                                                        <i class="fas fa-trash-alt me-1"></i> Изтрий
                                                     </button>
                                                 </form>
                                             </div>
@@ -45,3 +49,117 @@
         </div>
     </div>
 </div>
+
+<style>
+    /* Custom styling for the genre table */
+    .genre-table {
+        --primary-color: #8B6B4F;
+        --primary-light: #A0855C;
+        --primary-dark: #5C4033;
+        --accent-color: #E6D5B8;
+        --danger-color: #A05C5C;
+        --success-color: #5C8B4F;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .genre-table thead {
+            background-color: rgba(139, 107, 79, 0.15);
+        }
+
+            .genre-table thead th {
+                font-weight: 600;
+                color: var(--primary-dark);
+                border: none;
+                padding: 1rem;
+                position: relative;
+            }
+
+                .genre-table thead th:after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 2px;
+                    background-color: var(--primary-color);
+                    opacity: 0.3;
+                }
+
+        .genre-table tbody tr {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+            .genre-table tbody tr:hover {
+                background-color: rgba(230, 213, 184, 0.2);
+            }
+
+        .genre-table td {
+            padding: 0.75rem 1rem;
+            border: none;
+            vertical-align: middle;
+        }
+
+    /* Action button styling */
+    .btn-edit {
+        background-color: var(--success-color);
+        border-color: var(--success-color);
+        color: white;
+        transition: all 0.2s ease;
+    }
+
+        .btn-edit:hover {
+            background-color: darken(var(--success-color), 10%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+    .btn-delete {
+        background-color: var(--danger-color);
+        border-color: var(--danger-color);
+        color: white;
+        transition: all 0.2s ease;
+    }
+
+        .btn-delete:hover {
+            background-color: darken(var(--danger-color), 10%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+    /* Card enhancements */
+    .card {
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    .card-header {
+        border-bottom: none;
+    }
+
+    /* Responsive adjustments */
+    media (max-width: 767.98px) {
+        .genre-table thead th, .genre-table td
+
+    {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+        .btn-sm i {
+            margin-right: 0 !important;
+        }
+
+    .genre-table {
+        font-size: 0.9rem;
+    }
+
+    }
+</style>

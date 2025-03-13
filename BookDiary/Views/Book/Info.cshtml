@@ -17,6 +17,17 @@
                     <a asp-area="" asp-controller="Author" asp-action="Info" asp-route-AuthorName="@Model.AuthorName" class="author-name">👤 @Model.AuthorName</a>
                 </span>
                 <span class="genre-name">📖 @Model.GenreName</span>
+               
+            </div>
+            <div class="book-metadata second-row">
+                @if (!string.IsNullOrEmpty(Model.LanguageName))
+                {
+                    <span class="language-name">🌐 @Model.LanguageName</span>
+                }
+                @if (!string.IsNullOrEmpty(Model.PublishingHouseName))
+                {
+                    <span class="publishing-house">🏢 @Model.PublishingHouseName</span>
+                }
             </div>
             @if (Model.SeriesName != null)
             {
@@ -57,6 +68,13 @@
         <h2 class="section-title">Description</h2>
         <p class="book-description">@Model.Description</p>
     </div>
+
+    <div class="book-actions">
+        <form method="post" class="actions-form">
+            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            <button type="submit" class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</button>
+        </form>
+    </div>
 </div>
 
 <style>
@@ -65,9 +83,9 @@
         max-width: 1200px;
         width: 85%;
         margin: 1.5rem auto;
-        background: white;
+        background: #f8f5f0;
         border-radius: 24px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 30px rgba(98, 74, 46, 0.15);
         padding: 2rem;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         position: relative;
@@ -81,7 +99,7 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: linear-gradient(90deg, #6a11cb, #2575fc, #6a11cb);
+            background: linear-gradient(90deg, #8b6b4c, #d2b48c, #8b6b4c);
             background-size: 200% 100%;
             animation: gradientMove 8s infinite linear;
         }
@@ -105,7 +123,7 @@
 
     .book-admin-container:hover {
         transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 15px 35px rgba(98, 74, 46, 0.2);
     }
 
     /* Book main row */
@@ -126,7 +144,7 @@
         height: 18rem;
         border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 20px rgba(98, 74, 46, 0.2);
         transition: transform 0.4s ease, box-shadow 0.4s ease;
         position: relative;
     }
@@ -142,7 +160,7 @@
 
         .book-cover-wrapper:hover {
             transform: scale(1.05) rotate(1deg);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 25px rgba(98, 74, 46, 0.25);
         }
 
     .book-cover-image {
@@ -165,7 +183,7 @@
     .book-title {
         font-size: 2rem;
         font-weight: 700;
-        color: #1a202c;
+        color: #5d4037;
         margin-bottom: 0.5rem;
         position: relative;
         display: inline-block;
@@ -178,7 +196,7 @@
             bottom: -5px;
             width: 0;
             height: 3px;
-            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            background: linear-gradient(90deg, #8b6b4c, #d2b48c);
             transition: width 0.3s ease;
         }
 
@@ -189,9 +207,13 @@
     .book-metadata {
         display: flex;
         align-items: center;
-        color: #4a5568;
+        color: #6d4c41;
         margin-top: 0.75rem;
         font-size: 1.05rem;
+    }
+
+    .second-row {
+        margin-top: 0.25rem;
     }
 
     .author-link {
@@ -199,29 +221,34 @@
     }
 
     .author-name {
-        color: #4a5568;
+        color: #795548;
         text-decoration: underline;
         transition: color 0.2s ease;
     }
 
         .author-name:hover {
-            color: #2b6cb0;
+            color: #5d4037;
         }
+
+    .genre-name, .format-name, .language-name, .publishing-house {
+        margin-right: 1rem;
+        color: #6d4c41;
+    }
 
     .series-info {
         margin-top: 0.75rem;
-        color: #3182ce;
+        color: #795548;
         font-size: 1.05rem;
     }
 
     .series-link {
-        color: #3182ce;
+        color: #795548;
         text-decoration: underline;
         transition: color 0.2s ease;
     }
 
         .series-link:hover {
-            color: #2c5282;
+            color: #5d4037;
         }
 
     /* Book stats */
@@ -233,40 +260,40 @@
     }
 
     .stat-item {
-        background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+        background: linear-gradient(to bottom, #f5f0e8, #e8e0d5);
         padding: 1rem;
         border-radius: 12px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 5px rgba(98, 74, 46, 0.1);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
         .stat-item:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 5px 10px rgba(98, 74, 46, 0.15);
         }
 
     .stat-label {
         font-weight: 600;
-        color: #4b5563;
+        color: #795548;
         margin-bottom: 0.25rem;
     }
 
     .stat-value {
         font-size: 1.25rem;
-        color: #1f2937;
+        color: #5d4037;
     }
 
     /* Tags section */
     .book-tags-section {
         margin-top: 2rem;
         padding-top: 1.5rem;
-        border-top: 1px solid #e5e7eb;
+        border-top: 1px solid #e0d5c7;
     }
 
     .section-title {
         font-size: 1.25rem;
         font-weight: 600;
-        color: #1a202c;
+        color: #5d4037;
         margin-bottom: 1rem;
         position: relative;
         display: inline-block;
@@ -279,7 +306,7 @@
             bottom: -5px;
             width: 2rem;
             height: 2px;
-            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            background: linear-gradient(90deg, #8b6b4c, #d2b48c);
             transition: width 0.3s ease;
         }
 
@@ -294,24 +321,24 @@
     }
 
     .book-tag {
-        background: linear-gradient(to right, #e0f2fe, #bfdbfe);
-        color: #1e40af;
+        background: linear-gradient(to right, #f0e9dd, #e6dccb);
+        color: #795548;
         font-size: 0.875rem;
         font-weight: 500;
         padding: 0.5rem 1rem;
         border-radius: 9999px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 4px rgba(98, 74, 46, 0.08);
         transition: all 0.3s ease;
     }
 
         .book-tag:hover {
             transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            background: linear-gradient(to right, #bfdbfe, #93c5fd);
+            box-shadow: 0 4px 6px rgba(98, 74, 46, 0.12);
+            background: linear-gradient(to right, #e6dccb, #d2b48c);
         }
 
     .no-tags {
-        color: #6b7280;
+        color: #8d6e63;
         font-style: italic;
     }
 
@@ -319,11 +346,11 @@
     .book-description-section {
         margin-top: 2rem;
         padding-top: 1.5rem;
-        border-top: 1px solid #e5e7eb;
+        border-top: 1px solid #e0d5c7;
     }
 
     .book-description {
-        color: #4b5563;
+        color: #6d4c41;
         line-height: 1.7;
         max-width: 100%;
         position: relative;
@@ -333,7 +360,56 @@
     }
 
         .book-description:hover {
-            background-color: #f9fafb;
+            background-color: #f0e9dd;
+        }
+
+    /* Book actions */
+    .book-actions {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e0d5c7;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .actions-form {
+        display: flex;
+        gap: 1rem;
+    }
+
+    /* Button styles */
+    .btn {
+        padding: 0.6rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background-color: #8b6b4c;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #7d5f42;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(98, 74, 46, 0.2);
+        }
+
+    .btn-danger {
+        background-color: #a1887f;
+        color: white;
+    }
+
+        .btn-danger:hover {
+            background-color: #8d6e63;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(98, 74, 46, 0.2);
         }
 
     /* Responsive adjustments */
@@ -365,8 +441,13 @@
         gap: 0.5rem;
     }
 
-    .author-link {
+    .author-link, .genre-name, .format-name, .language-name, .publishing-house {
         margin-right: 0;
+    }
+
+    .actions-form {
+        justify-content: center;
+        width: 100%;
     }
 
     }
@@ -379,12 +460,12 @@
 
         tags.forEach(tag => {
             tag.addEventListener('mouseenter', function() {
-                const hue = Math.floor(Math.random() * 60) + 200; // Blue range hues
-                this.style.boxShadow = `0 4px 8px rgba(${hue - 200}, ${hue - 100}, ${hue}, 0.2)`;
+                const brownHue = Math.floor(Math.random() * 20) + 20; // Brown-beige range hues
+                this.style.boxShadow = `0 4px 8px rgba(${brownHue + 100}, ${brownHue + 70}, ${brownHue + 30}, 0.2)`;
             });
 
             tag.addEventListener('mouseleave', function() {
-                this.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+                this.style.boxShadow = '0 2px 4px rgba(98, 74, 46, 0.08)';
             });
         });
 

@@ -36,7 +36,7 @@ namespace BookDiary.Models
         public ICollection<User> Users { get; set; }
         public int Chapters {  get; set; }
         public ICollection<Notes> Notes { get; set; }
-        public ICollection<BookPublishingHouse> BookPublishingHouse { get; set; }
+        public ICollection<BookPublishingHouse>? BookPublishingHouse { get; set; }
         public ICollection<BookTag> BookTags { get; set; }
         public ICollection<ShelfBook> ShelfBooks { get; set; }
         public ICollection<QuestionGenreBook> QuestionGenreBooks { get; set; }

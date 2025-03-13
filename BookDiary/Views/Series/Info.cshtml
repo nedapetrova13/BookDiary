@@ -1,29 +1,358 @@
 ﻿@model BookDiary.Models.ViewModels.SeriesViewModels.SeriesAdminViewModel;
-<div class="flex flex-col max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-8 mb-8">
+
+<style>
+    :root {
+        --primary-dark: #3A2618;
+        --primary-medium: #5D4037;
+        --primary-light: #8D6E63;
+        --accent: #D7CCC8;
+        --page-color: #F5F5DC;
+        --text-dark: #2E1F18;
+        --text-light: #EFEBE9;
+        --shadow: rgba(0, 0, 0, 0.2);
+        --error: #C62828;
+        --success: #2E7D32;
+        --info: #1565C0;
+    }
+
+    body {
+        background-color: var(--accent);
+        font-family: 'Georgia', serif;
+        color: var(--text-dark);
+    }
+
+    .series-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        background-color: #FBFBF2;
+        
+        border-radius: 12px;
+        box-shadow: 0 8px 30px var(--shadow);
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .series-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary-light));
+        }
+
+    .series-header {
+        border-bottom: 2px solid var(--primary-light);
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .series-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .series-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--primary-dark);
+        margin-bottom: 0.5rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .series-badge {
+        display: inline-flex;
+        align-items: center;
+        color: var(--primary-medium);
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+
+        .series-badge svg {
+            margin-right: 0.5rem;
+        }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.625rem 1.25rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        text-decoration: none;
+        font-family: 'Georgia', serif;
+    }
+
+        .btn svg {
+            margin-right: 0.5rem;
+        }
+
+    .btn-edit {
+        background-color: var(--info);
+        color: white;
+        box-shadow: 0 4px 6px rgba(21, 101, 192, 0.3);
+    }
+
+        .btn-edit:hover {
+            background-color: #0D47A1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(21, 101, 192, 0.4);
+        }
+
+    .btn-delete {
+        background-color: var(--error);
+        color: white;
+        box-shadow: 0 4px 6px rgba(198, 40, 40, 0.3);
+    }
+
+        .btn-delete:hover {
+            background-color: #B71C1C;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(198, 40, 40, 0.4);
+        }
+
+    .btn-add {
+        background-color: var(--primary-medium);
+        color: white;
+        box-shadow: 0 4px 6px rgba(93, 64, 55, 0.3);
+    }
+
+        .btn-add:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(93, 64, 55, 0.4);
+        }
+
+    .description-section {
+        margin-top: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        color: var(--primary-medium);
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+    }
+
+    .description-content {
+        background-color: white;
+        padding: 1.25rem;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary-light);
+        box-shadow: 0 2px 8px var(--shadow);
+        line-height: 1.6;
+        color: var(--text-dark);
+    }
+
+    .books-section-title {
+        font-size: 1.75rem;
+        color: var(--primary-dark);
+        margin: 2rem 0 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary-light);
+        position: relative;
+    }
+
+        .books-section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 80px;
+            height: 2px;
+            background-color: var(--primary-dark);
+        }
+
+    .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .book-card {
+        position: relative;
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px var(--shadow);
+        transition: all 0.3s ease;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+    }
+
+        .book-card:hover {
+            transform: translateY(-8px) rotateY(5deg);
+            box-shadow: 8px 14px 20px var(--shadow);
+        }
+
+        .book-card::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 6px;
+            background: linear-gradient(to bottom, var(--primary-light), var(--primary-dark));
+            transform: translateZ(-1px);
+        }
+
+    .book-cover-link {
+        display: block;
+        width: 100%;
+         height: 350px;
+        overflow: hidden;
+    }
+
+    .book-cover {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .book-card:hover .book-cover {
+        transform: scale(1.05);
+    }
+
+    .no-books-message {
+        background-color: white;
+        border: 2px dashed var(--primary-light);
+        border-radius: 10px;
+        padding: 2.5rem;
+        text-align: center;
+        color: var(--primary-medium);
+    }
+
+    .add-book-button-container {
+        margin-top: 2.5rem;
+        text-align: center;
+    }
+
+    /* Animation */
+    keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .series-container {
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    .book-card {
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    /* Staggered book card animations */
+    .books-grid > div:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .books-grid > div:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .books-grid > div:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .books-grid > div:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    .books-grid > div:nth-child(5) {
+        animation-delay: 0.5s;
+    }
+
+    .books-grid > div:nth-child(6) {
+        animation-delay: 0.6s;
+    }
+
+    /* Responsive adjustments */
+    media (max-width: 768px) {
+        .series-title-row
+
+    {
+        flex-direction: column;
+    }
+
+    .action-buttons {
+        margin-top: 1rem;
+    }
+
+    .books-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+
+    }
+
+    media (max-width: 576px) {
+        .books-grid
+
+    {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .series-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .book-cover-link {
+        height: 200px;
+    }
+
+    }
+</style>
+
+<div class="series-container">
     <!-- Series Header -->
-    <div class="border-b border-gray-200 pb-6 mb-6">
-        <div class="flex items-start justify-between">
+    <div class="series-header">
+        <div class="series-title-row">
             <div>
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">@Model.Title</h1>
-                <div class="mt-2 flex items-center text-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>
-                    <span class="font-medium">Series</span>
+                <h1 class="series-title">@Model.Title</h1>
+                <div class="series-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>
+                    <span>Book Series</span>
                 </div>
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex gap-3">
-                <a class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            <div class="action-buttons">
+                <a class="btn btn-edit"
                    asp-action="Edit" asp-route-id="@Model.Id">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                     </svg>
                     Edit
                 </a>
                 <form method="post" asp-action="Delete" asp-route-id="@Model.Id" style="display: inline;">
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                    <button type="submit" class="btn btn-delete">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M3 6h18"></path>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
                             <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -37,9 +366,9 @@
         </div>
 
         <!-- Description -->
-        <div class="mt-6">
-            <h2 class="text-gray-700 font-medium mb-2">Description</h2>
-            <div class="bg-gray-50 p-4 rounded-lg text-gray-700 leading-relaxed">
+        <div class="description-section">
+            <h2 class="section-title">Description</h2>
+            <div class="description-content">
                 @Model.Description
             </div>
         </div>
@@ -47,40 +376,42 @@
 
     <!-- Books in Series -->
     <div>
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Books in this Series</h2>
+        <h2 class="books-section-title">Books in this Series</h2>
         @if (Model.Books != null && Model.Books.Any())
         {
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach (var book in Model.Books)
-            {
-                <div class="flex flex-col bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                    <a asp-area="" asp-controller="Book" asp-action="Info" asp-route-BookId="@book.Id" class="w-full h-56 overflow-hidden">
-                        <img src="@book.CoverImageURL"
-                             alt="Cover of @book.Title"
-                             class="object-cover w-full h-full transition-transform hover:scale-105"
-                             onerror="this.src='/images/placeholder-cover.jpg'" />
-                    </a>
-                </div>
-            }
-        </div>
+            <div class="books-grid">
+                @foreach (var book in Model.Books)
+                {
+                    <div class="book-card">
+                        <a asp-area="" asp-controller="Book" asp-action="Info" asp-route-BookId="@book.Id" class="book-cover-link">
+                            <img src="@book.CoverImageURL"
+                                 alt="Cover of @book.Title"
+                                 class="book-cover" />
+                        </a>
+                    </div>
+                }
+            </div>
         }
         else
         {
-        <div class="bg-gray-50 p-6 rounded-lg text-gray-500 text-center">
-            <p>No books have been added to this series yet.</p>
-            <a asp-area="" asp-controller="Book" asp-action="Create" class="inline-block mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
-                Add a Book
-            </a>
-        </div>
+            <div class="no-books-message">
+                <p>No books have been added to this series yet.</p>
+                <a asp-area="" asp-controller="Book" asp-action="Create" class="btn btn-add" style="margin-top: 1rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 5v14M5 12h14"></path>
+                    </svg>
+                    Add a Book
+                </a>
+            </div>
         }
     </div>
 
     <!-- Add New Book Button -->
     @if (Model.Books != null && Model.Books.Any())
     {
-        <div class="mt-8 text-center">
-            <a asp-area="" asp-controller="Book" asp-action="Create" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+        <div class="add-book-button-container">
+            <a asp-area="" asp-controller="Book" asp-action="Add" class="btn btn-add">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 5v14M5 12h14"></path>
                 </svg>
                 Add New Book to Series
@@ -88,4 +419,3 @@
         </div>
     }
 </div>
-Last edited just now

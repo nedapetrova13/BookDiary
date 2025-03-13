@@ -1,7 +1,78 @@
 ﻿@model BookDiary.Models.ViewModels.BookViewModels.BookFilterViewModel;
+
 <style>
-    /* From Uiverse.io by Madflows */
-    button {
+    :root {
+        --primary-dark: #3A2618;
+        --primary-medium: #5D4037;
+        --primary-light: #8D6E63;
+        --accent: #D7CCC8;
+        --page-color: #F5F5DC;
+        --text-dark: #2E1F18;
+        --text-light: #EFEBE9;
+        --shadow: rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+        background-color: var(--accent);
+        font-family: 'Georgia', serif;
+        color: var(--text-dark);
+    }
+
+    .page-title {
+        color: var(--primary-dark);
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: center;
+        margin: 2rem 0;
+        text-shadow: 2px 2px 4px var(--shadow);
+        position: relative;
+    }
+
+        .page-title:after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-medium);
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+    .filter-container {
+        background-color: var(--primary-light);
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 6px 15px var(--shadow);
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+    }
+
+        .filter-container:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px);
+        }
+
+    .form-control {
+        background-color: var(--page-color);
+        border: 2px solid var(--primary-medium);
+        color: var(--text-dark);
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(93, 64, 55, 0.25);
+            border-color: var(--primary-dark);
+        }
+
+    label {
+        color: var(--text-light);
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .filter-button {
         position: relative;
         display: inline-block;
         cursor: pointer;
@@ -9,203 +80,331 @@
         border: 0;
         vertical-align: middle;
         text-decoration: none;
-        font-family: inherit;
-        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-dark);
+        text-transform: uppercase;
+        padding: 1em 2em;
+        background: var(--accent);
+        border: 2px solid var(--primary-dark);
+        border-radius: 0.75em;
+        transform-style: preserve-3d;
+        transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
     }
 
-        button.learn-more {
-            font-weight: 600;
-            color: #382b22;
-            text-transform: uppercase;
-            padding: 1.25em 2em;
-            background: #fff0f0;
-            border: 2px solid #b18597;
-            border-radius: 0.75em;
-            -webkit-transform-style: preserve-3d;
-            transform-style: preserve-3d;
-            -webkit-transition: background 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1);
-            transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1);
+        .filter-button::before {
+            position: absolute;
+            content: '';
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--primary-light);
+            border-radius: inherit;
+            box-shadow: 0 0 0 2px var(--primary-dark), 0 0.625em 0 0 var(--primary-medium);
+            transform: translate3d(0, 0.75em, -1em);
+            transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
         }
 
-            button.learn-more::before {
-                position: absolute;
-                content: '';
-                width: 100%;
-                height: 100%;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: #f9c4d2;
-                border-radius: inherit;
-                -webkit-box-shadow: 0 0 0 2px #b18597, 0 0.625em 0 0 #ffe3e2;
-                box-shadow: 0 0 0 2px #b18597, 0 0.625em 0 0 #ffe3e2;
-                -webkit-transform: translate3d(0, 0.75em, -1em);
-                transform: translate3d(0, 0.75em, -1em);
-                transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+        .filter-button:hover {
+            background: var(--page-color);
+            transform: translate(0, 0.25em);
+        }
+
+            .filter-button:hover::before {
+                box-shadow: 0 0 0 2px var(--primary-dark), 0 0.5em 0 0 var(--primary-medium);
+                transform: translate3d(0, 0.5em, -1em);
             }
 
-            button.learn-more:hover {
-                background: #ffe9e9;
-                -webkit-transform: translate(0, 0.25em);
-                transform: translate(0, 0.25em);
+        .filter-button:active {
+            background: var(--page-color);
+            transform: translate(0em, 0.75em);
+        }
+
+            .filter-button:active::before {
+                box-shadow: 0 0 0 2px var(--primary-dark), 0 0 var(--primary-medium);
+                transform: translate3d(0, 0, -1em);
             }
 
-                button.learn-more:hover::before {
-                    -webkit-box-shadow: 0 0 0 2px #b18597, 0 0.5em 0 0 #ffe3e2;
-                    box-shadow: 0 0 0 2px #b18597, 0 0.5em 0 0 #ffe3e2;
-                    -webkit-transform: translate3d(0, 0.5em, -1em);
-                    transform: translate3d(0, 0.5em, -1em);
-                }
+    .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 40px;
+        padding: 20px 0;
+    }
 
-            button.learn-more:active {
-                background: #ffe9e9;
-                -webkit-transform: translate(0em, 0.75em);
-                transform: translate(0em, 0.75em);
-            }
-
-                button.learn-more:active::before {
-                    -webkit-box-shadow: 0 0 0 2px #b18597, 0 0 #ffe3e2;
-                    box-shadow: 0 0 0 2px #b18597, 0 0 #ffe3e2;
-                    -webkit-transform: translate3d(0, 0, -1em);
-                    transform: translate3d(0, 0, -1em);
-                }
-    /* From Uiverse.io by eslam-hany */
     .book {
         position: relative;
         border-radius: 10px;
-        width: 220px;
-        height: 300px;
-        background-color: whitesmoke;
-        box-shadow: 1px 1px 12px #000;
+        width: 100%;
+        height: 340px;
+        background-color: var(--page-color);
+        box-shadow: 5px 5px 15px var(--shadow);
         transform: preserve-3d;
         perspective: 2000px;
         display: flex;
-        flex-direction: column; /* Ensures vertical stacking */
+        flex-direction: column;
         align-items: center;
-        justify-content: flex-start; /* Align items to the top */
-        color: #000;
-        padding: 10px;
+        justify-content: flex-start;
+        color: var(--text-dark);
+        padding: 15px;
         box-sizing: border-box;
+        transition: transform 0.3s ease;
     }
+
+        .book:hover {
+            transform: translateY(-10px);
+        }
 
         .book p {
             margin: 5px 0;
+            text-align: center;
         }
 
+            .book p:first-of-type {
+                font-size: 1rem;
+                color: var(--primary-medium);
+            }
+
+            .book p:nth-of-type(2) {
+                font-size: 1.2rem;
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+
+            .book p:nth-of-type(3),
+            .book p:nth-of-type(4) {
+                font-size: 0.9rem;
+                color: var(--primary-medium);
+            }
 
     .cover {
         top: 0;
         position: absolute;
-        background-color: lightgray;
+        background-color: var(--primary-light);
         width: 100%;
         height: 100%;
         border-radius: 10px;
         cursor: pointer;
-        -webkit-transition: all 0.5s;
-        transition: all 0.5s;
-        -webkit-transform-origin: 0;
-        -ms-transform-origin: 0;
+        transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
         transform-origin: 0;
-        -webkit-box-shadow: 1px 1px 12px #000;
-        box-shadow: 1px 1px 12px #000;
-        display: -webkit-box;
-        display: -ms-flexbox;
+        box-shadow: 5px 5px 15px var(--shadow);
         display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
         align-items: center;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
         justify-content: center;
+        overflow: hidden;
     }
+
+        .cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: all 0.5s ease;
+        }
 
     .book:hover .cover {
-        -webkit-transition: all 0.5s;
-        transition: all 0.5s;
-        -webkit-transform: rotatey(-80deg);
-        -ms-transform: rotatey(-80deg);
-        transform: rotatey(-80deg);
+        transform: rotateY(-80deg);
     }
 
-    .book p:first-of-type {
-        text-align: center;
-        font-size: 24px; /* Optional: Make the title stand out */
-        font-weight: bold; /* Optional: Emphasize the title */
-        margin-bottom: 10px; /* Add spacing below the title */
+        .book:hover .cover img {
+            filter: brightness(1.1);
+        }
+
+    .details-button {
+        margin-top: auto;
+        background-color: var(--primary-medium);
+        color: var(--text-light);
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px var(--shadow);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.85rem;
     }
 
+        .details-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px var(--shadow);
+        }
 
-    p {
-        font-size: 20px;
-        font-weight: bolder;
+        .details-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+
+    .separator {
+        height: 4px;
+        background: linear-gradient(90deg, transparent, var(--primary-medium), transparent);
+        margin: 2rem 0;
+        border-radius: 2px;
+    }
+
+    /* Responsive adjustments */
+    media (max-width: 992px) {
+        .books-grid
+
+    {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    }
+
+    media (max-width: 768px) {
+        .books-grid
+
+    {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+
+    .filter-container {
+        padding: 1rem;
+    }
+
+    .filter-form-row {
+        flex-direction: column;
+    }
+
+    .filter-form-col {
+        margin-bottom: 1rem;
+    }
+
+    }
+
+    media (max-width: 576px) {
+        .books-grid
+
+    {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 20px;
+    }
+
+    .book {
+        height: 320px;
+    }
+
+    }
+
+    /* Animations */
+    keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .book {
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    .books-grid > div:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .books-grid > div:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .books-grid > div:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .books-grid > div:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    .books-grid > div:nth-child(5) {
+        animation-delay: 0.5s;
+    }
+
+    .books-grid > div:nth-child(6) {
+        animation-delay: 0.6s;
+    }
+
+    .books-grid > div:nth-child(7) {
+        animation-delay: 0.7s;
+    }
+
+    .books-grid > div:nth-child(8) {
+        animation-delay: 0.8s;
+    }
+
+    .books-grid > div:nth-child(9) {
+        animation-delay: 0.9s;
+    }
+
+    .books-grid > div:nth-child(10) {
+        animation-delay: 1s;
     }
 </style>
-<h2>Book List</h2>
 
-<!-- Filter Form -->
-<form method="get" asp-action="Index" asp-controller="Book">
-    <div class="row">
-        <div class="col-md-3">
-            <label>Genre:</label>
-            <select asp-for="GenreId" asp-items="Model.Genres" class="form-control">
-                <option value="">All Genres</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label>Author:</label>
-            <select asp-for="AuthorId" asp-items="Model.Authors" class="form-control">
-                <option value="">All Authors</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <label>Min Pages:</label>
-            <input asp-for="PageMinCount" class="form-control" type="number" />
-        </div>
-        <div class="col-md-2">
-            <label>Max Pages:</label>
-            <input asp-for="PageMaxCount" class="form-control" type="number" />
-        </div>
-        <div class="col-md-2 mt-4">
-            <button type="submit" class="btn btn-primary" asp-action="Index" asp-controller="Book">Filter</button>
-        </div>
+<div class="container">
+    <h2 class="page-title">Book Collection</h2>
+
+    <!-- Filter Form -->
+    <div class="filter-container">
+        <form method="get" asp-action="Index" asp-controller="Book">
+            <div class="row filter-form-row">
+                <div class="col-md-3 filter-form-col">
+                    <label>Genre:</label>
+                    <select asp-for="GenreId" asp-items="Model.Genres" class="form-control">
+                        <option value="">All Genres</option>
+                    </select>
+                </div>
+                <div class="col-md-3 filter-form-col">
+                    <label>Author:</label>
+                    <select asp-for="AuthorId" asp-items="Model.Authors" class="form-control">
+                        <option value="">All Authors</option>
+                    </select>
+                </div>
+                <div class="col-md-2 filter-form-col">
+                    <label>Min Pages:</label>
+                    <input asp-for="PageMinCount" class="form-control" type="number" />
+                </div>
+                <div class="col-md-2 filter-form-col">
+                    <label>Max Pages:</label>
+                    <input asp-for="PageMaxCount" class="form-control" type="number" />
+                </div>
+                <div class="col-md-2 filter-form-col" style="display: flex; align-items: flex-end;">
+                    <button type="submit" class="filter-button" asp-action="Index" asp-controller="Book">
+                        Filter Books
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
-</form>
 
+    <div class="separator"></div>
 
-<hr />
-
-<!-- Books Grid -->
-<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 40px 20px;">
-    @foreach (var book in Model.Books)
-    {
-        <div class="book">
-            <p>@book.Id</p>
-            <p>@book.Title</p>
-            <p>@book.Author.Name</p>
-            <p>@book.Genre.Name</p>
-            <div style="margin-top: auto;">
-
-                <a class="btn btn-primary" asp-area="" asp-controller="Book" asp-action="Info" asp-route-bookId="@book.Id">Детайли</a>
-               @*  <a  class="btn btn-primary" asp-action="AssignTags" asp-route-BookId="@book.Id">Edit</a>
-                <form method="post" asp-action="Delete" asp-route-id="@book.Id" style="display: inline;">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form> *@
+    <!-- Books Grid -->
+    <div class="books-grid">
+        @foreach (var book in Model.Books)
+        {
+            <div class="book">
+                <p>@book.Id</p>
+                <p>@book.Title</p>
+                <p>@book.Author.Name</p>
+                <p>@book.Genre.Name</p>
+                <div style="margin-top: auto; width: 100%; text-align: center;">
+                    <a class="btn details-button" asp-area="" asp-controller="Book" asp-action="Info" asp-route-bookId="@book.Id">Details</a>
+                </div>
+                <div class="cover">
+                    <img src="@book.CoverImageURL" alt="Book Cover">
+                </div>
             </div>
-            <div class="cover">
-                <img src="@book.CoverImageURL" class="card-img-top" alt="Book Cover">
-            </div>
-        </div>
-
-
-      @*   <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">@book.Title</h5>
-                <p class="card-text">Genre: @book.Genre.Name</p>
-                <p class="card-text">Author: @book.Author.Name</p>
-                <p class="card-text">Pages: @book.BookPages</p>
-                
-            </div>
-        </div> *@
-    }
+        }
+    </div>
 </div>

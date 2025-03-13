@@ -1,89 +1,237 @@
 ﻿@model IEnumerable<BookDiary.Models.ViewModels.AuthorViewModels.AuthorCreateViewModel>
 
-<style>
-    /* Updated colors to fit the bookish aesthetic */
-    .card {
-        --bg-card: rgba(255, 248, 220, 0.9); /* Soft parchment-like background */
-        --primary: #8B4513; /* Rich brown for warmth */
-        --primary-hover: #A0522D; /* Slightly lighter brown */
-        --light: #5a3e2b; /* Dark coffee color for text */
-        --shadow: rgba(0, 0, 0, 0.15); /* Soft shadow effect */
-
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        padding: 1rem;
-        width: 16rem;
-        background-color: rgb(251 238 220 / 45%);
-        border-radius: 1rem;
-        box-shadow: 0 4px 10px var(--shadow);
-        text-align: center;
-    }
-
-    .image_container {
-        overflow: hidden;
-        cursor: pointer;
-        position: relative;
-        z-index: 5;
-        width: 100%;
-        height: 200px;
-        background-color: var(--primary);
-        border-radius: 0.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-        .image_container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 0.5rem;
-        }
-
-    .title {
-        font-size: 1.1rem;
-        font-weight: bold;
-        color: var(--light);
-        text-transform: capitalize;
-        text-overflow: ellipsis;
-    }
-
-    .cart-button {
-        cursor: pointer;
-        padding: 0.6rem;
-        width: 100%;
-        background: #67320c;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        transition: background 0.3s ease;
-    }
-
-        .cart-button:hover {
-            background: var(--primary-hover);
-        }
-
-</style>
-
-<div style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center;">
+<div class="authors-container">
     @foreach (var au in Model)
     {
-        <div class="card">
-            <div class="image_container">
+        <div class="author-card" data-aos="fade-up">
+            <div class="image-container">
                 <img src="@au.ProfilePictureURL" alt="Author Image">
+                <div class="overlay">
+                    <div class="author-info">
+                        <h3>@au.Name</h3>
+                    </div>
+                </div>
             </div>
-            <div class="title">
-                <span>@au.Name</span>
+            <div class="card-content">
+                <h4 class="author-name">@au.Name</h4>
+                <a asp-area="" asp-controller="Author" asp-action="Info" asp-route-AuthorName="@au.Name" class="view-more-btn">
+                    Виж още
+                </a>
             </div>
-            <button class="cart-button">
-                <span>
-                    <a asp-area="" asp-controller="Author" asp-action="Info" asp-route-AuthorName="@au.Name">Виж още</a>
-                </span>
-            </button>
         </div>
     }
 </div>
+
+<style>
+    /* Variables for consistent theming */
+    :root {
+        --primary-color: #8B4513;
+        --secondary-color: #A0522D;
+        --card-bg: rgba(255, 248, 220, 0.9);
+        --text-color: #5a3e2b;
+        --shadow-color: rgba(0, 0, 0, 0.15);
+        --border-radius: 12px;
+        --transition-speed: 0.4s;
+    }
+
+    /* Container for all author cards */
+    .authors-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+        justify-content: center;
+        perspective: 1000px;
+    }
+
+    /* Author card styling */
+    .author-card {
+        position: relative;
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: 0 10px 20px var(--shadow-color);
+        overflow: hidden;
+        transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        transform-style: preserve-3d;
+        height: 350px;
+    }
+
+        .author-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Image container with hover effect */
+    .image-container {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-speed);
+        }
+
+    .author-card:hover .image-container img {
+        transform: scale(1.05);
+    }
+
+    /* Overlay effect on hover */
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        opacity: 0;
+        transition: opacity var(--transition-speed);
+        display: flex;
+        align-items: flex-end;
+        padding: 1rem;
+    }
+
+    .author-card:hover .overlay {
+        opacity: 1;
+    }
+
+    .author-info {
+        color: white;
+        transform: translateY(20px);
+        transition: transform var(--transition-speed);
+    }
+
+    .author-card:hover .author-info {
+        transform: translateY(0);
+    }
+
+    .author-info h3 {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 500;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Card content styling */
+    .card-content {
+        padding: 1rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .author-name {
+        font-size: 1.2rem;
+        color: var(--text-color);
+        margin: 0;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Button styling */
+    .view-more-btn {
+        padding: 0.7rem 1rem;
+        background-color: var(--primary-color);
+        color: white !important;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: background-color var(--transition-speed), transform 0.2s;
+        border: none;
+        cursor: pointer;
+        display: inline-block;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+        .view-more-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .view-more-btn:active {
+            transform: translateY(0);
+        }
+
+    /* Add responsive design for smaller screens */
+    media (max-width: 768px) {
+        .authors-container
+
+    {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+
+    .author-card {
+        height: 320px;
+    }
+
+    .image-container {
+        height: 220px;
+    }
+
+    }
+
+    media (max-width: 480px) {
+        .authors-container
+
+    {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
+    }
+
+    .author-card {
+        height: 290px;
+    }
+
+    .image-container {
+        height: 200px;
+    }
+
+    .author-info h3 {
+        font-size: 1.2rem;
+    }
+
+    .author-name {
+        font-size: 1.1rem;
+    }
+
+    }
+
+    /* Optional: Add animation-on-scroll library support */
+    [data-aos] {
+        opacity: 0;
+        transition-property: opacity, transform;
+    }
+
+        [data-aos].aos-animate {
+            opacity: 1;
+        }
+</style>
+
+<!-- Optional: Add AOS (Animation On Scroll) library if you want staggered animations -->
+<script>
+    // Check if AOS is already included, if not, don't worry about it
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-out',
+                once: true
+            });
+        } else {
+            // Remove the data-aos attributes as they're not needed
+            document.querySelectorAll('[data-aos]').forEach(element => {
+                element.removeAttribute('data-aos');
+            });
+        }
+    });
+</script>

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using NuGet.Packaging.Signing;
+using NuGet.Versioning;
 
 
 namespace BookDiary.Controllers
@@ -22,8 +23,11 @@ namespace BookDiary.Controllers
             private readonly ISeriesService _seriesService;
             private readonly ITagService _tagService; 
             private readonly IBookTagService _bookTagService;
+            private readonly ILanguageService _languageService;
+            private readonly IPublishingHouseService _pubHouseService;
+            private readonly IBookPublishingHouseService _bookPublishingHouse;
 
-            public BookController(IBookService bookService,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService)
+            public BookController(IBookService bookService, IBookPublishingHouseService bookPublishingHouse,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService,ILanguageService languageService, IPublishingHouseService pubHouseService)
             {
                 _bookService = bookService;
                 _authorService = authorService;
@@ -31,6 +35,9 @@ namespace BookDiary.Controllers
                 _seriesService = seriesService;
                 _tagService = tagService;
                 _bookTagService = bookTagService;
+                _languageService = languageService;
+                _pubHouseService = pubHouseService;
+                _bookPublishingHouse = bookPublishingHouse;
             }
 
             public async  Task<IActionResult> Index(BookFilterViewModel? filter)
@@ -110,12 +117,36 @@ namespace BookDiary.Controllers
                 ViewBag.Series = new SelectList(series, "Id", "Title");
                 ViewBag.Tags = new SelectList(tags, "Id", "Name");
                 var book = await _bookService.GetById(id);
-                return View(book);
+                var model = new BookEditViewModel
+                {
+                    Id = book.Id,
+                    Title = book.Title,
+                    Description = book.Description,
+                    AuthorId = book.AuthorId,
+                    SeriesId = book.SeriesId,
+                    BookPages = book.BookPages,
+                    Chapters = book.Chapters,
+                    GenreId = book.GenreId,
+                    CoverImageURL = book.CoverImageURL,
+                    
+                };
+                return View(model);
             }
             [HttpPost]
-            public async Task<IActionResult> Edit(Book book)
+            public async Task<IActionResult> Edit(BookEditViewModel model)
             {
-            
+            var book = new Book
+            {
+                Id = model.Id,
+                Title = model.Title,
+                Description = model.Description,
+                AuthorId = model.AuthorId,
+                SeriesId = model.SeriesId,
+                BookPages = model.BookPages,
+                Chapters = model.Chapters,
+                GenreId = model.GenreId,
+                CoverImageURL = model.CoverImageURL
+            };
                     await _bookService.Update(book);
                     return RedirectToAction("Index");
 
@@ -127,23 +158,43 @@ namespace BookDiary.Controllers
                 return RedirectToAction("Index");
             }
         [HttpGet]
-        public IActionResult AssignTags(int BookId)
+        public async Task<IActionResult> AssignTags(int BookId)
         {
-            var tags = _tagService.GetAll();
+            var book = await _bookService.GetById(BookId);
+            if (book == null)
+            {
+                return NotFound(); // Ensure the book exists
+            }
+
+            // Get assigned tags safely (list of Tag objects)
+            var selectedTags = _bookService.GetAll()
+                .Where(b => b.Id == BookId)
+                .SelectMany(b => b.BookTags.Select(bt => bt.Tag))
+                .ToList();
+
+            // Get all tags safely (list of Tag objects)
+            var allTags = _tagService.GetAll().ToList();
+
+            // Get available tags (tags that are NOT assigned to the book)
+            var availableTags = allTags.Except(selectedTags).ToList();
+
             var model = new AssignTagsToBookViewModel
             {
-               BookId= BookId,
-               TagList = tags.ToList(),
+                BookId = BookId,
+                SelectedTags = selectedTags,  // List<Tag>
+                AvailableTags = availableTags // List<Tag>
             };
 
-            return View("AssignTags", model);
+            return View(model);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AssignTags(AssignTagsToBookViewModel model)
         {
             foreach (var tag in model.SelectedTagIds)
             {
+                
                 var booktag = new BookTag()
                 {
                     TagId = tag,
@@ -152,6 +203,32 @@ namespace BookDiary.Controllers
 
                 await _bookTagService.Add(booktag);
             }
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> AssignLangandPH(int id)
+        {
+            var languages = _languageService.GetAll();
+            var publishinghouses = _pubHouseService.GetAll();
+            ViewBag.Languages = new SelectList(languages, "Id", "Name");
+            ViewBag.PublishingHouses = new SelectList(publishinghouses, "Id", "Name");
+            var model = new BookLanguagePHVM
+            {
+                BookId = id,
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AssignLangandPH(BookLanguagePHVM? model)
+        {
+            var book = new BookPublishingHouse()
+            {
+                BookId = model.BookId,
+                LanguageId = model.LanguageId,
+                PublishingHouseId = model.PublishingHouseId,
+                PublishingDate = model.PublishingDate,
+            };
+            await _bookPublishingHouse.Add(book);
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> Info(int bookId)
@@ -180,6 +257,14 @@ namespace BookDiary.Controllers
              .Where(b => b.Id == bookId)
              .Select(b => b.BookFormat.ToString()) // Convert the enum to a string
              .FirstOrDefault();
+            var language = _languageService.GetAll()
+                .Where(b => b.BookPublishingHouses.Select(bt=>bt.BookId==bookId).FirstOrDefault())
+                .SelectMany(b => b.BookPublishingHouses.Select(bp => bp.Language.Name))
+                .FirstOrDefault();
+            var publishinghouse = _pubHouseService.GetAll()
+                .Where(b => b.bookPublishingHouses.Select(c=>c.BookId==bookId).FirstOrDefault())
+                .SelectMany(b => b.bookPublishingHouses.Select(bp => bp.PublishingHouse.Name))
+                .FirstOrDefault();
             var seriesview = _seriesService.Get(x => x.Title == series);
             
             var book = new BookAdminViewModel()
@@ -195,7 +280,9 @@ namespace BookDiary.Controllers
                 BookFormat = format,
                 BookPages = bookcvm.BookPages,
                 Chapters = bookcvm.Chapters,
-                SelectedTags = tags
+                LanguageName=language,
+                SelectedTags = tags,
+                PublishingHouseName= publishinghouse
             };
             return View(book);
         }

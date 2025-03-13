@@ -1,30 +1,166 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model IEnumerable<BookDiary.Models.ViewModels.LanguageViewModels.LanguageCreateViewModel>
-<h1>See all languages</h1>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var language in Model)
-        {
-            <tr>
-                <td scope="row">@language.Id</td>
-                <td>@language.Name</td>
-                <td>
-                    <a type="button" class="btn btn-success" asp-action="Edit" asp-controller="Language" asp-route-id="@language.Id">Edit</a>
-                    <form method="post" asp-controller="language" asp-action="Delete">
-                        <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="Language" asp-route-id="@language.Id">Delete</button>
-                    </form>
-                </td>
-            </tr>
+﻿@model IEnumerable<BookDiary.Models.ViewModels.LanguageViewModels.LanguageCreateViewModel>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+                <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0 fw-bold"><i class="fas fa-language me-2"></i>Всички езици</h2>
+                        <a asp-controller="Language" asp-action="Add" class="btn btn-light btn-sm">
+                            <i class="fas fa-plus-circle me-1"></i> Добави език
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 language-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center" width="80">Id</th>
+                                    <th scope="col">Език</th>
+                                    <th scope="col" class="text-center" width="250">Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var language in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center fw-bold">@language.Id</td>
+                                        <td>@language.Name</td>
+                                        <td>
+                                            <div class="d-flex justify-content-center gap-2">
+                                                <a class="btn btn-edit btn-sm" asp-action="Edit" asp-controller="Language" asp-route-id="@language.Id">
+                                                    <i class="fas fa-edit me-1"></i> Редактирай
+                                                </a>
+                                                <form method="post" asp-controller="Language" asp-action="Delete" style="display:inline;">
+                                                    <button type="submit" class="btn btn-delete btn-sm" asp-route-id="@language.Id" >
+                                                        <i class="fas fa-trash-alt me-1"></i> Изтрий
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom styling for the language table */
+    .language-table {
+        --primary-color: #8B6B4F;
+        --primary-light: #A0855C;
+        --primary-dark: #5C4033;
+        --accent-color: #E6D5B8;
+        --danger-color: #A05C5C;
+        --success-color: #5C8B4F;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .language-table thead {
+            background-color: rgba(139, 107, 79, 0.15);
         }
-    </tbody>
-</table>
+
+            .language-table thead th {
+                font-weight: 600;
+                color: var(--primary-dark);
+                border: none;
+                padding: 1rem;
+                position: relative;
+            }
+
+                .language-table thead th:after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 2px;
+                    background-color: var(--primary-color);
+                    opacity: 0.3;
+                }
+
+        .language-table tbody tr {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+            .language-table tbody tr:hover {
+                background-color: rgba(230, 213, 184, 0.2);
+            }
+
+        .language-table td {
+            padding: 0.75rem 1rem;
+            border: none;
+            vertical-align: middle;
+        }
+
+    /* Action button styling */
+    .btn-edit {
+        background-color: var(--success-color);
+        border-color: var(--success-color);
+        color: white;
+        transition: all 0.2s ease;
+    }
+
+        .btn-edit:hover {
+            background-color: #4A7241;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+    .btn-delete {
+        background-color: var(--danger-color);
+        border-color: var(--danger-color);
+        color: white;
+        transition: all 0.2s ease;
+    }
+
+        .btn-delete:hover {
+            background-color: #834A4A;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+    /* Card enhancements */
+    .card {
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    .card-header {
+        border-bottom: none;
+    }
+
+    /* Responsive adjustments */
+    media (max-width: 767.98px) {
+        .language-table thead th, .language-table td
+
+    {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+        .btn-sm i {
+            margin-right: 0 !important;
+        }
+
+    .language-table {
+        font-size: 0.9rem;
+    }
+
+    }
+</style>

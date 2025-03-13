@@ -1,8 +1,54 @@
 ﻿@using BookDiary.Models.ViewModels.BookViewModels
 @model BookDiary.Models.ViewModels.BookViewModels.AssignTagsToBookViewModel
 
-
 <div class="form-container">
+    <h2>Добави характеристики към книга</h2>
+
+    <form method="post">
+        <input type="hidden" name="BookId" value="@Model.BookId" />
+
+        @* Selected Tags Section *@
+        <div class="selected-tags">
+            <h3>Избрани тагове</h3>
+            @if (Model.SelectedTags.Any())
+            {
+                <ul class="tag-list">
+                    @foreach (var tag in Model.SelectedTags)
+                    {
+                        <li class="tag-item">
+                            <span>@tag.Name</span>
+                            <a asp-action="RemoveTag" asp-controller="Book" asp-route-bookId="@Model.BookId" asp-route-tagId="@tag.Id" class="remove-tag">❌</a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Няма избрани тагове.</p>
+            }
+        </div>
+
+        @* Available Tags Section *@
+        <div class="checkbox-group">
+            <h3>Налични тагове</h3>
+            @foreach (var tag in Model.AvailableTags)
+            {
+                <label for="tag_@tag.Id" class="checkbox-label">
+                    <input id="tag_@tag.Id" type="checkbox" class="peer hidden" name="SelectedTagIds" value="@tag.Id" />
+                    <div class="checkbox-custom">
+                        <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+                            <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
+                    <span class="checkbox-text">@tag.Name</span>
+                </label>
+            }
+        </div>
+
+        <button class="btn btn-info" type="submit" asp-action="AssignTags" asp-controller="Book">Добави</button>
+    </form>
+</div>
+@* <div class="form-container">
     <h2>Добави характеристики към книга</h2>
     <form method="post">
         <input type="hidden" name="BookId" value="@Model.BookId" />
@@ -22,9 +68,9 @@
             }
         </div>
 
-        <button class="btn btn-info" type="submit" asp-action="AssignTags" asp-controller="Book" asp-route-id="@Model.BookId">Добави</button>
+        <button class="btn btn-info" type="submit" asp-action="AssignTags" asp-controller="Book" >Добави</button>
     </form>
-</div>
+</div> *@
 
 <style>
     .peer.hidden {

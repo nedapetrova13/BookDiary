@@ -13,7 +13,8 @@
         public string BookFormat { get; set; }
         public int BookPages { get; set; }
         public int Chapters { get; set; }
-        
+        public string? LanguageName { get; set; }
+        public string? PublishingHouseName { get; set; }
         public List<string>? SelectedTags { get; set; } = new List<string>();
     }
 }

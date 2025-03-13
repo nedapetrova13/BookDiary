@@ -58,7 +58,9 @@
                         <div class="book-cover">
                             @if (!string.IsNullOrEmpty(book.CoverImageURL))
                             {
+                               <a asp-area="" asp-controller="Book" asp-action="Info" asp-route-BookId="@book.Id" class="w-full h-56 overflow-hidden">
                                 <img src="@book.CoverImageURL" alt="@book.Title" />
+                                </a>
                             }
                             else
                             {
