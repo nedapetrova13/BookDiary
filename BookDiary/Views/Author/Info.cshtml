@@ -1,6 +1,5 @@
 ﻿@model BookDiary.Models.ViewModels.AuthorViewModels.AuthorAdminViewModel
 
-
 <div class="author-profile-container">
     <div class="author-header">
         <div class="profile-picture-container">
@@ -16,21 +15,31 @@
             }
         </div>
         <div class="author-title">
-            <h1>@Model.Name</h1>
+            <div class="title-with-actions">
+                <h1>@Model.Name</h1>
+                <div class="author-actions">
+                    <a asp-controller="Author" asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <button type="button" class="btn-delete" data-bs-toggle="modal" data-bs-target="#deleteAuthorModal">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                </div>
+            </div>
             <div class="author-subtitle">
-                <span class="birth-date">Born: @Model.BirthDate.ToString("MMMM d, yyyy")</span>
+                <span class="birth-date"><i class="fas fa-birthday-cake"></i> Born: @Model.BirthDate.ToString("MMMM d, yyyy")</span>
                 @if (!string.IsNullOrEmpty(Model.WebSiteLink))
                 {
                     <span class="separator">•</span>
                     <a href="@Model.WebSiteLink" class="website-link" target="_blank">
-                        <i class="fas fa-globe"></i> Visit Website: @Model.WebSiteLink
+                        <i class="fas fa-globe"></i> Visit Website
                     </a>
                 }
                 @if (!string.IsNullOrEmpty(Model.Email))
                 {
                     <span class="separator">•</span>
                     <a href="mailto:@Model.Email" class="email-link">
-                        <i class="fas fa-envelope"></i> Email: @Model.Email
+                        <i class="fas fa-envelope"></i> Email
                     </a>
                 }
             </div>
@@ -40,7 +49,7 @@
     @if (!string.IsNullOrEmpty(Model.Bio))
     {
         <div class="author-bio">
-            <h2>Biography</h2>
+            <h2><i class="fas fa-book-reader"></i> Biography</h2>
             <div class="bio-content">
                 @Html.Raw(Model.Bio)
             </div>
@@ -50,7 +59,7 @@
     @if (Model.Books != null && Model.Books.Any())
     {
         <div class="author-books">
-            <h2>Books by @Model.Name</h2>
+            <h2><i class="fas fa-books"></i> Books by @Model.Name</h2>
             <div class="books-grid">
                 @foreach (var book in Model.Books)
                 {
@@ -58,8 +67,8 @@
                         <div class="book-cover">
                             @if (!string.IsNullOrEmpty(book.CoverImageURL))
                             {
-                               <a asp-area="" asp-controller="Book" asp-action="Info" asp-route-BookId="@book.Id" class="w-full h-56 overflow-hidden">
-                                <img src="@book.CoverImageURL" alt="@book.Title" />
+                                <a asp-area="" asp-controller="Book" asp-action="Info" asp-route-BookId="@book.Id" class="w-full h-56 overflow-hidden">
+                                    <img src="@book.CoverImageURL" alt="@book.Title" />
                                 </a>
                             }
                             else
@@ -69,7 +78,9 @@
                                 </div>
                             }
                         </div>
-                        
+                        <div class="book-title-overlay">
+                            <h3>@book.Title</h3>
+                        </div>
                     </div>
                 }
             </div>
@@ -77,13 +88,37 @@
     }
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteAuthorModal" tabindex="-1" aria-labelledby="deleteAuthorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteAuthorModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete @Model.Name? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                <form asp-controller="Author" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                    <button type="submit" class="btn-delete-confirm">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     /* Base styles */
     .author-profile-container {
         max-width: 1200px;
         margin: 2rem auto;
-        padding: 0 1rem;
+        padding: 2rem;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f7f2e8;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(158, 132, 96, 0.1);
     }
 
     /* Author header */
@@ -92,10 +127,91 @@
         align-items: center;
         margin-bottom: 2rem;
         transition: transform 0.3s ease;
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(158, 132, 96, 0.08);
     }
 
-        .author-header:hover {
-            transform: translateY(-5px);
+    .title-with-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .author-actions {
+        display: flex;
+        gap: 0.8rem;
+        align-items: center;
+    }
+
+    .btn-edit, .btn-delete {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-edit {
+        background-color: #e4d4b8;
+        color: #5a4a33;
+    }
+
+        .btn-edit:hover {
+            background-color: #d9c9a8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+    .btn-delete {
+        background-color: #f8e7e7;
+        color: #c53030;
+    }
+
+        .btn-delete:hover {
+            background-color: #f8d7d7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+    .btn-cancel {
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        background-color: #e2e8f0;
+        color: #4a5568;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .btn-cancel:hover {
+            background-color: #cbd5e0;
+        }
+
+    .btn-delete-confirm {
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        background-color: #c53030;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .btn-delete-confirm:hover {
+            background-color: #9b2c2c;
         }
 
     /* Profile picture */
@@ -125,47 +241,58 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(45deg, #6a11cb, #2575fc);
+        background: linear-gradient(45deg, #b8986a, #e4d4b8);
         color: white;
         font-size: 3rem;
     }
 
     /* Author title */
-    .author-title h1 {
-        margin: 0;
-        font-size: 2.5rem;
-        color: #333;
+    .author-title {
+        flex: 1;
     }
+
+        .author-title h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #5a4a33;
+        }
 
     .author-subtitle {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
-        margin-top: 0.5rem;
-        color: #555;
+        margin-top: 0.8rem;
+        color: #6b7280;
+        font-size: 0.95rem;
     }
 
+        .author-subtitle i {
+            margin-right: 0.3rem;
+            color: #b8986a;
+        }
+
     .separator {
-        margin: 0 0.5rem;
+        margin: 0 0.8rem;
+        color: #b8986a;
     }
 
     .website-link, .email-link {
-        color: #2575fc;
+        color: #b8986a;
         text-decoration: none;
         transition: color 0.3s ease;
     }
 
         .website-link:hover, .email-link:hover {
-            color: #6a11cb;
+            color: #a47e4f;
             text-decoration: underline;
         }
 
     /* Author bio */
     .author-bio {
         margin-bottom: 2rem;
-        padding: 1.5rem;
-        background-color: #f9f9f9;
-        border-radius: 15px;
+        padding: 1.8rem;
+        background-color: #fff;
+        border-radius: 12px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
@@ -177,20 +304,67 @@
 
         .author-bio h2 {
             margin-top: 0;
-            color: #333;
+            color: #5a4a33;
             font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
         }
 
+            .author-bio h2:after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 80px;
+                height: 3px;
+                background: linear-gradient(to right, #b8986a, transparent);
+            }
+
+            .author-bio h2 i {
+                margin-right: 0.5rem;
+                color: #b8986a;
+            }
+
     .bio-content {
-        line-height: 1.6;
+        line-height: 1.7;
+        color: #4b5563;
     }
 
     /* Books section */
-    .author-books h2 {
-        margin-bottom: 1rem;
-        color: #333;
-        font-size: 1.5rem;
+    .author-books {
+        background-color: #fff;
+        padding: 1.8rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
+
+        .author-books h2 {
+            margin-bottom: 1.5rem;
+            color: #5a4a33;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+            .author-books h2:after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 80px;
+                height: 3px;
+                background: linear-gradient(to right, #b8986a, transparent);
+            }
+
+            .author-books h2 i {
+                margin-right: 0.5rem;
+                color: #b8986a;
+            }
 
     .books-grid {
         display: grid;
@@ -201,26 +375,28 @@
     /* Book card */
     .book-card {
         background-color: white;
-        border-radius: 12px;
+        border-radius: 8px;
         overflow: hidden;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        height: 250px;
     }
 
         .book-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) rotate(1deg);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
         }
 
     .book-cover {
-        height: 250px;
+        height: 100%;
         overflow: hidden;
     }
 
         .book-cover img {
             width: 100%;
             height: 100%;
-            object-fit: fill;
+            object-fit: cover;
             transition: transform 0.5s ease;
         }
 
@@ -233,36 +409,64 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+        background: linear-gradient(45deg, #b8986a, #e4d4b8);
         color: white;
         font-size: 2rem;
     }
 
-    .book-details {
+    .book-title-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
         padding: 1rem;
+        color: white;
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
 
-        .book-details h3 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1rem;
-            color: #333;
-        }
-
-    .series {
-        font-size: 0.85rem;
-        color: #555;
-        margin: 0.25rem 0;
+    .book-card:hover .book-title-overlay {
+        opacity: 1;
     }
 
-    .series-number {
-        color: #2575fc;
-        font-weight: bold;
+    .book-title-overlay h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
     }
 
-    .publication-year {
-        margin: 0.25rem 0 0 0;
-        font-size: 0.85rem;
-        color: #777;
+    /* Modal styling */
+    .modal-content {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #f0e7d7;
+        background-color: #f7f2e8;
+        padding: 1rem 1.5rem;
+    }
+
+    .modal-title {
+        color: #5a4a33;
+        font-weight: 600;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+        font-size: 1rem;
+        color: #4b5563;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #f0e7d7;
+        padding: 1rem 1.5rem;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.8rem;
     }
 
     /* Responsive adjustments */
@@ -272,6 +476,7 @@
     {
         flex-direction: column;
         text-align: center;
+        padding: 1rem;
     }
 
     .profile-picture-container {
@@ -279,8 +484,24 @@
         margin-bottom: 1rem;
     }
 
+    .title-with-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .author-actions {
+        width: 100%;
+        justify-content: center;
+    }
+
     .author-subtitle {
         justify-content: center;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .separator {
+        display: none;
     }
 
     .books-grid {
@@ -299,9 +520,7 @@
             // Create a subtle hover animation
             bookCards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
-                    const randomColor = `rgba(${Math.floor(Math.random() * 50)},
-                                           ${Math.floor(Math.random() * 50 + 100)},
-                                           ${Math.floor(Math.random() * 50 + 200)}, 0.05)`;
+                    const randomColor = `rgba(184, 152, 106, 0.1)`;
                     this.style.background = `linear-gradient(45deg, white, ${randomColor})`;
                 });
 

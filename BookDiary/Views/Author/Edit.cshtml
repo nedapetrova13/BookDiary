@@ -1,56 +1,530 @@
 ﻿@using BookDiary.Models.Enums;
 @model BookDiary.Models.ViewModels.AuthorViewModels.AuthorEditViewModel;
 
-<form method="post" enctype="multipart/form-data">
-    <div>
-        <label asp-for="Name">Name</label>
-        <input type="text" asp-for="Name" required />
-        <span asp-validation-for="Name"></span>
-        
+<div class="author-edit-container">
+    <div class="form-header">
+        <h1>@(Model.Id > 0 ? "Edit" : "Add") Author</h1>
+        <p class="form-subtitle">Enter the author's information below</p>
     </div>
 
-    <div>
-        <label asp-for="BirthDate">Birth Date</label>
-        <input type="date" asp-for="BirthDate" required />
-        <span asp-validation-for="BirthDate"></span>
-    </div>
+    <form method="post" enctype="multipart/form-data" class="author-edit-form">
+        <input type="hidden" asp-for="Id" />
 
-    <div>
-        <label asp-for="Email">Email</label>
-        <input type="email" asp-for="Email" required />
-        <span asp-validation-for="Email"></span>
-    </div>
+        <div class="form-grid">
+            <div class="form-section personal-info">
+                <h2><i class="fas fa-user"></i> Personal Information</h2>
 
-    <div>
-        <label asp-for="ProfilePictureURL">Profile Picture URL</label>
-        <input type="text" asp-for="ProfilePictureURL" />
-        <span asp-validation-for="ProfilePictureURL"></span>
-        
-    </div>
+                <div class="form-group">
+                    <label asp-for="Name">Full Name</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-signature input-icon"></i>
+                        <input type="text" asp-for="Name" class="form-control" placeholder="Enter author's full name" required />
+                    </div>
+                    <span asp-validation-for="Name" class="validation-error"></span>
+                </div>
 
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="BirthDate">Birth Date</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-birthday-cake input-icon"></i>
+                            <input type="date" asp-for="BirthDate" class="form-control" required />
+                        </div>
+                        <span asp-validation-for="BirthDate" class="validation-error"></span>
+                    </div>
 
+                    <div class="form-group">
+                        <label asp-for="Gender">Gender</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-venus-mars input-icon"></i>
+                            <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="form-control"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <div>
-        <label asp-for="Gender">Gender</label>
-        <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()"></select>
+            <div class="form-section contact-info">
+                <h2><i class="fas fa-address-card"></i> Contact Information</h2>
 
-    </div>
+                <div class="form-group">
+                    <label asp-for="Email">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" asp-for="Email" class="form-control" placeholder="author@example.com" required />
+                    </div>
+                    <span asp-validation-for="Email" class="validation-error"></span>
+                </div>
 
-    <div>
-        <label asp-for="Bio">Biography</label>
-        <textarea asp-for="Bio"></textarea>
-    </div>
+                <div class="form-group">
+                    <label asp-for="WebSiteLink">Website</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-globe input-icon"></i>
+                        <input type="url" asp-for="WebSiteLink" class="form-control" placeholder="https://author-website.com" />
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div>
-        <label asp-for="WebSiteLink">Website</label>
-        <input type="url" asp-for="WebSiteLink" />
-    </div>
+        <div class="form-section media-bio">
+            <h2><i class="fas fa-image"></i> Profile Picture</h2>
 
-    <button type="submit">Add Author</button>
-</form>
+            <div class="profile-picture-section">
+                <div class="current-picture">
+                    @if (!string.IsNullOrEmpty(Model.ProfilePictureURL))
+                    {
+                        <img src="@Model.ProfilePictureURL" alt="Current profile picture" class="profile-preview" />
+                    }
+                    else
+                    {
+                        <div class="profile-placeholder">
+                            <i class="fas fa-user-circle"></i>
+                            <span>No Image</span>
+                        </div>
+                    }
+                </div>
+
+                <div class="picture-input">
+                    <div class="form-group">
+                        <label asp-for="ProfilePictureURL">Profile Picture URL</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-link input-icon"></i>
+                            <input type="text" asp-for="ProfilePictureURL" class="form-control" placeholder="https://example.com/author-image.jpg" />
+                        </div>
+                        <span asp-validation-for="ProfilePictureURL" class="validation-error"></span>
+                        <p class="input-help">Enter a URL to an existing image or upload a new one</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profileImage">Upload New Image</label>
+                        <div class="file-upload-wrapper">
+                            <i class="fas fa-upload"></i>
+                            <span class="file-label">Choose a file...</span>
+                            <input type="file" id="profileImage" name="ProfileImage" accept="image/*" class="file-input" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section bio-section">
+            <h2><i class="fas fa-book-reader"></i> Biography</h2>
+
+            <div class="form-group">
+                <label asp-for="Bio">Author Biography</label>
+                <textarea asp-for="Bio" class="form-control bio-textarea" rows="8" placeholder="Enter the author's biographical information..."></textarea>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="Index" asp-controller="Author" class="btn-cancel">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+            <button asp-action="Edit" asp-controller="Author" type="submit" class="btn-submit">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    /* Base Styles */
+    :root {
+        --primary-color: #b8986a;
+        --primary-dark: #a47e4f;
+        --primary-light: #e4d4b8;
+        --secondary-color: #5a4a33;
+        --background-color: #f7f2e8;
+        --form-bg: #ffffff;
+        --text-color: #4b5563;
+        --text-dark: #374151;
+        --text-light: #6b7280;
+        --error-color: #c53030;
+        --success-color: #046c4e;
+        --border-color: #e6d7bc;
+        --focus-color: #dfc296;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
+        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05);
+        --transition: all 0.3s ease;
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --radius-lg: 12px;
+    }
+
+    /* Container Styles */
+    .author-edit-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: var(--background-color);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-color);
+    }
+
+    /* Form Header */
+    .form-header {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+        .form-header h1 {
+            color: var(--secondary-color);
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .form-subtitle {
+        color: var(--text-light);
+        margin: 0.5rem 0 0;
+        font-size: 1rem;
+    }
+
+    /* Form Layout */
+    .author-edit-form {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .form-section {
+        background-color: var(--form-bg);
+        padding: 1.5rem;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
+    }
+
+        .form-section h2 {
+            color: var(--secondary-color);
+            font-size: 1.25rem;
+            margin: 0 0 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+            .form-section h2 i {
+                color: var(--primary-color);
+            }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    /* Form Controls */
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary-color);
+        font-size: 1rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        font-size: 1rem;
+        color: var(--text-dark);
+        background-color: #fff;
+        transition: var(--transition);
+    }
+
+    select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23b8986a'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1.5rem;
+        padding-right: 2.5rem;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--focus-color);
+        box-shadow: 0 0 0 3px rgba(184, 152, 106, 0.2);
+    }
+
+    .bio-textarea {
+        min-height: 150px;
+        resize: vertical;
+        line-height: 1.6;
+        padding: 1rem;
+    }
+
+    /* Profile Picture Section */
+    .profile-picture-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        align-items: flex-start;
+    }
+
+    .current-picture {
+        flex: 0 0 150px;
+    }
+
+    .profile-preview {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: var(--shadow-md);
+        border: 3px solid white;
+    }
+
+    .profile-placeholder {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: var(--primary-light);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: var(--secondary-color);
+        box-shadow: var(--shadow-md);
+        border: 3px solid white;
+    }
+
+        .profile-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+    .picture-input {
+        flex: 1;
+        min-width: 250px;
+    }
+
+    .input-help {
+        margin: 0.5rem 0 0;
+        font-size: 0.8rem;
+        color: var(--text-light);
+    }
+
+    /* File Upload */
+    .file-upload-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border: 1px dashed var(--border-color);
+        border-radius: var(--radius-sm);
+        background-color: #faf7f0;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+        .file-upload-wrapper:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary-color);
+        }
+
+        .file-upload-wrapper i {
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+
+    .file-label {
+        color: var(--text-dark);
+    }
+
+    .file-input {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Form Actions */
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        font-size: 1rem;
+        transition: var(--transition);
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+    }
+
+    .btn-cancel {
+        background-color: #e2e8f0;
+        color: #4a5568;
+    }
+
+        .btn-cancel:hover {
+            background-color: #cbd5e0;
+        }
+
+    .btn-submit {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+        .btn-submit:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+    /* Validation */
+    .validation-error {
+        display: block;
+        color: var(--error-color);
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Responsive Adjustments */
+    media (max-width: 768px) {
+        .author-edit-container
+
+    {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-picture-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .current-picture {
+        margin-bottom: 1rem;
+    }
+
+    .picture-input {
+        width: 100%;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+        width: 100%;
+        justify-content: center;
+    }
+
+    }
+
+    /* Animation for form section hover */
+    .form-section {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .form-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+        }
+</style>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        // File upload preview
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('profileImage');
+            const fileLabel = document.querySelector('.file-label');
+
+            if (fileInput) {
+                fileInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        fileLabel.textContent = this.files[0].name;
+
+                        // Optional: Preview the image
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const preview = document.querySelector('.profile-preview');
+                            const placeholder = document.querySelector('.profile-placeholder');
+
+                            if (preview) {
+                                preview.src = e.target.result;
+                            } else if (placeholder) {
+                                // Replace placeholder with preview
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                img.alt = "Profile preview";
+                                img.className = "profile-preview";
+
+                                placeholder.parentNode.replaceChild(img, placeholder);
+                            }
+                        }
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+            }
+
+            // Initialize any WYSIWYG editor for biography if needed
+            // This is a placeholder for potential future enhancements
+            const bioTextarea = document.querySelector('.bio-textarea');
+            if (bioTextarea) {
+                // Example: initialize a rich text editor
+                // You would need to include the editor's scripts first
+                // initializeEditor(bioTextarea);
+            }
+        });
+    </script>
 }

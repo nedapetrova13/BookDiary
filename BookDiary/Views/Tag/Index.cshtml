@@ -34,7 +34,7 @@
                                                     <i class="fas fa-edit me-1"></i> Редактирай
                                                 </a>
                                                 <form method="post" asp-controller="Tag" asp-action="Delete" style="display:inline;">
-                                                    <button type="submit" class="btn btn-delete btn-sm" asp-route-id="@tag.Id" >
+                                                    <button class="button" class="btn btn-delete btn-sm" asp-action="Delete" asp-controller="Tag" asp-route-id="@tag.Id">
                                                         <i class="fas fa-trash-alt me-1"></i> Изтрий
                                                     </button>
                                                 </form>

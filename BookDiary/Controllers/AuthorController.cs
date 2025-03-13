@@ -80,6 +80,7 @@ namespace BookDiary.Controllers
         {
             var author = new Author
             {
+                Id=aevm.Id,
                 Name = aevm.Name,
                 BirthDate = aevm.BirthDate,
                 Bio = aevm.Bio,

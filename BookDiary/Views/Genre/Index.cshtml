@@ -32,8 +32,13 @@
                                                 <a class="btn btn-edit btn-sm" asp-action="Edit" asp-controller="Genre" asp-route-id="@genre.Id">
                                                     <i class="fas fa-edit me-1"></i> Редактирай
                                                 </a>
-                                                <form method="post" asp-controller="Genre" asp-action="Delete">
-                                                    <button type="submit" class="btn btn-delete btn-sm" asp-route-id="@genre.Id" >
+                                               @*  <form method="post" asp-controller="Genre" asp-action="Delete" style="display: inline;">
+                                                    <button class="button" asp-action="Delete" asp-controller="Genre" asp-route-id="@genre.Id">
+                                                       Iztrij
+                                                    </button>
+                                                </form> *@
+                                                <form method="post" asp-controller="Genre" asp-action="Delete" style="display:inline;">
+                                                    <button class="button" class="btn btn-delete btn-sm" asp-action="Delete" asp-controller="Genre" asp-route-id="@genre.Id">
                                                         <i class="fas fa-trash-alt me-1"></i> Изтрий
                                                     </button>
                                                 </form>

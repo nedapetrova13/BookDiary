@@ -1,123 +1,241 @@
 ﻿@using BookDiary.Models.ViewModels.BookViewModels
 @model BookDiary.Models.ViewModels.BookViewModels.AssignTagsToBookViewModel
 
-<div class="form-container">
-    <h2>Добави характеристики към книга</h2>
+<div class="book-tags-container">
+    <h2 class="page-title">Добави характеристики към книга</h2>
 
     <form method="post">
         <input type="hidden" name="BookId" value="@Model.BookId" />
 
-        @* Selected Tags Section *@
-        <div class="selected-tags">
-            <h3>Избрани тагове</h3>
-            @if (Model.SelectedTags.Any())
-            {
-                <ul class="tag-list">
-                    @foreach (var tag in Model.SelectedTags)
+        <div class="tags-wrapper">
+            <!-- Selected Tags Section -->
+            <div class="selected-tags-section">
+                <h3 class="section-title">Избрани тагове</h3>
+                <div class="selected-tags-container">
+                    @if (Model.SelectedTags.Any())
                     {
-                        <li class="tag-item">
-                            <span>@tag.Name</span>
-                            <a asp-action="RemoveTag" asp-controller="Book" asp-route-bookId="@Model.BookId" asp-route-tagId="@tag.Id" class="remove-tag">❌</a>
-                        </li>
+                        <ul class="tag-list">
+                            @foreach (var tag in Model.SelectedTags)
+                            {
+                                <li class="tag-item">
+                                    <span>@tag.Name</span>
+                                    <a asp-action="RemoveTag" asp-controller="Book" asp-route-bookId="@Model.BookId" asp-route-tagId="@tag.Id" class="remove-tag">❌</a>
+                                </li>
+                            }
+                        </ul>
                     }
-                </ul>
-            }
-            else
-            {
-                <p>Няма избрани тагове.</p>
-            }
+                    else
+                    {
+                        <p class="no-tags">Няма избрани тагове.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Available Tags Section -->
+            <div class="available-tags-section">
+                <h3 class="section-title">Налични тагове</h3>
+                <div class="checkbox-group">
+                    @foreach (var tag in Model.AvailableTags)
+                    {
+                        <label for="tag_@tag.Id" class="checkbox-label">
+                            <input id="tag_@tag.Id" type="checkbox" class="peer hidden" name="SelectedTagIds" value="@tag.Id" />
+                            <div class="checkbox-custom">
+                                <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+                                    <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                            <span class="checkbox-text">@tag.Name</span>
+                        </label>
+                    }
+                </div>
+            </div>
         </div>
 
-        @* Available Tags Section *@
-        <div class="checkbox-group">
-            <h3>Налични тагове</h3>
-            @foreach (var tag in Model.AvailableTags)
-            {
-                <label for="tag_@tag.Id" class="checkbox-label">
-                    <input id="tag_@tag.Id" type="checkbox" class="peer hidden" name="SelectedTagIds" value="@tag.Id" />
-                    <div class="checkbox-custom">
-                        <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
-                            <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>
-                    </div>
-                    <span class="checkbox-text">@tag.Name</span>
-                </label>
-            }
-        </div>
-
-        <button class="btn btn-info" type="submit" asp-action="AssignTags" asp-controller="Book">Добави</button>
+        <button class="submit-btn" type="submit" asp-action="AssignTags" asp-controller="Book">Добави</button>
     </form>
 </div>
-@* <div class="form-container">
-    <h2>Добави характеристики към книга</h2>
-    <form method="post">
-        <input type="hidden" name="BookId" value="@Model.BookId" />
-        
-        <div class="checkbox-group">
-            @foreach (var tag in Model.TagList) 
-            {
-                <label for="@tag.Id" class="checkbox-label">
-                    <input id="@tag.Id" type="checkbox" class="peer hidden" name="SelectedTagIds" value="@tag.Id" />
-                    <div class="checkbox-custom">
-                        <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>
-                    </div>
-                    <span class="checkbox-text">@tag.Name</span>
-                </label>
-            }
-        </div>
-
-        <button class="btn btn-info" type="submit" asp-action="AssignTags" asp-controller="Book" >Добави</button>
-    </form>
-</div> *@
 
 <style>
+    /* Base styles */
+    body {
+        background-color: #f5f0e6;
+        color: #5a4a33;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Container styles */
+    .book-tags-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: #e8dcc8;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(158, 132, 96, 0.15);
+    }
+
+    /* Title styles */
+    .page-title {
+        color: #7d5f3c;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        text-shadow: 1px 1px 2px rgba(121, 99, 71, 0.1);
+        position: relative;
+    }
+
+        .page-title:after {
+            content: '';
+            display: block;
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #a47e4f, transparent);
+            margin: 0.5rem auto;
+        }
+
+    .section-title {
+        color: #8c6842;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #a47e4f;
+        padding-left: 10px;
+    }
+
+    /* Tags wrapper */
+    .tags-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    media (max-width: 768px) {
+        .tags-wrapper
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    }
+
+    /* Selected tags styling */
+    .selected-tags-section {
+        background-color: #f2e7d5;
+        padding: 1.5rem;
+        border-radius: 8px;
+        height: fit-content;
+        border: 1px solid #d9c9a8;
+    }
+
+    .selected-tags-container {
+        min-height: 150px;
+    }
+
+    .tag-list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .tag-item {
+        background-color: #c9a87e;
+        color: #40341f;
+        padding: 8px 12px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        animation: fadeIn 0.3s ease-in-out;
+        box-shadow: 0 2px 4px rgba(140, 120, 81, 0.15);
+    }
+
+        .tag-item:hover {
+            background-color: #b89b6d;
+            transform: translateY(-2px);
+        }
+
+    .remove-tag {
+        color: #40341f;
+        cursor: pointer;
+        font-size: 0.8rem;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+
+        .remove-tag:hover {
+            opacity: 1;
+        }
+
+    .no-tags {
+        color: #a08b70;
+        font-style: italic;
+    }
+
+    /* Available tags styling */
+    .available-tags-section {
+        background-color: #f2e7d5;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #d9c9a8;
+    }
+
+    /* Checkbox group styling */
+    .checkbox-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+    }
+
+    /* Checkbox styling */
     .peer.hidden {
-        appearance: none; /* Скрива стандартния чекбокс */
+        appearance: none;
         position: absolute;
         opacity: 0;
         width: 0;
         height: 0;
     }
 
-    .checkbox-group {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr); /* 5 per row */
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-
     .checkbox-label {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
         cursor: pointer;
-        font-size: 16px;
-        font-weight: 500;
-        color: #ffffff; /* Light text */
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s ease-in-out;
+        background-color: #e6d7bc;
+        border: 1px solid #d4c29e;
     }
+
+        .checkbox-label:hover {
+            background-color: #d9c9a8;
+            transform: translateX(3px);
+        }
 
     .checkbox-custom {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 24px;
-        height: 24px;
-        border-radius: 6px;
-        border: 2px solid #a2a1a8;
-        background-color: #e8e8e8;
+        width: 22px;
+        height: 22px;
+        border-radius: 4px;
+        border: 2px solid #b09264;
+        background-color: #f5eee1;
         transition: all 0.3s ease-in-out;
+        flex-shrink: 0;
     }
 
     input:checked + .checkbox-custom {
-        background-color: #7152f3;
-        border-color: #7152f3;
+        background-color: #b8986a;
+        border-color: #a47e4f;
+        transform: scale(1.05);
     }
 
     .checkbox-icon {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         stroke: #ffffff;
         opacity: 0;
         transition: opacity 0.2s ease-in-out;
@@ -125,9 +243,75 @@
 
     input:checked + .checkbox-custom .checkbox-icon {
         opacity: 1;
+        animation: checkmark 0.3s ease-in-out;
     }
 
     .checkbox-text {
-        flex-grow: 1;
+        color: #5a4a33;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    /* Button styling */
+    .submit-btn {
+        background-color: #b8986a;
+        color: #ffffff;
+        border: none;
+        padding: 12px 24px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: block;
+        margin: 0 auto;
+        box-shadow: 0 4px 6px rgba(158, 132, 96, 0.2);
+    }
+
+        .submit-btn:hover {
+            background-color: #a47e4f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(158, 132, 96, 0.25);
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(158, 132, 96, 0.2);
+        }
+
+    /* Animations */
+    keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    keyframes checkmark {
+        0%
+
+    {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
     }
 </style>

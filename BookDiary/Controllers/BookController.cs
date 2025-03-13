@@ -286,5 +286,14 @@ namespace BookDiary.Controllers
             };
             return View(book);
         }
+        [HttpPost]
+        public async Task<IActionResult> RemoveTag(int id)
+        {
+           
+             await _tagService.Delete(id);
+            
+            return View();
+        }
+       
     }
 }
