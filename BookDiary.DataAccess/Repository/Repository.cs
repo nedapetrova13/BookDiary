@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using BookDiary.Models;
@@ -39,13 +40,14 @@ namespace BookDiary.DataAccess.Repository
 
         public async Task DeleteMapping(int id1, int id2)
         {
-            var entity = dbSet.Find(id1,id2);
+            var entity = await dbSet.FirstOrDefaultAsync(e => e. == bookId && e.TagId == tagId);
             if (entity == null)
             {
-                throw new ArgumentException("Id is null!");
+                throw new ArgumentException("Entity not found!");
             }
+
             dbSet.Remove(entity);
-            await this._context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<T>> Find(Expression<Func<T, bool>> filter)

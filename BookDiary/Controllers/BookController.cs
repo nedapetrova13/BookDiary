@@ -306,6 +306,8 @@ namespace BookDiary.Controllers
             };
             return View(book);
         }
+
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> RemoveTag(int bookId, int tagId)
@@ -319,9 +321,7 @@ namespace BookDiary.Controllers
                     await _bookTagService.DeleteBookTag(tag.BookId,tag.TagId);
                 }
             }
-       
             return View("AssignTags",bookId);
-
         }
 
     }
