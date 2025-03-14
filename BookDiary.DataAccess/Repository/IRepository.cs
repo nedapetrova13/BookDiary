@@ -17,5 +17,6 @@ namespace BookDiary.DataAccess.Repository
         Task<T> GetById(int id);
         Task< List<T>> Find(Expression<Func<T, bool>> filter);
         Task<T> Get(Expression<Func<T, bool>> filter);
+        Task DeleteMapping(int id1, int id2);
     }
 }

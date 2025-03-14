@@ -9,5 +9,7 @@ namespace BookDiary.Core.IServices
 {
     public interface IBookTagService:IService<BookTag>
     {
+        Task DeleteBookTag(int bookid, int tagid);
+        
     }
 }

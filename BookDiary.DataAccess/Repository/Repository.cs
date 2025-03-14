@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using BookDiary.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookDiary.DataAccess.Repository
@@ -26,7 +27,19 @@ namespace BookDiary.DataAccess.Repository
 
         public async Task Delete(int id)
         {
+         
             var entity = dbSet.Find(id);
+            if (entity == null)
+            {
+                throw new ArgumentException("Id is null!");
+            }
+            dbSet.Remove(entity);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task DeleteMapping(int id1, int id2)
+        {
+            var entity = dbSet.Find(id1,id2);
             if (entity == null)
             {
                 throw new ArgumentException("Id is null!");

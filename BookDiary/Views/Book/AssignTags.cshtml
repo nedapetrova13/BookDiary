@@ -19,8 +19,14 @@
                             {
                                 <li class="tag-item">
                                     <span>@tag.Name</span>
-                                    <a asp-action="RemoveTag" asp-controller="Book" asp-route-bookId="@Model.BookId" asp-route-tagId="@tag.Id" class="remove-tag">❌</a>
-                                </li>
+                                    <form method="post" asp-controller="Book" asp-action="RemoveTag" @* style="display:inline;" *@>
+                                        <button class="button"  class="remove-tag" asp-action="RemoveTag" asp-controller="Book" asp-route-bookId="@Model.BookId" asp-route-tagId="@tag.Id">
+                                            ❌
+                                        </button>
+                                    </form>
+@*                                     <a method="post" asp-action="RemoveTag" asp-controller="Book" asp-route-bookId="@Model.BookId" asp-route-tagId="@tag.Id" class="remove-tag">❌</a>
+ *@                                </li>
+
                             }
                         </ul>
                     }

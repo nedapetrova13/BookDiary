@@ -10,8 +10,9 @@ namespace BookDiary.Models
 {
     public class BookTag
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int Id { get; set; } 
+        public int Id { get; set; }
         [ForeignKey(nameof(Book))]
         public int BookId { get; set; }
         public Book Book { get; set; }

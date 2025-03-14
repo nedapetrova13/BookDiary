@@ -28,6 +28,11 @@ namespace BookDiary.Core.Services
             await _repo.Delete(id);
         }
 
+        public async Task DeleteBookTag(int bookid, int tagid)
+        {
+            await _repo.DeleteMapping(bookid, tagid);
+        }
+
         public async Task<List<BookTag>> Find(Expression<Func<BookTag, bool>> filter)
         {
             return await _repo.Find(filter);

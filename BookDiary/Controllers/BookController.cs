@@ -5,6 +5,7 @@ using BookDiary.Core.IServices;
 using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.BookViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -40,44 +41,46 @@ namespace BookDiary.Controllers
                 _bookPublishingHouse = bookPublishingHouse;
             }
 
-            public async  Task<IActionResult> Index(BookFilterViewModel? filter)
+        public async Task<IActionResult> Index(BookFilterViewModel? filter)
+        {
+            var books = _bookService.GetAll();
+            var query = books.AsQueryable();
+            if ((filter.GenreId != null))
             {
-                var books =  _bookService.GetAll();
-                var query = books.AsQueryable();
-                if ((filter.GenreId != null))
-                {
-                    query = query.Where(g => g.GenreId == filter.GenreId);
-                }
-                if ((filter.AuthorId != null))
-                {
-                    query = query.Where(b => b.AuthorId == filter.AuthorId);
-                }
-                if ((filter.PageMinCount != null) && (filter.PageMinCount != 0))
-                {
-                    query = query.Where(b => b.BookPages >= filter.PageMinCount);
-                }
-                if ((filter.PageMaxCount != null) && (filter.PageMaxCount != 0))
-                {
-                    query = query.Where(b => b.BookPages <= filter.PageMaxCount);
-                }
-
-                var list =  _bookService.GetAll();
-                var testList = list.AsQueryable().Include(b => b.Genre).Include(b => b.Author).ToList();
-                var model = new BookFilterViewModel
-                {
-                    BookId=filter.BookId,
-                    GenreId = filter.GenreId,
-                    AuthorId = filter.AuthorId,
-                    PageMaxCount = filter.PageMaxCount,
-                    PageMinCount = filter.PageMinCount,
-                    Genres = new SelectList( _genreService.GetAll(), "Id", "Name"),
-                    Authors = new SelectList( _authorService.GetAll(), "Id", "Name"),
-                    Books = query.Include(b => b.Genre).Include(b => b.Author).ToList()
-
-                };
-                return View(model);
+                query = query.Where(g => g.GenreId == filter.GenreId);
             }
-            public async Task<IActionResult> Add()
+            if ((filter.AuthorId != null))
+            {
+                query = query.Where(b => b.AuthorId == filter.AuthorId);
+            }
+            if ((filter.PageMinCount != null) && (filter.PageMinCount != 0))
+            {
+                query = query.Where(b => b.BookPages >= filter.PageMinCount);
+            }
+            if ((filter.PageMaxCount != null) && (filter.PageMaxCount != 0))
+            {
+                query = query.Where(b => b.BookPages <= filter.PageMaxCount);
+            }
+
+            var list = _bookService.GetAll();
+            var testList = list.AsQueryable().Include(b => b.Genre).Include(b => b.Author).ToList();
+            var model = new BookFilterViewModel
+            {
+                BookId = filter.BookId,
+                GenreId = filter.GenreId,
+                AuthorId = filter.AuthorId,
+                PageMaxCount = filter.PageMaxCount,
+                PageMinCount = filter.PageMinCount,
+                Genres = new SelectList(_genreService.GetAll(), "Id", "Name"),
+                Authors = new SelectList(_authorService.GetAll(), "Id", "Name"),
+                Books = query.Include(b => b.Genre).Include(b => b.Author).ToList()
+
+            };
+            return View(model);
+        }
+        [Authorize(Roles = "Admin")]
+
+        public async Task<IActionResult> Add()
             {
                 var authors = _authorService.GetAll();
                 var genres =  _genreService.GetAll();
@@ -88,7 +91,9 @@ namespace BookDiary.Controllers
                 var model = new BookCreateViewModel();
                 return View(model);
             }
-            [HttpPost]
+        [Authorize(Roles = "Admin")]
+
+        [HttpPost]
             public async Task<IActionResult> Add(BookCreateViewModel bookcvm)
             {
             var book = new Book
@@ -106,7 +111,9 @@ namespace BookDiary.Controllers
                 await _bookService.Add(book);
                 return RedirectToAction("Index");
             }
-            public async Task<IActionResult> Edit(int id)
+        [Authorize(Roles = "Admin")]
+
+        public async Task<IActionResult> Edit(int id)
             {
                 var authors = _authorService.GetAll();
                 var genres =  _genreService.GetAll();
@@ -132,7 +139,9 @@ namespace BookDiary.Controllers
                 };
                 return View(model);
             }
-            [HttpPost]
+        [Authorize(Roles = "Admin")]
+
+        [HttpPost]
             public async Task<IActionResult> Edit(BookEditViewModel model)
             {
             var book = new Book
@@ -150,13 +159,17 @@ namespace BookDiary.Controllers
                     await _bookService.Update(book);
                     return RedirectToAction("Index");
 
-            }    
-            [HttpPost]
+            }
+        [Authorize(Roles = "Admin")]
+
+        [HttpPost]
             public async Task<IActionResult> Delete(int id)
             {
                 await _bookService.Delete(id);
                 return RedirectToAction("Index");
             }
+        [Authorize(Roles = "Admin")]
+
         [HttpGet]
         public async Task<IActionResult> AssignTags(int BookId)
         {
@@ -188,6 +201,7 @@ namespace BookDiary.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         public async Task<IActionResult> AssignTags(AssignTagsToBookViewModel model)
@@ -205,6 +219,8 @@ namespace BookDiary.Controllers
             }
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
+
         [HttpGet]
         public async Task<IActionResult> AssignLangandPH(int id)
         {
@@ -218,6 +234,8 @@ namespace BookDiary.Controllers
             };
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public async Task<IActionResult> AssignLangandPH(BookLanguagePHVM? model)
         {
@@ -231,6 +249,8 @@ namespace BookDiary.Controllers
             await _bookPublishingHouse.Add(book);
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Info(int bookId)
         {
             var bookcvm = await _bookService.GetById(bookId);
@@ -286,14 +306,23 @@ namespace BookDiary.Controllers
             };
             return View(book);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> RemoveTag(int id)
+        public async Task<IActionResult> RemoveTag(int bookId, int tagId)
         {
-           
-             await _tagService.Delete(id);
+            var booktagmodel = _bookTagService.GetAll();
             
-            return View();
-        }
+            foreach(var tag in booktagmodel)
+            {
+                if (tag.TagId == tagId && tag.BookId == bookId)
+                {
+                    await _bookTagService.DeleteBookTag(tag.BookId,tag.TagId);
+                }
+            }
        
+            return View("AssignTags",bookId);
+
+        }
+
     }
 }
