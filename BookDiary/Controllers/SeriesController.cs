@@ -8,6 +8,7 @@ using BookDiary.Models.ViewModels.NewsViewModels;
 using BookDiary.Models.ViewModels.BookViewModels;
 using System.Net;
 using System.Data.Entity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookDiary.Controllers
 {
@@ -35,11 +36,15 @@ namespace BookDiary.Controllers
 
             return View(viewModelList);
         }
+        [Authorize(Roles = "Admin")]
+
         public IActionResult Add()
         {
             var model = new SeriesCreateViewModel();
             return View();
         }
+        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public async Task<IActionResult> Add(SeriesCreateViewModel scvm)
         {
@@ -51,6 +56,8 @@ namespace BookDiary.Controllers
             await _seriesService.Add(series);
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Edit(int id)
         {
             Series series = await _seriesService.GetById(id);
@@ -61,6 +68,8 @@ namespace BookDiary.Controllers
             };
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public async Task<IActionResult> Edit(SeriesEditViewModel sevm)
         {
@@ -74,12 +83,16 @@ namespace BookDiary.Controllers
             return RedirectToAction("Index");
 
         }
+        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             await _seriesService.Delete(id);
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Info(string seriesName)
         {
             var seriesmodel = await _seriesService.Get(x=>x.Title == seriesName);

@@ -1,6 +1,7 @@
 ﻿using BookDiary.Core.IServices;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.NewsViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Versioning;
 
@@ -27,12 +28,16 @@ namespace BookDiary.Controllers
 
             return View(viewModelList);
         }
+        [Authorize(Roles = "Admin")]
+
         public IActionResult Add()
         {
             
             var model = new NewsCreateViewModel();
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public async Task<IActionResult> Add(NewsCreateViewModel ncvm)
         {
@@ -44,6 +49,8 @@ namespace BookDiary.Controllers
             await _newsService.Add(news);
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Edit(int id)
         {
             var news = await _newsService.GetById(id);
@@ -58,6 +65,7 @@ namespace BookDiary.Controllers
             };
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         public async Task<IActionResult> Edit(NewsEditViewModel nevm)
@@ -72,6 +80,7 @@ namespace BookDiary.Controllers
             return RedirectToAction("Index");
             
         }
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)

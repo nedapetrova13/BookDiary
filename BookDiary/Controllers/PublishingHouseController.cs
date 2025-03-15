@@ -5,6 +5,7 @@ using BookDiary.Models.ViewModels.TagViewModels;
 using BookDiary.Models.ViewModels.PublishingHouseViewModels;
 using Microsoft.AspNetCore.Mvc;
 using BookDiary.Models.ViewModels.NewsViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookDiary.Controllers
 {
@@ -30,12 +31,14 @@ namespace BookDiary.Controllers
 
             return View(viewModelList);
         }
+        [Authorize(Roles = "Admin")]
 
         public IActionResult Add()
         {
             var model = new PublishingHouseCreateViewModel();
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         public async Task<IActionResult> Add(PublishingHouseCreateViewModel phcvm)
@@ -48,6 +51,7 @@ namespace BookDiary.Controllers
             await _publishingHouseService.Add(pubhouse);
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Edit(int id)
         {
@@ -59,6 +63,7 @@ namespace BookDiary.Controllers
             };
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         public async Task<IActionResult> Edit(PublishingHouseEditViewModel phevm)
@@ -71,6 +76,7 @@ namespace BookDiary.Controllers
             await _publishingHouseService.Update(model);
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)

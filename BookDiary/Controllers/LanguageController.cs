@@ -3,6 +3,7 @@ using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.LanguageViewModels;
 using BookDiary.Models.ViewModels.NewsViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookDiary.Controllers
@@ -15,6 +16,7 @@ namespace BookDiary.Controllers
         {
             _service = service;
         }
+        [Authorize(Roles = "Admin")]
 
         public IActionResult Index()
         {
@@ -28,11 +30,15 @@ namespace BookDiary.Controllers
 
             return View(viewModelList);
         }
+        [Authorize(Roles = "Admin")]
+
         public IActionResult Add()
         {
             var model = new LanguageCreateViewModel();
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public async Task<IActionResult> Add(LanguageCreateViewModel lcvm)
         {
@@ -43,6 +49,8 @@ namespace BookDiary.Controllers
             await _service.Add(language);
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Edit(int id)
         {
 
@@ -53,6 +61,8 @@ namespace BookDiary.Controllers
             };
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public async Task<IActionResult> Edit(LanguageEditViewModel levm)
         {
@@ -64,6 +74,8 @@ namespace BookDiary.Controllers
             await _service.Update(model);
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

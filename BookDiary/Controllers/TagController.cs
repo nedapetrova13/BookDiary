@@ -3,6 +3,7 @@ using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.NewsViewModels;
 using BookDiary.Models.ViewModels.TagViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -29,12 +30,14 @@ namespace BookDiary.Controllers
 
             return View(viewModelList);
         }
+        [Authorize(Roles = "Admin")]
 
         public IActionResult Add()
         {
             var model = new TagCreateViewModel();
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         public async Task<IActionResult> Add(TagCreateViewModel tcvm)
@@ -46,6 +49,7 @@ namespace BookDiary.Controllers
             await _tagService.Add(tag);
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Edit(int id)
         {
@@ -56,6 +60,7 @@ namespace BookDiary.Controllers
             };
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         public async Task<IActionResult> Edit(TagEditViewModel tagModel)
@@ -68,6 +73,7 @@ namespace BookDiary.Controllers
             await _tagService.Update(model);
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
