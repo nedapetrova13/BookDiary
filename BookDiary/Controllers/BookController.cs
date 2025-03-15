@@ -82,20 +82,27 @@ namespace BookDiary.Controllers
 
         public async Task<IActionResult> Add()
             {
+        {
                 var authors = _authorService.GetAll();
                 var genres =  _genreService.GetAll();
                 var series =  _seriesService.GetAll();
+                var languages = _languageService.GetAll();
+                var ph = _pubHouseService.GetAll();
                 ViewBag.Genres = new SelectList(genres, "Id", "Name");
                 ViewBag.Authors = new SelectList(authors, "Id", "Name");
                 ViewBag.Series = new SelectList(series, "Id", "Title");
+                ViewBag.Languages = new SelectList(languages, "Id", "Name");
+                ViewBag.PublishingHouses = new SelectList(ph, "Id", "Name");
                 var model = new BookCreateViewModel();
                 return View(model);
-            }
+        }
+
+
         [Authorize(Roles = "Admin")]
 
         [HttpPost]
-            public async Task<IActionResult> Add(BookCreateViewModel bookcvm)
-            {
+        public async Task<IActionResult> Add(BookCreateViewModel bookcvm)
+        {
             var book = new Book
             {
                 Title = bookcvm.Title,
@@ -104,13 +111,21 @@ namespace BookDiary.Controllers
                 GenreId = bookcvm.GenreId,
                 SeriesId = bookcvm.SeriesId,
                 CoverImageURL = bookcvm.CoverImageURL,
-                BookFormat = bookcvm.BookFormat,
                 BookPages = bookcvm.BookPages,
                 Chapters = bookcvm.Chapters
             };
-                await _bookService.Add(book);
-                return RedirectToAction("Index");
-            }
+
+            await _bookService.Add(book);
+            var bphl = new BookPublishingHouse
+            {
+                BookId = book.Id,
+                PublishingHouseId = bookcvm.PublishingHouseId,
+                LanguageId = bookcvm.LanguageId,
+            };
+            await _bookPublishingHouse.Add(bphl);
+            return RedirectToAction("Index");
+            
+        }
         [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Edit(int id)
@@ -196,10 +211,12 @@ namespace BookDiary.Controllers
                 BookId = BookId,
                 SelectedTags = selectedTags,  // List<Tag>
                 AvailableTags = availableTags // List<Tag>
+               
             };
 
             return View(model);
         }
+
 
         [Authorize(Roles = "Admin")]
 
@@ -208,7 +225,7 @@ namespace BookDiary.Controllers
         {
             foreach (var tag in model.SelectedTagIds)
             {
-                
+
                 var booktag = new BookTag()
                 {
                     TagId = tag,
@@ -282,9 +299,9 @@ namespace BookDiary.Controllers
                 .SelectMany(b => b.BookPublishingHouses.Select(bp => bp.Language.Name))
                 .FirstOrDefault();
             var publishinghouse = _pubHouseService.GetAll()
-                .Where(b => b.bookPublishingHouses.Select(c=>c.BookId==bookId).FirstOrDefault())
-                .SelectMany(b => b.bookPublishingHouses.Select(bp => bp.PublishingHouse.Name))
-                .FirstOrDefault();
+                 .Where(ph => ph.bookPublishingHouses.Any(bph => bph.BookId == bookId))
+                 .Select(ph => ph.Name)
+                 .FirstOrDefault();
             var seriesview = _seriesService.Get(x => x.Title == series);
             
             var book = new BookAdminViewModel()
@@ -297,7 +314,6 @@ namespace BookDiary.Controllers
                 SeriesName = series,
                 SeriesId = seriesview.Id,
                 CoverImageURL = bookcvm.CoverImageURL,
-                BookFormat = format,
                 BookPages = bookcvm.BookPages,
                 Chapters = bookcvm.Chapters,
                 LanguageName=language,
@@ -307,22 +323,12 @@ namespace BookDiary.Controllers
             return View(book);
         }
 
-
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> RemoveTag(int bookId, int tagId)
         {
-            var booktagmodel = _bookTagService.GetAll();
-            
-            foreach(var tag in booktagmodel)
-            {
-                if (tag.TagId == tagId && tag.BookId == bookId)
-                {
-                    await _bookTagService.DeleteBookTag(tag.BookId,tag.TagId);
-                }
-            }
-            return View("AssignTags",bookId);
+            await _bookTagService.DeleteBookTag(bookId, tagId);
+            return RedirectToAction("AssignTags", new { BookId = bookId });
         }
-
     }
 }

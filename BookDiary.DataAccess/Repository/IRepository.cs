@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookDiary.DataAccess.Repository
 {
-    public interface IRepository <T> where T : class
+    public interface IRepository<T> where T : class
     {
         Task Add(T entity);
         Task Update(T entity);
@@ -15,8 +15,8 @@ namespace BookDiary.DataAccess.Repository
         Task<T> Get(int id);
         IQueryable<T> GetAll();
         Task<T> GetById(int id);
-        Task< List<T>> Find(Expression<Func<T, bool>> filter);
+        Task<List<T>> Find(Expression<Func<T, bool>> filter);
         Task<T> Get(Expression<Func<T, bool>> filter);
-        Task DeleteMapping(int id1, int id2);
+        Task DeleteMapping<TMapping>(Expression<Func<TMapping, bool>> predicate) where TMapping : class;
     }
 }

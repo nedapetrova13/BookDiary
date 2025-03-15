@@ -38,16 +38,15 @@ namespace BookDiary.DataAccess.Repository
             await this._context.SaveChangesAsync();
         }
 
-        public async Task DeleteMapping(int id1, int id2)
+        public async Task DeleteMapping<TMapping>(Expression<Func<TMapping, bool>> predicate) where TMapping : class
         {
-            var entity = await dbSet.FirstOrDefaultAsync(e => e. == bookId && e.TagId == tagId);
-            if (entity == null)
-            {
-                throw new ArgumentException("Entity not found!");
-            }
+            var entity = _context.Set<TMapping>().FirstOrDefault(predicate);
 
-            dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
+            if (entity != null)
+            {
+                _context.Set<TMapping>().Remove(entity);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<List<T>> Find(Expression<Func<T, bool>> filter)

@@ -20,13 +20,16 @@
                
             </div>
             <div class="book-metadata second-row">
-                @if (!string.IsNullOrEmpty(Model.LanguageName))
+
+                @if (!string.IsNullOrEmpty(Model.LanguageName)) 
                 {
                     <span class="language-name">🌐 @Model.LanguageName</span>
-                }
-                @if (!string.IsNullOrEmpty(Model.PublishingHouseName))
+
+                } 
+                @if (!string.IsNullOrEmpty(Model.PublishingHouseName)) 
                 {
                     <span class="publishing-house">🏢 @Model.PublishingHouseName</span>
+
                 }
             </div>
             @if (Model.SeriesName != null)

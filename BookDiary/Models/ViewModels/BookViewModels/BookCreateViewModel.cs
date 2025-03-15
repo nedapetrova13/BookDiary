@@ -9,8 +9,9 @@
         public int GenreId { get; set; }
         public int? SeriesId { get; set; }
         public string CoverImageURL { get; set; }
-        public string BookFormat {  get; set; }
         public int BookPages {  get; set; }
         public int Chapters {  get; set; }
+        public int LanguageId { get; set; }
+        public int PublishingHouseId { get; set; }
     }
 }

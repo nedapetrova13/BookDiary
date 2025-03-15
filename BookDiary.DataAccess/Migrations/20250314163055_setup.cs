@@ -172,6 +172,7 @@ namespace BookDiary.DataAccess.Migrations
                     GenreId = table.Column<int>(type: "int", nullable: false),
                     QuestionId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
@@ -294,7 +295,8 @@ namespace BookDiary.DataAccess.Migrations
                 {
                     BookId = table.Column<int>(type: "int", nullable: false),
                     PublishingHouseId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     LanguageId = table.Column<int>(type: "int", nullable: false),
                     PublishingDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -508,7 +510,8 @@ namespace BookDiary.DataAccess.Migrations
                     QuestionId = table.Column<int>(type: "int", nullable: false),
                     GenreId = table.Column<int>(type: "int", nullable: false),
                     BookId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false)
                 },
@@ -559,6 +562,7 @@ namespace BookDiary.DataAccess.Migrations
                     BookId = table.Column<int>(type: "int", nullable: false),
                     CommentId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
@@ -582,6 +586,7 @@ namespace BookDiary.DataAccess.Migrations
                     CommentId = table.Column<int>(type: "int", nullable: false),
                     NewsId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
@@ -605,6 +610,7 @@ namespace BookDiary.DataAccess.Migrations
                     BookId = table.Column<int>(type: "int", nullable: false),
                     ShelfId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {

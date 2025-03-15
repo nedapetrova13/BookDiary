@@ -4,9 +4,7 @@
 <div class="book-tags-container">
     <h2 class="page-title">Добави характеристики към книга</h2>
 
-    <form method="post">
         <input type="hidden" name="BookId" value="@Model.BookId" />
-
         <div class="tags-wrapper">
             <!-- Selected Tags Section -->
             <div class="selected-tags-section">
@@ -19,13 +17,12 @@
                             {
                                 <li class="tag-item">
                                     <span>@tag.Name</span>
-                                    <form method="post" asp-controller="Book" asp-action="RemoveTag" @* style="display:inline;" *@>
+                                    <form method="post" asp-controller="Book" asp-action="RemoveTag" >
                                         <button class="button"  class="remove-tag" asp-action="RemoveTag" asp-controller="Book" asp-route-bookId="@Model.BookId" asp-route-tagId="@tag.Id">
                                             ❌
                                         </button>
                                     </form>
-@*                                     <a method="post" asp-action="RemoveTag" asp-controller="Book" asp-route-bookId="@Model.BookId" asp-route-tagId="@tag.Id" class="remove-tag">❌</a>
- *@                                </li>
+                                </li>
 
                             }
                         </ul>
@@ -36,6 +33,8 @@
                     }
                 </div>
             </div>
+            <form method="post">
+            <input type="hidden" name="BookId" value="@Model.BookId" />
 
             <!-- Available Tags Section -->
             <div class="available-tags-section">
@@ -55,10 +54,11 @@
                     }
                 </div>
             </div>
-        </div>
+            <button class="submit-btn" type="submit" asp-action="AssignTags" asp-controller="Book">Добави</button>
 
-        <button class="submit-btn" type="submit" asp-action="AssignTags" asp-controller="Book">Добави</button>
-    </form>
+        </form>
+
+        </div>
 </div>
 
 <style>
