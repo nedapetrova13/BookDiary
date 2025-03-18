@@ -1,4 +1,5 @@
-﻿@model BookDiary.Models.ViewModels.AuthorViewModels.AuthorAdminViewModel
+﻿@using BookDiary.Utility
+@model BookDiary.Models.ViewModels.AuthorViewModels.AuthorAdminViewModel
 
 <div class="author-profile-container">
     <div class="author-header">
@@ -17,14 +18,17 @@
         <div class="author-title">
             <div class="title-with-actions">
                 <h1>@Model.Name</h1>
-                <div class="author-actions">
-                    <a asp-controller="Author" asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">
+                @if (User.IsInRole(SD.AdminRole))
+                {
+
+                    <div class="author-actions">
+                        <a asp-controller="Author" asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">
                         <i class="fas fa-edit"></i> Edit
                     </a>
                     <button type="button" class="btn-delete" data-bs-toggle="modal" data-bs-target="#deleteAuthorModal">
                         <i class="fas fa-trash-alt"></i> Delete
                     </button>
-                </div>
+                </div>}
             </div>
             <div class="author-subtitle">
                 <span class="birth-date"><i class="fas fa-birthday-cake"></i> Born: @Model.BirthDate.ToString("MMMM d, yyyy")</span>

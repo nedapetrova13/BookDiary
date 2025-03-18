@@ -117,7 +117,7 @@
         }
 
             .submenu.show {
-                max-height: 500px;
+                max-height: 900px;
             }
 
         .dropdown-toggle::after {
@@ -210,6 +210,31 @@
                 <li class="nav-item">
                     <partial name="_LoginPartial" />
                 </li>
+                @if (User.IsInRole(SD.UserRole)){
+                    <li class="nav-item">
+                        <a class="nav-link"  asp-controller="Book" asp-action="Index">
+                            Разгледай книгите
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Author" asp-action="Index">
+                            Разгледай авторите
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Author" asp-action="Index">
+                            Разгледай поредиците
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Author" asp-action="Index">
+                            Разгледай поредиците
+                        </a>
+                    </li>
+                }
+
+                
+
                 @if (User.IsInRole(SD.AdminRole))
                 {
                     <li class="nav-item">

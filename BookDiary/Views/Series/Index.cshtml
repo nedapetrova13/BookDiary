@@ -1,4 +1,5 @@
-﻿@model IEnumerable<BookDiary.Models.ViewModels.SeriesViewModels.SeriesCreateViewModel>
+﻿@using BookDiary.Utility
+@model IEnumerable<BookDiary.Models.ViewModels.SeriesViewModels.SeriesCreateViewModel>
 
 <div class="container py-4">
     <div class="row justify-content-center mb-4">
@@ -27,18 +28,22 @@
                     <div class="series-card-body">
                         <p class="series-card-text">@series.Description</p>
                     </div>
-                    <div class="series-card-footer">
-                        <div class="d-flex gap-2">
-                            <a type="button" class="btn btn-edit" asp-action="Edit" asp-controller="Series" asp-route-id="@series.Id">
-                                <i class="fas fa-edit me-1"></i> Редактирай
-                            </a>
-                            <form method="post" asp-controller="Series" asp-action="Delete">
-                                <button type="submit" class="btn btn-delete" asp-action="Delete" asp-controller="Series" asp-route-id="@series.Id" >
-                                    <i class="fas fa-trash-alt me-1"></i> Изтрий
-                                </button>
-                            </form>
+                    @if (User.IsInRole(SD.AdminRole))
+                    {
+
+                        <div class="series-card-footer">
+                            <div class="d-flex gap-2">
+                                <a type="button" class="btn btn-edit" asp-action="Edit" asp-controller="Series" asp-route-id="@series.Id">
+                                    <i class="fas fa-edit me-1"></i> Редактирай
+                                </a>
+                                <form method="post" asp-controller="Series" asp-action="Delete">
+                                    <button type="submit" class="btn btn-delete" asp-action="Delete" asp-controller="Series" asp-route-id="@series.Id" >
+                                        <i class="fas fa-trash-alt me-1"></i> Изтрий
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    }
                     <div style="margin-top: auto; width: 100%; text-align: center;">
                         <a class="btn details-button" asp-area="" asp-controller="Series" asp-action="Info" asp-route-seriesname="@series.Title">Details</a>
                     </div>

@@ -2,6 +2,7 @@
 using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.ProfileViewModels;
+using BookDiary.Models.ViewModels.UserViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,19 @@ namespace BookDiary.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var userlist = userService.GetAll();
+            List<UserIndexViewModel> users = new List<UserIndexViewModel>();
+            foreach (var item in userlist)
+            {
+                var user = new UserIndexViewModel
+                {
+                    Id = item.Id,
+                    ProfilePictureURL = item.ProfilePictureURL,
+                    Name = item.Name,
+                };
+                users.Add(user);
+            }
+            return View(users);    
         }
         
     }

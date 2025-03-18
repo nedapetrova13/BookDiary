@@ -1,4 +1,5 @@
-﻿@{
+﻿@using BookDiary.Utility
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -42,86 +43,114 @@
         </div>
     </div>
 
+
     <!-- Main Content Area -->
     <div class="dashboard-content">
-        <!-- Quick Actions Section -->
-        <div class="quick-actions mb-5">
-            <h4 class="section-title">Бързи действия</h4>
-            <div class="actions-grid">
-                <a asp-area="" asp-controller="Book" asp-action="Add" class="action-card">
-                    <div class="action-icon"><i class="bi bi-plus-circle"></i></div>
-                    <h5>Добави книга</h5>
-                </a>
-                <a asp-area="" asp-controller="Author" asp-action="Add" class="action-card">
-                    <div class="action-icon"><i class="bi bi-person-plus"></i></div>
-                    <h5>Добави автор</h5>
-                </a>
-                <a asp-area="" asp-controller="News" asp-action="Add" class="action-card">
-                    <div class="action-icon"><i class="bi bi-newspaper"></i></div>
-                    <h5>Добави новина</h5>
-                </a>
-                <a asp-area="" asp-controller="Book" asp-action="Index" class="action-card">
-                    <div class="action-icon"><i class="bi bi-search"></i></div>
-                    <h5>Преглед на книги</h5>
-                </a>
+        @if (User.IsInRole(SD.AdminRole)){
+            <div class="quick-actions mb-5">
+                <h4 class="section-title">Бързи действия</h4>
+                <div class="actions-grid">
+                    <a asp-area="" asp-controller="Book" asp-action="Add" class="action-card">
+                        <div class="action-icon"><i class="bi bi-plus-circle"></i></div>
+                        <h5>Добави книга</h5>
+                    </a>
+                    <a asp-area="" asp-controller="Author" asp-action="Add" class="action-card">
+                        <div class="action-icon"><i class="bi bi-person-plus"></i></div>
+                        <h5>Добави автор</h5>
+                    </a>
+                    <a asp-area="" asp-controller="News" asp-action="Add" class="action-card">
+                        <div class="action-icon"><i class="bi bi-newspaper"></i></div>
+                        <h5>Добави новина</h5>
+                    </a>
+                    <a asp-area="" asp-controller="Book" asp-action="Index" class="action-card">
+                        <div class="action-icon"><i class="bi bi-search"></i></div>
+                        <h5>Преглед на книги</h5>
+                    </a>
+                </div>
             </div>
-        </div>
+        }
+        else{
+            <div class="quick-actions mb-5">
+                <h4 class="section-title">Бързи действия</h4>
+                <div class="actions-grid">
+                    <a asp-area="" asp-controller="Book" asp-action="Index" class="action-card">
+                        <div class="action-icon"><i class="bi bi-plus-circle"></i></div>
+                        <h5>Разгледай книги</h5>
+                    </a>
+                    <a asp-area="" asp-controller="Author" asp-action="Index" class="action-card">
+                        <div class="action-icon"><i class="bi bi-person-plus"></i></div>
+                        <h5>Разгледай автори</h5>
+                    </a>
+                    <a asp-area="" asp-controller="News" asp-action="Index" class="action-card">
+                        <div class="action-icon"><i class="bi bi-newspaper"></i></div>
+                        <h5>Разгледай новини</h5>
+                    </a>
+                    <a asp-area="" asp-controller="Book" asp-action="Index" class="action-card">
+                        <div class="action-icon"><i class="bi bi-search"></i></div>
+                        <h5>Разгледай шкафове</h5>
+                    </a>
+                </div>
+            </div>
+        }
+        <!-- Quick Actions Section -->
 
-        <!-- Users and News Section -->
-        <div class="content-row">
-            <!-- Users Section -->
-            <div class="users-section">
-                <h4 class="section-title">Потребители</h4>
-                <div class="users-container">
-                    @foreach(var u in Model.Users){
-                        <div class="user-card">
-                            <div class="user-avatar">
-                                <img src="@u.ProfilePictureURL"
-                                     class="rounded-circle shadow avatar-md mr-3" alt="Profile Picture">
+        @if (User.IsInRole(SD.AdminRole)) {
+            <div class="content-row">
+                <!-- Users Section -->
+                <div class="users-section">
+                    <h4 class="section-title">Потребители</h4>
+                    <div class="users-container">
+                        @foreach (var u in Model.Users)
+                        {
+                            <div class="user-card">
+                                <div class="user-avatar">
+                                    <img src="@u.ProfilePictureURL"
+                                         class="rounded-circle shadow avatar-md mr-3" alt="Profile Picture">
+                                </div>
+                                <div class="user-info">
+                                    <h5>@u.Name</h5>
+                                </div>
+                                <div class="user-actions">
+                                    <button class="btn-icon" title="Изтрий"><i class="bi bi-chat"></i></button>
+                                </div>
                             </div>
-                            <div class="user-info">
-                                <h5>@u.Name</h5>
-                            </div>
-                            <div class="user-actions">
-                                <button class="btn-icon" title="Редактирай"><i class="bi bi-pencil"></i></button>
-                                <button class="btn-icon" title="Изтрий"><i class="bi bi-chat"></i></button>
-                            </div>
+                        }
+                        <div class="view-all-link">
+                            <a href="@Url.Action("Index", "User")">Виж всички потребители <i class="bi bi-arrow-right"></i></a>
                         </div>
-                    }
-                   
+                    </div>
+                </div>
+                <div class="news-section">
+                    <h4 class="section-title">Последни новини</h4>
+                    <div class="news-container">
+                        @if (Model.News.Any())
+                        {
+                            @foreach (var news in Model.News)
+                            {
+                                <div class="news-card">
+                                    <h5>@news.Title</h5>
+                                    <p>@news.Content</p>
 
-                   
-                    <div class="view-all-link">
-                        <a href="@Url.Action("Index", "User")">Виж всички потребители <i class="bi bi-arrow-right"></i></a>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="no-news">
+                                <p>Няма нови новини</p>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
+        }
+
+      
+    </div>
 
             <!-- News Section -->
-            <div class="news-section">
-                <h4 class="section-title">Последни новини</h4>
-                <div class="news-container">
-                    @if (Model.News.Any())
-                    {
-                        @foreach (var news in Model.News)
-                        {
-                            <div class="news-card">
-                                <h5>@news.Title</h5>
-                                <p>@news.Content</p>
-                               
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <div class="no-news">
-                            <p>Няма нови новини</p>
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
+            
+       
 </div>
 
 <!-- Custom styles -->

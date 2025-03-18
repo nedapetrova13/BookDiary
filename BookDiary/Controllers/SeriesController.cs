@@ -83,7 +83,6 @@ namespace BookDiary.Controllers
             return RedirectToAction("Index");
 
         }
-        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
@@ -91,7 +90,6 @@ namespace BookDiary.Controllers
             await _seriesService.Delete(id);
             return RedirectToAction("Index");
         }
-        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Info(string seriesName)
         {

@@ -331,6 +331,8 @@ using (var scope = app.Services.CreateScope())
         dbContext.Genres.AddRange(genres); 
         await dbContext.SaveChangesAsync(); 
     }
+    
+
     if (!dbContext.Books.Any()) 
     {
         var books = new List<Book>
@@ -398,13 +400,81 @@ using (var scope = app.Services.CreateScope())
                 Description = "Третата част от поредицата „Песен за огън и лед“, където борбата за власт става още по-кървава, а съдбите на любимите герои се преплитат в неочаквани обрати.",
                 Chapters = 82,
                 CoverImageURL = "https://www.bard.bg/files/mf/books/876_pic_1.jpg"
-            }
+            },
 
+            new Book
+            {
+                Title = "The Shining",
+                AuthorId = dbContext.Authors.First(a => a.Name == "Стивън Кинг").Id,
+                GenreId = dbContext.Genres.First(g => g.Name == "Ужаси").Id,
+                BookPages = 447,
+                Description = "Jack Torrance takes a job as the winter caretaker at the Overlook Hotel, but sinister forces begin to influence him.",
+                Chapters = 58,
+                CoverImageURL = "https://libris.to/media/jacket/02933315_shining.jpg"
+            },
+            new Book
+            {
+                Title = "Carrie",
+                AuthorId = dbContext.Authors.First(a => a.Name == "Стивън Кинг").Id,
+                GenreId = dbContext.Genres.First(g => g.Name == "Ужаси").Id,
+                BookPages = 199,
+                Description = "A bullied teenage girl discovers her telekinetic abilities and uses them to unleash a night of horror.",
+                Chapters = 17,
+                CoverImageURL = "https://th.bing.com/th/id/R.2c05123acc614da649f8be9a2ca4d8fb?rik=YteGOBdAvgOfcQ&riu=http%3a%2f%2fprodimage.images-bn.com%2fpimages%2f9780307743664_p0_v1_s1200x630.jpg&ehk=nJYIcUr2L%2fE0HjoqDWBESaX7Hh8FOQtF6bXZsNJaXNs%3d&risl=&pid=ImgRaw&r=0"
+            },
+            new Book
+            {
+                Title = "Murder on the Orient Express",
+                AuthorId = dbContext.Authors.First(a => a.Name == "Агата Кристи").Id,
+                GenreId = dbContext.Genres.First(g => g.Name == "Криминален").Id,
+                BookPages = 256,
+                Description = "Hercule Poirot investigates a murder aboard the luxurious Orient Express train.",
+                Chapters = 30,
+                CoverImageURL = "https://www.pluggedin.com/wp-content/uploads/2020/01/murder-on-the-orient-express-cover.jpg"
+            }
 
 
         };
 
         dbContext.Books.AddRange(books); 
+        await dbContext.SaveChangesAsync();
+    }
+    if (!dbContext.BooksPublishingHouses.Any())
+    {
+        var bph = new List<BookPublishingHouse>
+        {
+            new BookPublishingHouse
+            {
+                BookId=dbContext.Books.First(b=>b.Title=="Хари Потър и Философският камък").Id,
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
+            },
+             new BookPublishingHouse
+            {
+                BookId=dbContext.Books.First(b=>b.Title=="Игра на тронове").Id,
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
+            },
+             new BookPublishingHouse
+            {
+                BookId = dbContext.Books.First(b => b.Title == "The Shining").Id,
+                PublishingHouseId = dbContext.PublishingHouses.First(ph => ph.Name == "Бард").Id,
+                LanguageId = dbContext.Languages.First(l => l.Name == "Английски").Id
+            },
+            new BookPublishingHouse
+            {
+                BookId = dbContext.Books.First(b => b.Title == "Carrie").Id,
+                PublishingHouseId = dbContext.PublishingHouses.First(ph => ph.Name == "Бард").Id,
+                LanguageId = dbContext.Languages.First(l => l.Name == "Английски").Id
+            },
+            new BookPublishingHouse
+            {
+                BookId = dbContext.Books.First(b => b.Title == "Murder on the Orient Express").Id,
+                PublishingHouseId = dbContext.PublishingHouses.First(ph => ph.Name == "Изток-Запад").Id,
+                LanguageId = dbContext.Languages.First(l => l.Name == "Английски").Id
+            }
+        };
+        dbContext.BooksPublishingHouses.AddRange(bph);
         await dbContext.SaveChangesAsync();
     }
 }

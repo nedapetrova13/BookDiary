@@ -1,4 +1,5 @@
-﻿@model IEnumerable<BookDiary.Models.ViewModels.PublishingHouseViewModels.PublishingHouseCreateViewModel>
+﻿@using BookDiary.Utility
+@model IEnumerable<BookDiary.Models.ViewModels.PublishingHouseViewModels.PublishingHouseCreateViewModel>
 
 <div class="container py-4">
     <div class="row justify-content-center">
@@ -31,16 +32,20 @@
                                         <td>@ph.Name</td>
                                         <td class="text-center">@ph.YearFounded</td>
                                         <td>
-                                            <div class="d-flex justify-content-center gap-2">
-                                                <a class="btn btn-edit btn-sm" asp-action="Edit" asp-controller="PublishingHouse" asp-route-id="@ph.Id">
-                                                    <i class="fas fa-edit me-1"></i> Редактирай
-                                                </a>
-                                                <form method="post" asp-controller="PublishingHouse" asp-action="Delete" style="display:inline;">
-                                                    <button class="button" class="btn btn-delete btn-sm" asp-action="Delete" asp-controller="PublishingHouse" asp-route-id="@ph.Id">
-                                                        <i class="fas fa-trash-alt me-1"></i> Изтрий
-                                                    </button>
-                                                </form>
-                                            </div>
+                                            @if (User.IsInRole(SD.AdminRole))
+                                            {
+
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    <a class="btn btn-edit btn-sm" asp-action="Edit" asp-controller="PublishingHouse" asp-route-id="@ph.Id">
+                                                        <i class="fas fa-edit me-1"></i> Редактирай
+                                                    </a>
+                                                    <form method="post" asp-controller="PublishingHouse" asp-action="Delete" style="display:inline;">
+                                                        <button class="button" class="btn btn-delete btn-sm" asp-action="Delete" asp-controller="PublishingHouse" asp-route-id="@ph.Id">
+                                                            <i class="fas fa-trash-alt me-1"></i> Изтрий
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            }
                                         </td>
                                     </tr>
                                 }
