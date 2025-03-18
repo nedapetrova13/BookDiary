@@ -212,23 +212,28 @@
                 </li>
                 @if (User.IsInRole(SD.UserRole)){
                     <li class="nav-item">
+                        <a class="nav-link" asp-controller="Profile" asp-action="Index">
+                            Профил
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link"  asp-controller="Book" asp-action="Index">
-                            Разгледай книгите
+                            Kниги
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Author" asp-action="Index">
-                            Разгледай авторите
+                            Aвтори
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Series" asp-action="Index">
+                            Поредици
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Author" asp-action="Index">
-                            Разгледай поредиците
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Author" asp-action="Index">
-                            Разгледай поредиците
+                            
                         </a>
                     </li>
                 }

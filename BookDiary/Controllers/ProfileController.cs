@@ -33,6 +33,9 @@ namespace BookDiary.Controllers
             }
             return View(users);    
         }
-        
+        public IActionResult UserProfile()
+        {
+
+        }
     }
 }
