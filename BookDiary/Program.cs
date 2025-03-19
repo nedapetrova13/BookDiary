@@ -83,7 +83,7 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    // Ensure Admin User Exists
+    
     string adminEmail = "admin@abv.bg"; //do not remind of the fact that abv.bg exists!
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
     if (adminUser == null)
@@ -100,7 +100,7 @@ using (var scope = app.Services.CreateScope())
         await userManager.CreateAsync(user, "admin123");
         await userManager.AddToRoleAsync(user, "Admin");
     }
-    string userEmail = "neda@abv.bg"; //do not remind of the fact that abv.bg exists!
+    string userEmail = "neda@abv.bg"; 
     var userUser = await userManager.FindByEmailAsync(userEmail);
     if (userUser == null)
     {

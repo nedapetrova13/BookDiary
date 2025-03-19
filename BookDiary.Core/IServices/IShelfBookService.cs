@@ -9,7 +9,8 @@ namespace BookDiary.Core.IServices
 {
     public interface IShelfBookService:IService<ShelfBook>
     {
-       //Task<IEnumerable<ShelfBook>> GetAllShelfBooks();
+        //Task<IEnumerable<ShelfBook>> GetAllShelfBooks();
+        Task DeleteShelfBook(int bookid, int shelfid);
 
     }
 }

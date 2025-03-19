@@ -28,6 +28,11 @@ namespace BookDiary.Core.Services
             await _repo.Delete(id);
         }
 
+        public async Task DeleteShelfBook(int bookid, int shelfid)
+        {
+            await _repo.DeleteMapping<ShelfBook>(bs => bs.BookId == bookid && bs.ShelfId == shelfid);
+        }
+
         public async Task<List<ShelfBook>> Find(Expression<Func<ShelfBook, bool>> filter)
         {
             return await _repo.Find(filter);

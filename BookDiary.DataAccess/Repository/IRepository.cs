@@ -12,6 +12,7 @@ namespace BookDiary.DataAccess.Repository
         Task Add(T entity);
         Task Update(T entity);
         Task Delete(int id);
+        Task<T> GetByIdUser(string id);
         Task<T> Get(int id);
         IQueryable<T> GetAll();
         Task<T> GetById(int id);

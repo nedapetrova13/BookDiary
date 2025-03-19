@@ -52,10 +52,11 @@ namespace BookDiary.Core.Services
         {
             await _repo.Update(entity);
         }
-
-       /* public async Task<IEnumerable<User>> GetAllUsers()
+        public async Task<User> GetByIdUser(string id)
         {
-            return await _repo.GetAll();
-        }*/
+            var result = await _repo.GetByIdUser(id);
+            return result;
+        }
+       
     }
 }

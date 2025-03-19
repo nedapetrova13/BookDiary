@@ -27,8 +27,10 @@ namespace BookDiary.Controllers
             private readonly ILanguageService _languageService;
             private readonly IPublishingHouseService _pubHouseService;
             private readonly IBookPublishingHouseService _bookPublishingHouse;
+            private readonly IShelfService _shelfService;
+        private readonly IShelfBookService _shelfBookService;
 
-            public BookController(IBookService bookService, IBookPublishingHouseService bookPublishingHouse,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService,ILanguageService languageService, IPublishingHouseService pubHouseService)
+            public BookController(IBookService bookService,IShelfBookService shelfBookService, IShelfService shelfService, IBookPublishingHouseService bookPublishingHouse,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService,ILanguageService languageService, IPublishingHouseService pubHouseService)
             {
                 _bookService = bookService;
                 _authorService = authorService;
@@ -39,6 +41,8 @@ namespace BookDiary.Controllers
                 _languageService = languageService;
                 _pubHouseService = pubHouseService;
                 _bookPublishingHouse = bookPublishingHouse;
+                _shelfService = shelfService;
+            _shelfBookService = shelfBookService;
             }
 
         public async Task<IActionResult> Index(BookFilterViewModel? filter)
@@ -200,10 +204,9 @@ namespace BookDiary.Controllers
             var book = await _bookService.GetById(BookId);
             if (book == null)
             {
-                return NotFound(); // Ensure the book exists
+                return NotFound(); 
             }
 
-            // Get assigned tags safely (list of Tag objects)
             var selectedTags = _bookService.GetAll()
                 .Where(b => b.Id == BookId)
                 .SelectMany(b => b.BookTags.Select(bt => bt.Tag))
@@ -278,6 +281,8 @@ namespace BookDiary.Controllers
 
         public async Task<IActionResult> Info(int bookId)
         {
+            var shelves = _shelfService.GetAll().Where(x => !x.ShelfBooks.Any(b => b.BookId == bookId)).ToList();  
+            ViewBag.Shelves = new SelectList(shelves, "Id", "Name");
             var bookcvm = await _bookService.GetById(bookId);
             var tags = _bookService.GetAll()
              .Where(b => b.Id == bookId)
@@ -337,6 +342,19 @@ namespace BookDiary.Controllers
         {
             await _bookTagService.DeleteBookTag(bookId, tagId);
             return RedirectToAction("AssignTags", new { BookId = bookId });
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddBookToShelf(int bookid, int shelfId)
+        {
+            var book = _bookService.GetById(bookid);
+            var shelf = _shelfService.GetById(shelfId);
+            var bs = new ShelfBook
+            {
+                BookId = bookid,
+                ShelfId = shelfId
+            };
+            await _shelfBookService.Add(bs);
+            return RedirectToAction("Info", new { bookId = bookid });
         }
     }
 }

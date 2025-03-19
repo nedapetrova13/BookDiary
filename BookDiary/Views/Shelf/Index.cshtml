@@ -1,0 +1,208 @@
+﻿@model List<BookDiary.Models.ViewModels.ShelfViewModels.ShelfIndexViewModel>
+<style>
+    .bookshelf-card {
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        
+        position: relative;
+        overflow: hidden;
+    }
+
+        .bookshelf-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+    .bookshelf-top {
+        height: 15px;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .bookshelf-body {
+        min-height: 200px;
+        padding: 15px;
+        position: relative;
+    }
+
+    .bookshelf-bottom {
+        height: 20px;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .shelf-title {
+        color: white;
+        font-size: 1.4rem;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        margin-bottom: 15px;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        padding-bottom: 8px;
+    }
+
+    .shelf-books {
+        display: flex;
+        align-items: flex-end;
+        height: 140px;
+    }
+
+    .book-spine {
+        flex: 1;
+        margin: 0 3px;
+        border-radius: 2px 2px 0 0;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+    }
+
+        .book-spine:hover {
+            transform: translateY(-10px);
+        }
+
+    .shelf-actions {
+        position: absolute;
+        right: 15px;
+        bottom: 15px;
+        display: flex;
+        gap: 8px;
+    }
+
+    .bg-brown {
+        background-color: #8B6B4F;
+    }
+
+    .bg-dark-brown {
+        background-color: #5C4033;
+    }
+
+    .bg-light-beige {
+        background-color: #F5F5DC;
+    }
+
+    .text-brown {
+        color: #5C4033;
+    }
+
+    .btn-brown {
+        background-color: #8B6B4F;
+        color: white;
+    }
+
+        .btn-brown:hover {
+            background-color: #6B4226;
+            color: white;
+        }
+
+    .btn-beige {
+        background-color: #D2B48C;
+        color: #5C4033;
+    }
+
+        .btn-beige:hover {
+            background-color: #C19A6B;
+            color: #5C4033;
+        }
+
+    media (max-width: 768px) {
+        .shelf-title
+
+    {
+        font-size: 1.2rem;
+    }
+
+    .bookshelf-body {
+        min-height: 180px;
+    }
+
+    .shelf-books {
+        height: 120px;
+    }
+
+    }
+</style>
+
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h1 class="display-5 fw-bold text-brown"><i class="fas fa-book-open me-2"></i>My Bookshelves</h1>
+            <a asp-action="Add" asp-controller="Shelf" asp-route-userid="@Model.FirstOrDefault()?.UserId" class="btn btn-brown btn-lg shadow-sm">
+                <i class="fas fa-plus-circle me-2"></i>Create New Shelf
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8 text-center">
+                <div class="card border-0 shadow-lg p-5 bg-light-beige">
+                    <img src="~/images/empty-shelf.svg" alt="Empty Shelf" class="img-fluid mx-auto mb-4" style="max-width: 200px;" onerror="this.src='https://via.placeholder.com/200x120?text=No+Shelves'">
+                    <h3 class="fw-bold text-brown">No Shelves Yet</h3>
+                    <p class="text-brown">Create your first bookshelf to start organizing your reading journey!</p>
+                    <div class="mt-4">
+                        <a asp-action="Add" asp-controller="Shelf" asp-route-userid="@ViewBag.UserId" class="btn btn-brown btn-lg">
+                            <i class="fas fa-plus-circle me-2"></i>Create First Shelf
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var shelf in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="bookshelf-card h-100">
+                        <div class="bookshelf-top" style="background-color: #5C4033;"></div>
+                        <div class="bookshelf-body" style="background: linear-gradient(to right, #6B4226, #8B6B4F);">
+                            <div style="display: flex; justify-content: space-between">
+                            <h3 class="shelf-title">@shelf.Name</h3>
+                                <a asp-action="Info" asp-controller="Shelf" asp-route-shelfId="@shelf.Id" class="btn btn-sm btn-brown" style=" height: 30px;">
+                                <i class="fas fa-eye me-1"></i> View
+                            </a>
+                            </div>
+                            <div class="shelf-books">
+                                <!-- Book spines would be dynamically generated based on books in shelf -->
+                                <div class="book-spine" style="height: 120px; background-color: #8B4513;"></div>
+                                <div class="book-spine" style="height: 100px; background-color: #D2B48C;"></div>
+                                <div class="book-spine" style="height: 140px; background-color: #A0522D;"></div>
+                                <div class="book-spine" style="height: 110px; background-color: #F5DEB3;"></div>
+                                <div class="book-spine" style="height: 90px; background-color: #DEB887;"></div>
+                            </div>
+                        </div>
+                        <div class="bookshelf-bottom" style="background-color: #5C4033;"></div>
+                       
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+       
+
+            // Random heights for book spines to make them look more natural
+            $(".book-spine").each(function() {
+                const minHeight = 80;
+                const maxHeight = 140;
+                const randomHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+                $(this).css('height', randomHeight + 'px');
+            });
+
+            // Brown and beige colors for book spines
+            const colors = [
+                '#8B4513', '#A0522D', '#D2B48C', '#DEB887', '#F5DEB3',
+                '#CD853F', '#A47551', '#C19A6B', '#E6C9A8', '#836953',
+                '#5C4033', '#6B4226', '#BC8F8F', '#F5F5DC', '#FAEBD7'
+            ];
+
+            $(".book-spine").each(function() {
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                $(this).css('background-color', randomColor);
+            });
+        });
+    </script>
+}

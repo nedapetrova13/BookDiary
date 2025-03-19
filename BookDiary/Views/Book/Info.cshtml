@@ -2,6 +2,49 @@
 @model BookDiary.Models.ViewModels.BookViewModels.BookAdminViewModel;
 
 <div class="book-admin-container">
+    <!-- Actions Panel (Top Right) -->
+    <div class="book-actions-panel">
+        <div class="action-buttons-container">
+            <div class="dropdown shelf-dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="shelfDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bookmark"></i> Add to Shelf
+                </button>
+                <div class="dropdown-menu" aria-labelledby="shelfDropdown">
+
+                    @if (ViewBag.Shelves != null && ((SelectList)ViewBag.Shelves).Count() > 0)
+                    {
+                        <form method="post" asp-controller="Shelf" asp-action="AddBookToShelf">
+                            <input type="hidden" name="BookId" value="@Model.Id" />
+                            <select name="ShelfId" class="form-select shelf-select">
+                                <option selected disabled>Select a shelf</option>
+                                @foreach (var item in (SelectList)ViewBag.Shelves)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <button class="submit-btn" type="submit" asp-action="AddBookToShelf" asp-controller="Book">Добави</button>
+
+@*                             <button type="submit" class="btn btn-sm btn-primary add-to-shelf-btn">Add</button>
+ *@                        </form>
+                    }
+
+                    else
+                    {
+                        <span class="dropdown-item disabled">No available shelves</span>
+                        <a class="dropdown-item" asp-controller="Shelf" asp-action="Add">Create new shelf</a>
+                    }
+                </div>
+            </div>
+
+            <form method="post" asp-controller="Book" asp-action="SetCurrentRead">
+                <input type="hidden" name="BookId" value="@Model.Id" />
+                <button type="submit" class="btn btn-reading">
+                    <i class="fas fa-book-reader"></i> Set as Current Read
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Book Cover & Details Row -->
     <div class="book-main-row">
         <!-- Book Cover -->
@@ -22,12 +65,12 @@
             </div>
             <div class="book-metadata second-row">
 
-                @if (!string.IsNullOrEmpty(Model.LanguageName)) 
+                @if (!string.IsNullOrEmpty(Model.LanguageName))
                 {
                     <span class="language-name">🌐 @Model.LanguageName</span>
 
-                } 
-                @if (!string.IsNullOrEmpty(Model.PublishingHouseName)) 
+                }
+                @if (!string.IsNullOrEmpty(Model.PublishingHouseName))
                 {
                     <span class="publishing-house">🏢 @Model.PublishingHouseName</span>
 
@@ -76,8 +119,8 @@
     {
         <div class="book-actions">
             <form method="post" class="actions-form">
-            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-            <button type="submit" class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</button>
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                <button type="submit" class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</button>
             </form>
         </div>
     }
@@ -132,12 +175,101 @@
         box-shadow: 0 15px 35px rgba(98, 74, 46, 0.2);
     }
 
+    /* Book Actions Panel */
+    .book-actions-panel {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        z-index: 10;
+    }
+
+    .action-buttons-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-end;
+    }
+
+    /* Dropdown styling */
+    .shelf-dropdown .dropdown-toggle {
+        background: linear-gradient(to right, #8b6b4c, #a68763);
+        border: none;
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        color: white;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(98, 74, 46, 0.2);
+    }
+
+        .shelf-dropdown .dropdown-toggle:hover,
+        .shelf-dropdown .dropdown-toggle:focus {
+            background: linear-gradient(to right, #7d5f42, #9a7a58);
+            box-shadow: 0 4px 8px rgba(98, 74, 46, 0.25);
+            transform: translateY(-2px);
+        }
+
+    .shelf-dropdown .dropdown-menu {
+        background: #f5f0e8;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(98, 74, 46, 0.15);
+        padding: 1rem;
+        min-width: 250px;
+    }
+
+    .shelf-select {
+        background-color: #fff;
+        border: 1px solid #e0d5c7;
+        border-radius: 6px;
+        padding: 0.5rem;
+        margin-bottom: 0.75rem;
+        color: #5d4037;
+        font-size: 0.95rem;
+        width: 100%;
+    }
+
+    .add-to-shelf-btn {
+        background: linear-gradient(to right, #8b6b4c, #a68763);
+        border: none;
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+        .add-to-shelf-btn:hover {
+            background: linear-gradient(to right, #7d5f42, #9a7a58);
+            transform: translateY(-1px);
+        }
+
+    /* Current Read button */
+    .btn-reading {
+        background: linear-gradient(to right, #a1887f, #bcaaa4);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(98, 74, 46, 0.2);
+    }
+
+        .btn-reading:hover {
+            background: linear-gradient(to right, #8d6e63, #a89892);
+            box-shadow: 0 4px 8px rgba(98, 74, 46, 0.25);
+            transform: translateY(-2px);
+        }
+
     /* Book main row */
     .book-main-row {
         display: flex;
         gap: 2.5rem;
         align-items: flex-start;
         margin-bottom: 2rem;
+        padding-top: 2rem; /* Added padding to accommodate the action panel */
     }
 
     /* Book cover */
@@ -153,6 +285,8 @@
         box-shadow: 0 8px 20px rgba(98, 74, 46, 0.2);
         transition: transform 0.4s ease, box-shadow 0.4s ease;
         position: relative;
+        opacity: 0.9; /* Initial opacity for animation */
+        transform: translateY(5px) rotate(-1deg); /* Initial position for animation */
     }
 
         .book-cover-wrapper::after {
@@ -419,6 +553,25 @@
         }
 
     /* Responsive adjustments */
+    media (max-width: 992px) {
+        .book-actions-panel
+
+    {
+        position: relative;
+        top: 0;
+        right: 0;
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 1.5rem;
+    }
+
+    .action-buttons-container {
+        flex-direction: row;
+        gap: 1rem;
+    }
+
+    }
+
     media (max-width: 768px) {
         .book-main-row
 
@@ -426,6 +579,7 @@
         flex-direction: column;
         align-items: center;
         gap: 1rem;
+        padding-top: 0;
     }
 
     .book-cover-container {
@@ -453,6 +607,24 @@
 
     .actions-form {
         justify-content: center;
+        width: 100%;
+    }
+
+    .action-buttons-container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .shelf-dropdown, .btn-reading {
+        width: 100%;
+    }
+
+        .shelf-dropdown .dropdown-toggle {
+            width: 100%;
+            text-align: center;
+        }
+
+    .book-actions-panel {
         width: 100%;
     }
 

@@ -82,6 +82,12 @@ namespace BookDiary.DataAccess.Repository
             }
             return entity;
         }
+
+        public async Task<T> GetByIdUser(string id)
+        {
+            return await dbSet.FindAsync(id);
+        }
+
         public async Task Update(T entity)
         {
             dbSet.Update(entity);

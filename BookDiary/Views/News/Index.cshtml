@@ -8,9 +8,12 @@
                 <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
                     <div class="d-flex justify-content-between align-items-center">
                         <h2 class="mb-0 fw-bold"><i class="fas fa-newspaper me-2"></i>Новини</h2>
+                        @if (User.IsInRole(SD.AdminRole))
+                        {
                         <a asp-action="Add" asp-controller="News" class="btn btn-light btn-sm">
                             <i class="fas fa-plus-circle me-1"></i> Добави новина
-                        </a>
+                            </a>
+                        }
                     </div>
                 </div>
             </div>
