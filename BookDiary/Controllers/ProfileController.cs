@@ -6,6 +6,7 @@ using BookDiary.Models.ViewModels.UserViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BookDiary.Models.ViewModels.BookViewModels;
 
 namespace BookDiary.Controllers
 {
@@ -13,11 +14,13 @@ namespace BookDiary.Controllers
     {
         private readonly IUserService _userService;
         private readonly UserManager<User> _userManager;
+        private readonly IBookService _bookService;
 
-        public ProfileController(IUserService userService, UserManager<User> userManager)
+        public ProfileController(IUserService userService, UserManager<User> userManager, IBookService bookService)
         {
             _userService = userService;
             _userManager = userManager;
+            _bookService = bookService;
         }
 
         public IActionResult Index()
@@ -39,7 +42,15 @@ namespace BookDiary.Controllers
         public async Task<IActionResult> UserProfile()
         {
             var currentUser = await _userManager.GetUserAsync(User);
-
+            var favbookid = currentUser.FavouriteBookId;
+            
+            var uservm = new UserProfileViewModel
+            {
+                Id = currentUser.Id,
+                Name = currentUser.Name,
+                ProfilePictureURL = currentUser.ProfilePictureURL,
+                Bio = currentUser.Bio,
+            };
             return View();
         }
     }
