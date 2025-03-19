@@ -370,6 +370,24 @@
                         <option value="">All Authors</option>
                     </select>
                 </div>
+                <div class="col-md-3 filter-form-col">
+                    <label>Language:</label>
+                    <select asp-for="LanguageId" asp-items="Model.Languages" class="form-control">
+                        <option value="">All Languages</option>
+                    </select>
+                </div>
+                <div class="col-md-3 filter-form-col">
+                    <label>Publishing house:</label>
+                    <select asp-for="PublishingHouseId" asp-items="Model.PublishingHouses" class="form-control">
+                        <option value="">All Publishing houses</option>
+                    </select>
+                </div>
+                <div class="col-md-3 filter-form-col">
+                    <label>Tags:</label>
+                    <select asp-for="TagId" asp-items="Model.Tags" class="form-control">
+                        <option value="">All Tags</option>
+                    </select>
+                </div>
                 <div class="col-md-2 filter-form-col">
                     <label>Min Pages:</label>
                     <input asp-for="PageMinCount" class="form-control" type="number" />

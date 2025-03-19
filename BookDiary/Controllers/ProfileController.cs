@@ -43,15 +43,26 @@ namespace BookDiary.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(User);
             var favbookid = currentUser.FavouriteBookId;
-            
+           
+            Book book1 = await _bookService.GetById((int)favbookid);
+
+            BookSeriesViewModel book = new BookSeriesViewModel
+            {
+                Id = book1.Id,
+                Title = book1.Title,
+                CoverImageURL = book1.CoverImageURL,
+            };
+           
             var uservm = new UserProfileViewModel
             {
                 Id = currentUser.Id,
                 Name = currentUser.Name,
                 ProfilePictureURL = currentUser.ProfilePictureURL,
                 Bio = currentUser.Bio,
+                FavouriteBook =book,
+                Birthdate = currentUser.Birthdate,
             };
-            return View();
+            return View(uservm);
         }
     }
 }

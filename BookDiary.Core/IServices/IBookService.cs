@@ -11,6 +11,5 @@ namespace BookDiary.Core.IServices
     {
         //Task<IEnumerable<Book>> GetAllBooks();
         Task AddTagToBook(string bookname,string tagname);
-        object GetById(int? favbookid);
     }
 }

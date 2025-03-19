@@ -67,14 +67,19 @@ namespace BookDiary.Controllers
             }
             if ((filter.TagId != null))
             {
-                query = query.AsQueryable().Include(x => x.BookTags.Where(b => b.TagId == filter.TagId));
-               // query=query.Where(b=>b.BookTags.Where(b=>b.TagId==filter.TagId));
+                query = query.AsQueryable()
+                             .Include(x => x.BookTags) // Load BookTags properly
+                             .Where(x => x.BookTags.Any(b => b.TagId == filter.TagId));
             }
             if (filter.PublishingHouseId != null)
             {
-                query = query.AsQueryable().Include(x => x.BookPublishingHouse.Where(b => b.PublishingHouseId == filter.PublishingHouseId));
+                query = query.AsQueryable().Include(x => x.BookPublishingHouse).Where(b => b.BookPublishingHouse.Any(b=>b.PublishingHouseId == filter.PublishingHouseId));
 
-                //query = query.Where(b=>b.BookPublishingHouse.Select(b=>b.PublishingHouseId==filter.PublishingHouseId));
+            }
+            if (filter.LanguageId != null)
+            {
+                query = query.AsQueryable().Include(x => x.BookPublishingHouse).Where(b => b.BookPublishingHouse.Any(b => b.LanguageId == filter.LanguageId));
+
             }
             var list = _bookService.GetAll();
             var testList = list.AsQueryable().Include(b => b.Genre).Include(b => b.Author).ToList();
@@ -87,6 +92,9 @@ namespace BookDiary.Controllers
                 PageMinCount = filter.PageMinCount,
                 Genres = new SelectList(_genreService.GetAll(), "Id", "Name"),
                 Authors = new SelectList(_authorService.GetAll(), "Id", "Name"),
+                Languages = new SelectList(_languageService.GetAll(),"Id","Name"),
+                PublishingHouses = new SelectList(_pubHouseService.GetAll(), "Id", "Name"),
+                Tags = new SelectList(_tagService.GetAll(), "Id", "Name"),
                 Books = query.Include(b => b.Genre).Include(b => b.Author).ToList()
 
             };
