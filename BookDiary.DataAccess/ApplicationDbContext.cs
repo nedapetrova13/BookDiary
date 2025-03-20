@@ -60,7 +60,7 @@
                   .HasOne(a => a.Author)
                   .WithMany(b => b.Books)
                   .HasForeignKey(k => k.AuthorId)
-                  .OnDelete(DeleteBehavior.NoAction);
+                  .OnDelete(DeleteBehavior.Cascade);
                 builder.Entity<User>()
                     .HasOne(u => u.Book)
                     .WithMany(b => b.Users)
@@ -83,55 +83,55 @@
                     .HasOne(x => x.Genre)
                     .WithMany(x => x.Books)
                     .HasForeignKey(x => x.GenreId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 builder.Entity<Book>()
                     .HasOne(x => x.Series)
                     .WithMany(x => x.Books)
                     .HasForeignKey(x => x.SeriesId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 builder.Entity<BookPublishingHouse>()
                     .HasOne(x => x.Language)
                     .WithMany(x => x.BookPublishingHouses)
                     .HasForeignKey(x => x.LanguageId)
-                     .OnDelete(DeleteBehavior.NoAction);
+                     .OnDelete(DeleteBehavior.Cascade);
 
                 builder.Entity<Comment>()
                     .HasOne(x => x.User)
                     .WithMany(x => x.MyComments)
                     .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 builder.Entity<CurrentRead>()
                     .HasOne(x => x.Book)
                     .WithMany(x => x.CurrentReads)
                     .HasForeignKey(x => x.BookId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 builder.Entity<CurrentRead>()
                     .HasOne(x => x.User)
                     .WithMany(x => x.CurrentReads)
                     .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 builder.Entity<Notes>()
                     .HasOne(x => x.Book)
                     .WithMany(x => x.Notes)
                     .HasForeignKey(x => x.BookId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 builder.Entity<Notes>()
                     .HasOne(x => x.User)
                     .WithMany(x => x.Notes)
                     .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 builder.Entity<Shelf>()
                     .HasOne(x => x.User)
                     .WithMany(x => x.Shelves)
                     .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 builder.Entity<BookPublishingHouse>()
                     .HasKey(x => new { x.PublishingHouseId, x.BookId });
@@ -236,20 +236,12 @@
                     .HasOne(x => x.Shelf)
                     .WithMany(x => x.ShelfBooks)
                     .HasForeignKey(x => x.ShelfId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
                 builder.Entity<ShelfBook>()
                     .HasOne(x => x.Book)
                     .WithMany(x => x.ShelfBooks)
                     .HasForeignKey(x => x.BookId)
-                    .OnDelete(DeleteBehavior.NoAction);
-                if (seedDb)
-                {
-                    builder.ApplyConfiguration(new RoleConfiguration());
-                    builder.ApplyConfiguration(new UserConfiguration());
-                    builder.ApplyConfiguration(new UserRoleConfiguration());
-                }
-
-
+                    .OnDelete(DeleteBehavior.Cascade);
             }
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {

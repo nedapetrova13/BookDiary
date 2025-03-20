@@ -1,21 +1,24 @@
-﻿@using BookDiary.Utility
+﻿
+@using BookDiary.Utility
 @model BookDiary.Models.ViewModels.BookViewModels.BookAdminViewModel;
 
 <div class="book-admin-container">
-    <!-- Actions Panel (Top Right) -->
-    <div class="book-actions-panel">
-        <div class="action-buttons-container">
-            <div class="dropdown shelf-dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="shelfDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-bookmark"></i> Add to Shelf
+    @if (User.IsInRole(SD.UserRole))
+    {
+        <!-- Consolidated Actions Dropdown (Top Right) -->
+        <div class="book-actions-panel">
+            <div class="dropdown consolidated-actions-dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="actionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-cog"></i> Book Actions
                 </button>
-                <div class="dropdown-menu" aria-labelledby="shelfDropdown">
-
+                <div class="dropdown-menu actions-dropdown-menu" aria-labelledby="actionsDropdown">
+                    <!-- Add to Shelf Option -->
+                    <h6 class="dropdown-header">Add to Shelf</h6>
                     @if (ViewBag.Shelves != null && ((SelectList)ViewBag.Shelves).Count() > 0)
                     {
-                        <form method="post" asp-controller="Shelf" asp-action="AddBookToShelf">
+                        <form method="post" asp-controller="Shelf" asp-action="AddBookToShelf" class="px-3 py-2">
                             <input type="hidden" name="BookId" value="@Model.Id" />
-                            <select name="ShelfId" class="form-select shelf-select">
+                            <select name="ShelfId" class="form-select shelf-select mb-2">
                                 <option selected disabled>Select a shelf</option>
                                 @foreach (var item in (SelectList)ViewBag.Shelves)
                                 {
@@ -23,27 +26,31 @@
                                 }
                             </select>
                             <button class="submit-btn" type="submit" asp-action="AddBookToShelf" asp-controller="Book">Добави</button>
-
-@*                             <button type="submit" class="btn btn-sm btn-primary add-to-shelf-btn">Add</button>
- *@                        </form>
+                        </form>
                     }
-
                     else
                     {
                         <span class="dropdown-item disabled">No available shelves</span>
                         <a class="dropdown-item" asp-controller="Shelf" asp-action="Add">Create new shelf</a>
                     }
+
+                    <div class="dropdown-divider"></div>
+
+                    <!-- Set Current Read Option -->
+                    <form method="post" asp-controller="Book" asp-action="SetCurrentRead" class="px-3 py-2">
+                        <input type="hidden" name="BookId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-sm btn-outline-primary w-100">
+                            <i class="fas fa-book-reader"></i> Set as Current Read
+                        </button>
+                    </form>
+
+                    <div class="dropdown-divider"></div>
+
+                    
                 </div>
             </div>
-
-            <form method="post" asp-controller="Book" asp-action="SetCurrentRead">
-                <input type="hidden" name="BookId" value="@Model.Id" />
-                <button type="submit" class="btn btn-reading">
-                    <i class="fas fa-book-reader"></i> Set as Current Read
-                </button>
-            </form>
         </div>
-    </div>
+    }
 
     <!-- Book Cover & Details Row -->
     <div class="book-main-row">
@@ -61,20 +68,14 @@
                     <a asp-area="" asp-controller="Author" asp-action="Info" asp-route-AuthorName="@Model.AuthorName" class="author-name">👤 @Model.AuthorName</a>
                 </span>
                 <span class="genre-name">📖 @Model.GenreName</span>
-
             </div>
             <div class="book-metadata second-row">
-
-                @if (!string.IsNullOrEmpty(Model.LanguageName))
-                {
+                
                     <span class="language-name">🌐 @Model.LanguageName</span>
-
-                }
-                @if (!string.IsNullOrEmpty(Model.PublishingHouseName))
-                {
+                
+               
                     <span class="publishing-house">🏢 @Model.PublishingHouseName</span>
-
-                }
+                
             </div>
             @if (Model.SeriesName != null)
             {
@@ -94,6 +95,7 @@
             </div>
         </div>
     </div>
+
     <!-- Tags & Description -->
     <div class="book-tags-section">
         <h2 class="section-title">Tags</h2>
@@ -115,19 +117,96 @@
         <h2 class="section-title">Description</h2>
         <p class="book-description">@Model.Description</p>
     </div>
-    @if (User.IsInRole(SD.AdminRole))
-    {
-        <div class="book-actions">
-            <form method="post" class="actions-form">
-                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-                <button type="submit" class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</button>
+
+    <!-- Comment Section -->
+    <div class="book-comments-section">
+        <h2 class="section-title">Comments and Ratings</h2>
+
+        <!-- Comment Form -->
+        <div class="comment-form-container" id="comment-form">
+            <h3 class="comment-form-title">Add Your Comment</h3>
+            <form method="post" asp-controller="Book" asp-action="AddComment" class="comment-form">
+                <input type="hidden" name="BookId" value="@Model.Id" />
+
+                <div class="rating-container">
+                    <label>Your Rating:</label>
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="Rating" value="5" /><label for="star5"></label>
+                        <input type="radio" id="star4" name="Rating" value="4" /><label for="star4"></label>
+                        <input type="radio" id="star3" name="Rating" value="3" /><label for="star3"></label>
+                        <input type="radio" id="star2" name="Rating" value="2" /><label for="star2"></label>
+                        <input type="radio" id="star1" name="Rating" value="1" /><label for="star1"></label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="commentText">Your Comment:</label>
+                    <textarea id="commentText" name="Content" rows="4" class="form-control comment-textarea" placeholder="Share your thoughts about this book..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary comment-submit-btn">
+                    <i class="fas fa-paper-plane"></i> Submit Comment
+                </button>
             </form>
         </div>
-    }
+
+        <!-- Comments List -->
+        <div class="comments-list">
+            @if (Model.CommentUsers != null && Model.CommentUsers.Count > 0)
+            {
+                @foreach (var comment in Model.CommentUsers)
+                {
+                    <div class="comment-card">
+                        <div class="comment-header">
+                            <div class="comment-user">
+                                <i class="fas fa-user-circle"></i>
+                                <span class="username">@comment.UserName</span>
+                            </div>
+                            <div class="comment-rating">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= comment.Rating)
+                                    {
+                                        <i class="fas fa-star filled"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star"></i>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="comment-content">@comment.Content</div>
+                        <div class="comment-footer">
+                            @if (User.Identity.Name == comment.UserName || User.IsInRole(SD.AdminRole))
+                            {
+                                <form method="post" asp-controller="Book" asp-action="DeleteComment" class="delete-comment-form">
+                                    <input type="hidden" name="CommentId" value="@comment.Id" />
+                                    <input type="hidden" name="BookId" value="@Model.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger delete-comment-btn">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="no-comments">
+                    <i class="fas fa-comment-slash"></i>
+                    <p>No comments yet. Be the first to share your thoughts!</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    
 </div>
 
 <style>
-    /* Base styles */
+    
     .book-admin-container {
         max-width: 1200px;
         width: 85%;
@@ -175,7 +254,7 @@
         box-shadow: 0 15px 35px rgba(98, 74, 46, 0.2);
     }
 
-    /* Book Actions Panel */
+    /* Consolidated Actions Dropdown */
     .book-actions-panel {
         position: absolute;
         top: 2rem;
@@ -183,15 +262,7 @@
         z-index: 10;
     }
 
-    .action-buttons-container {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        align-items: flex-end;
-    }
-
-    /* Dropdown styling */
-    .shelf-dropdown .dropdown-toggle {
+    .consolidated-actions-dropdown .dropdown-toggle {
         background: linear-gradient(to right, #8b6b4c, #a68763);
         border: none;
         border-radius: 8px;
@@ -202,20 +273,43 @@
         box-shadow: 0 2px 5px rgba(98, 74, 46, 0.2);
     }
 
-        .shelf-dropdown .dropdown-toggle:hover,
-        .shelf-dropdown .dropdown-toggle:focus {
+        .consolidated-actions-dropdown .dropdown-toggle:hover,
+        .consolidated-actions-dropdown .dropdown-toggle:focus {
             background: linear-gradient(to right, #7d5f42, #9a7a58);
             box-shadow: 0 4px 8px rgba(98, 74, 46, 0.25);
             transform: translateY(-2px);
         }
 
-    .shelf-dropdown .dropdown-menu {
+    .actions-dropdown-menu {
         background: #f5f0e8;
         border: none;
         border-radius: 12px;
         box-shadow: 0 5px 15px rgba(98, 74, 46, 0.15);
-        padding: 1rem;
-        min-width: 250px;
+        padding: 0.5rem;
+        min-width: 280px;
+    }
+
+    .dropdown-header {
+        color: #5d4037;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .dropdown-item {
+        color: #795548;
+        padding: 0.5rem 1rem;
+        transition: all 0.2s ease;
+        border-radius: 6px;
+    }
+
+        .dropdown-item:hover {
+            background-color: #e8dfd4;
+            color: #5d4037;
+        }
+
+    .dropdown-divider {
+        border-top: 1px solid #e0d5c7;
+        margin: 0.5rem 0;
     }
 
     .shelf-select {
@@ -223,45 +317,9 @@
         border: 1px solid #e0d5c7;
         border-radius: 6px;
         padding: 0.5rem;
-        margin-bottom: 0.75rem;
         color: #5d4037;
         font-size: 0.95rem;
-        width: 100%;
     }
-
-    .add-to-shelf-btn {
-        background: linear-gradient(to right, #8b6b4c, #a68763);
-        border: none;
-        color: white;
-        padding: 0.4rem 1rem;
-        border-radius: 6px;
-        font-size: 0.9rem;
-        width: 100%;
-        transition: all 0.3s ease;
-    }
-
-        .add-to-shelf-btn:hover {
-            background: linear-gradient(to right, #7d5f42, #9a7a58);
-            transform: translateY(-1px);
-        }
-
-    /* Current Read button */
-    .btn-reading {
-        background: linear-gradient(to right, #a1887f, #bcaaa4);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 0.6rem 1.2rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 5px rgba(98, 74, 46, 0.2);
-    }
-
-        .btn-reading:hover {
-            background: linear-gradient(to right, #8d6e63, #a89892);
-            box-shadow: 0 4px 8px rgba(98, 74, 46, 0.25);
-            transform: translateY(-2px);
-        }
 
     /* Book main row */
     .book-main-row {
@@ -503,6 +561,202 @@
             background-color: #f0e9dd;
         }
 
+    /* Comments Section */
+    .book-comments-section {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e0d5c7;
+    }
+
+    /* Comment Form */
+    .comment-form-container {
+        background: linear-gradient(to bottom, #f5f0e8, #f0e9dd);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 3px 10px rgba(98, 74, 46, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .comment-form-container:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(98, 74, 46, 0.15);
+        }
+
+    .comment-form-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #5d4037;
+        margin-bottom: 1rem;
+    }
+
+    .rating-container {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+        .rating-container label {
+            margin-right: 1rem;
+            font-weight: 500;
+            color: #6d4c41;
+        }
+
+    /* Star Rating */
+    .star-rating {
+        display: inline-flex;
+        flex-direction: row-reverse;
+        position: relative;
+    }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0 0.2rem;
+            color: #d2c2b0;
+        }
+
+            .star-rating label:before {
+                content: '\f005';
+                font-family: 'Font Awesome 5 Free';
+                font-weight: 900;
+            }
+
+            .star-rating input:checked ~ label,
+            .star-rating label:hover,
+            .star-rating label:hover ~ label {
+                color: #e6b325;
+                transition: 0.2s ease;
+            }
+
+    .comment-textarea {
+        background-color: white;
+        border: 1px solid #e0d5c7;
+        border-radius: 8px;
+        resize: vertical;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .comment-textarea:focus {
+            border-color: #b28f6b;
+            box-shadow: 0 0 0 0.2rem rgba(178, 143, 107, 0.25);
+            outline: none;
+        }
+
+    .comment-submit-btn {
+        background: linear-gradient(to right, #8b6b4c, #a68763);
+        border: none;
+        color: white;
+        margin-top: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+        .comment-submit-btn:hover {
+            background: linear-gradient(to right, #7d5f42, #9a7a58);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(98, 74, 46, 0.2);
+        }
+
+    /* Comments list */
+    .comments-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .comment-card {
+        background: #f5f0e8;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(98, 74, 46, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .comment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(98, 74, 46, 0.12);
+        }
+
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e6dccb;
+    }
+
+    .comment-user {
+        display: flex;
+        align-items: center;
+        color: #5d4037;
+        font-weight: 600;
+    }
+
+        .comment-user i {
+            margin-right: 0.5rem;
+            color: #8b6b4c;
+            font-size: 1.25rem;
+        }
+
+    .comment-rating {
+        display: flex;
+        gap: 0.2rem;
+    }
+
+        .comment-rating .fa-star.filled {
+            color: #e6b325;
+        }
+
+        .comment-rating .fa-star {
+            color: #d2c2b0;
+        }
+
+    .comment-content {
+        color: #6d4c41;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .comment-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #8d6e63;
+        font-size: 0.9rem;
+    }
+
+    .delete-comment-btn {
+        font-size: 0.85rem;
+        padding: 0.25rem 0.5rem;
+        color: #a1887f;
+        border-color: #a1887f;
+    }
+
+        .delete-comment-btn:hover {
+            background-color: #a1887f;
+            color: white;
+        }
+
+    .no-comments {
+        text-align: center;
+        padding: 2rem;
+        color: #8d6e63;
+        font-style: italic;
+        background: #f5f0e8;
+        border-radius: 12px;
+    }
+
+        .no-comments i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #b2947c;
+        }
+
     /* Book actions */
     .book-actions {
         margin-top: 2rem;
@@ -565,11 +819,6 @@
         margin-bottom: 1.5rem;
     }
 
-    .action-buttons-container {
-        flex-direction: row;
-        gap: 1rem;
-    }
-
     }
 
     media (max-width: 768px) {
@@ -605,26 +854,19 @@
         margin-right: 0;
     }
 
-    .actions-form {
-        justify-content: center;
-        width: 100%;
-    }
-
-    .action-buttons-container {
+    .comment-header {
         flex-direction: column;
-        width: 100%;
+        align-items: flex-start;
+        gap: 0.5rem;
     }
 
-    .shelf-dropdown, .btn-reading {
-        width: 100%;
+    .comment-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
     }
 
-        .shelf-dropdown .dropdown-toggle {
-            width: 100%;
-            text-align: center;
-        }
-
-    .book-actions-panel {
+    .delete-comment-btn {
         width: 100%;
     }
 

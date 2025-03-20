@@ -5,8 +5,10 @@ using BookDiary.Core.IServices;
 using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.BookViewModels;
+using BookDiary.Models.ViewModels.CommentViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
@@ -28,9 +30,15 @@ namespace BookDiary.Controllers
             private readonly IPublishingHouseService _pubHouseService;
             private readonly IBookPublishingHouseService _bookPublishingHouse;
             private readonly IShelfService _shelfService;
-        private readonly IShelfBookService _shelfBookService;
+            private readonly IShelfBookService _shelfBookService;
+            private readonly ICommentBookService _commentBookService;
+            private readonly ICommentService _commentService;
+            private readonly UserManager<User> _userManager;
+            private readonly IUserService _userService;
 
-            public BookController(IBookService bookService,IShelfBookService shelfBookService, IShelfService shelfService, IBookPublishingHouseService bookPublishingHouse,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService,ILanguageService languageService, IPublishingHouseService pubHouseService)
+
+
+        public BookController(IBookService bookService,IUserService userService,UserManager<User> userManager, ICommentService commentService,ICommentBookService commentBookService, IShelfBookService shelfBookService, IShelfService shelfService, IBookPublishingHouseService bookPublishingHouse,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService,ILanguageService languageService, IPublishingHouseService pubHouseService)
             {
                 _bookService = bookService;
                 _authorService = authorService;
@@ -42,7 +50,12 @@ namespace BookDiary.Controllers
                 _pubHouseService = pubHouseService;
                 _bookPublishingHouse = bookPublishingHouse;
                 _shelfService = shelfService;
-            _shelfBookService = shelfBookService;
+                _shelfBookService = shelfBookService;
+                _commentBookService = commentBookService;
+                _commentService = commentService;
+                _userManager = userManager;
+                _userService = userService;
+            
             }
 
         public async Task<IActionResult> Index(BookFilterViewModel? filter)
@@ -289,41 +302,70 @@ namespace BookDiary.Controllers
 
         public async Task<IActionResult> Info(int bookId)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+
             var shelves = _shelfService.GetAll().Where(x => !x.ShelfBooks.Any(b => b.BookId == bookId)).ToList();  
             ViewBag.Shelves = new SelectList(shelves, "Id", "Name");
+            
             var bookcvm = await _bookService.GetById(bookId);
+            
             var tags = _bookService.GetAll()
              .Where(b => b.Id == bookId)
              .SelectMany(b => b.BookTags.Select(bt => bt.Tag.Name))
              .ToList();
+           
             var author = _bookService.GetAll()
              .Where(b => b.Id == bookId)
              .Include(bt => bt.Author)
              .Select(a => a.Author.Name)
              .FirstOrDefault();
+            
             var genre = _bookService.GetAll()
            .Where(b => b.Id == bookId)
            .Include(bt => bt.Genre)
            .Select(a => a.Genre.Name)
            .FirstOrDefault();
+            
             var series = _bookService.GetAll()
            .Where(b => b.Id == bookId)
            .Include(bt => bt.Series)
-           .Select(a => a.Series.Title)
+           .Select(a => a.Series)
            .FirstOrDefault();
+           
             var format = _bookService.GetAll()
              .Where(b => b.Id == bookId)
              .Select(b => b.BookFormat.ToString()) // Convert the enum to a string
              .FirstOrDefault();
+            
             var language = _languageService.GetAll()
                 .Where(b => b.BookPublishingHouses.Select(bt=>bt.BookId==bookId).FirstOrDefault())
                 .SelectMany(b => b.BookPublishingHouses.Select(bp => bp.Language.Name))
                 .FirstOrDefault();
+           
             var publishinghouse = _pubHouseService.GetAll()
                  .Where(ph => ph.bookPublishingHouses.Any(bph => bph.BookId == bookId))
                  .Select(ph => ph.Name)
                  .FirstOrDefault();
-            var seriesview = _seriesService.Get(x => x.Title == series);
+            
+
+            var comments = await _commentService.Find(x => x.CommentBooks.Any(bt => bt.BookId == bookId));
+
+          
+            List<CommentUserViewModel> comuser = new List<CommentUserViewModel>();
+            foreach ( var comment in comments)
+            {
+                var user = _userService.GetAll().Where(x=>x.Id==comment.UserId).Select(x=>x.Name).FirstOrDefault();
+
+                var com = new CommentUserViewModel
+                {
+                    Id = comment.Id,
+                    BookId = bookId,
+                    Content = comment.Content,
+                    Rating = comment.Rating,
+                    UserName = user
+                };
+                comuser.Add(com);
+            }
             
             var book = new BookAdminViewModel()
             {
@@ -332,15 +374,19 @@ namespace BookDiary.Controllers
                 Description = bookcvm.Description,
                 AuthorName = author,
                 GenreName = genre,
-                SeriesName = series,
-                SeriesId = seriesview.Id,
                 CoverImageURL = bookcvm.CoverImageURL,
                 BookPages = bookcvm.BookPages,
                 Chapters = bookcvm.Chapters,
                 LanguageName=language,
                 SelectedTags = tags,
-                PublishingHouseName= publishinghouse
+                PublishingHouseName= publishinghouse,
+                CommentUsers = comuser
             };
+            if (series != null)
+            {
+                book.SeriesName = series.Title;
+                book.SeriesId = series.Id;
+            }
             return View(book);
         }
 
@@ -363,6 +409,48 @@ namespace BookDiary.Controllers
             };
             await _shelfBookService.Add(bs);
             return RedirectToAction("Info", new { bookId = bookid });
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> AddComment(int BookId)
+        {
+            var book = await _bookService.GetById(BookId);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            var comment = new CommentViewModel();
+            return View(comment);
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(CommentViewModel comment)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            Comment com = new Comment
+            {
+                UserId = currentUser.Id,
+                Content=comment.Content,
+                Rating = comment.Rating,
+            };
+            await _commentService.Add(com);
+            CommentBook cb = new CommentBook
+            {
+                BookId = comment.BookId,
+                CommentId = com.Id,
+            };
+            await _commentBookService.Add(cb);
+            return RedirectToAction("Info", new { bookId = comment.BookId });
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteComment(int bookId, int commentid)
+        {
+            await _commentBookService.DeleteBookComment(bookId, commentid);
+            return RedirectToAction("Info", new { BookId = bookId });
         }
     }
 }

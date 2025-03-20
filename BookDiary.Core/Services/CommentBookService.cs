@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using BookDiary.Core.IServices;
@@ -26,6 +27,12 @@ namespace BookDiary.Core.Services
         public async Task Delete(int id)
         {
             await _repo.Delete(id);
+        }
+
+        public async Task DeleteBookComment(int bookid, int comid)
+        {
+             await _repo.DeleteMapping<CommentBook>(bt => bt.BookId == bookid && bt.CommentId == comid);
+
         }
 
         public async Task<List<CommentBook>> Find(Expression<Func<CommentBook, bool>> filter)

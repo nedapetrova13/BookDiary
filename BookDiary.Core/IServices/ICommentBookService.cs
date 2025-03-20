@@ -10,6 +10,7 @@ namespace BookDiary.Core.IServices
     public interface ICommentBookService:IService<CommentBook>
     {
         //Task<IEnumerable<CommentBook>> GetAllCommentBooks();
+        Task DeleteBookComment(int bookid, int comid);
 
     }
 }

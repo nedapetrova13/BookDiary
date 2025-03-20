@@ -1,5 +1,18 @@
 ﻿@model IEnumerable<BookDiary.Models.ViewModels.AuthorViewModels.AuthorCreateViewModel>
 
+<div class="container py-4">
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+                <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0 fw-bold"><i class="fas fa-layer-group me-2"></i>Всички автори</h2>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <div class="authors-container">
     @foreach (var au in Model)
     {

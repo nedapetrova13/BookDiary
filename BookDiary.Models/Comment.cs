@@ -12,12 +12,12 @@ namespace BookDiary.Models
     {
         [Key]
         public int Id {  get; set; }
-        [Required(ErrorMessage = "Името е заядължително")]
-        public string Title {  get; set; }
+   
         [ForeignKey(nameof(User))]
         public string UserId { get; set; }
         public User User { get; set; }
         public string Content {  get; set; }
+        public int Rating { get; set; }
         public ICollection<CommentBook> CommentBooks { get; set; }  
         public ICollection<CommentNews> CommentNews { get; set; }
     }

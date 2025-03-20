@@ -1,4 +1,6 @@
-﻿namespace BookDiary.Models.ViewModels.BookViewModels
+﻿using BookDiary.Models.ViewModels.CommentViewModels;
+
+namespace BookDiary.Models.ViewModels.BookViewModels
 {
     public class BookAdminViewModel
     {
@@ -8,7 +10,7 @@
         public string AuthorName { get; set; }
         public string GenreName { get; set; }
         public string? SeriesName { get; set; }
-        public int SeriesId { get; set; }
+        public int? SeriesId { get; set; }
         public string CoverImageURL { get; set; }
         public string BookFormat { get; set; }
         public int BookPages { get; set; }
@@ -16,5 +18,6 @@
         public string? LanguageName { get; set; }
         public string? PublishingHouseName { get; set; }
         public List<string>? SelectedTags { get; set; } = new List<string>();
+        public List<CommentUserViewModel> CommentUsers { get; set; }
     }
 }

@@ -8,9 +8,11 @@
                 <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
                     <div class="d-flex justify-content-between align-items-center">
                         <h2 class="mb-0 fw-bold"><i class="fas fa-layer-group me-2"></i>Всички поредици</h2>
-                        <a asp-action="Add" asp-controller="Series" class="btn btn-light btn-sm">
-                            <i class="fas fa-plus-circle me-1"></i> Добави поредица
-                        </a>
+                        @if (User.IsInRole(SD.AdminRole))
+                        {
+                            <a asp-action="Add" asp-controller="Series" class="btn btn-light btn-sm">
+                                <i class="fas fa-plus-circle me-1"></i> Добави поредица
+                        </a>}
                     </div>
                 </div>
             </div>

@@ -449,10 +449,34 @@ using (var scope = app.Services.CreateScope())
                 PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
                 LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
             },
+            new BookPublishingHouse
+            {
+                BookId=dbContext.Books.First(b=>b.Title=="Хари Потър и Стаята на тайните").Id,
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
+            },
+            new BookPublishingHouse
+            {
+                BookId=dbContext.Books.First(b=>b.Title=="Хари Потър и Затворникът от Азкабан").Id,
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
+            },
              new BookPublishingHouse
             {
                 BookId=dbContext.Books.First(b=>b.Title=="Игра на тронове").Id,
-                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Бард").Id,
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
+            },
+              new BookPublishingHouse
+            {
+                BookId=dbContext.Books.First(b=>b.Title=="Сблъсък на крале").Id,
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Бард").Id,
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
+            },
+               new BookPublishingHouse
+            {
+                BookId=dbContext.Books.First(b=>b.Title=="Вихър от мечове").Id,
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Бард").Id,
                 LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
             },
              new BookPublishingHouse

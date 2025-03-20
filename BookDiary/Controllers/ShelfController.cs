@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Net;
 using BookDiary.Core.IServices;
 using BookDiary.Core.Services;
 using BookDiary.Models;
@@ -71,6 +72,11 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
+            List<ShelfBook> sb = await _shelfBookService.Find(x=>x.ShelfId==id);
+            foreach (var item in sb)
+            {
+                await _shelfBookService.DeleteShelfBook(item.BookId, item.ShelfId);
+            }
             await _shelfService.Delete(id);
             return RedirectToAction("Index");
         }

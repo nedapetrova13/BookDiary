@@ -42,26 +42,32 @@ namespace BookDiary.Controllers
         public async Task<IActionResult> UserProfile()
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            var favbookid = currentUser.FavouriteBookId;
-           
-            Book book1 = await _bookService.GetById((int)favbookid);
-
-            BookSeriesViewModel book = new BookSeriesViewModel
-            {
-                Id = book1.Id,
-                Title = book1.Title,
-                CoverImageURL = book1.CoverImageURL,
-            };
-           
+            
+            
+            
             var uservm = new UserProfileViewModel
             {
                 Id = currentUser.Id,
                 Name = currentUser.Name,
-                ProfilePictureURL = currentUser.ProfilePictureURL,
                 Bio = currentUser.Bio,
-                FavouriteBook =book,
                 Birthdate = currentUser.Birthdate,
             };
+            if (currentUser.ProfilePictureURL != null)
+            {
+                uservm.ProfilePictureURL = currentUser.ProfilePictureURL;
+            }
+            if (currentUser.FavouriteBookId != null)
+            {
+                Book book1 = _bookService.GetAll().Where(b => b.Id == currentUser.FavouriteBookId).FirstOrDefault();
+                BookSeriesViewModel book = new BookSeriesViewModel
+                {
+                    Id = book1.Id,
+                    Title = book1.Title,
+                    CoverImageURL = book1.CoverImageURL,
+                };
+                uservm.FavouriteBook= book;
+            }
+
             return View(uservm);
         }
     }
