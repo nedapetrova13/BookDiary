@@ -233,17 +233,20 @@ namespace BookDiary.DataAccess.Migrations
                         name: "FK_Books_Authors_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Authors",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Books_Genres_GenreId",
                         column: x => x.GenreId,
                         principalTable: "Genres",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Books_Series_SeriesId",
                         column: x => x.SeriesId,
                         principalTable: "Series",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -312,7 +315,8 @@ namespace BookDiary.DataAccess.Migrations
                         name: "FK_BooksPublishingHouses_Languages_LanguageId",
                         column: x => x.LanguageId,
                         principalTable: "Languages",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_BooksPublishingHouses_PublishingHouses_PublishingHouseId",
                         column: x => x.PublishingHouseId,
@@ -437,9 +441,9 @@ namespace BookDiary.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -448,7 +452,8 @@ namespace BookDiary.DataAccess.Migrations
                         name: "FK_Comments_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -468,12 +473,14 @@ namespace BookDiary.DataAccess.Migrations
                         name: "FK_CurrentReads_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CurrentReads_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -495,12 +502,14 @@ namespace BookDiary.DataAccess.Migrations
                         name: "FK_Notes_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Notes_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -552,7 +561,8 @@ namespace BookDiary.DataAccess.Migrations
                         name: "FK_Shelves_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -619,12 +629,14 @@ namespace BookDiary.DataAccess.Migrations
                         name: "FK_ShelvesBooks_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ShelvesBooks_Shelves_ShelfId",
                         column: x => x.ShelfId,
                         principalTable: "Shelves",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

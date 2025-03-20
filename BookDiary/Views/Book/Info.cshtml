@@ -46,7 +46,7 @@
 
                     <div class="dropdown-divider"></div>
 
-                    
+
                 </div>
             </div>
         </div>
@@ -70,12 +70,12 @@
                 <span class="genre-name">📖 @Model.GenreName</span>
             </div>
             <div class="book-metadata second-row">
-                
-                    <span class="language-name">🌐 @Model.LanguageName</span>
-                
-               
-                    <span class="publishing-house">🏢 @Model.PublishingHouseName</span>
-                
+
+                <span class="language-name">🌐 @Model.LanguageName</span>
+
+
+                <span class="publishing-house">🏢 @Model.PublishingHouseName</span>
+
             </div>
             @if (Model.SeriesName != null)
             {
@@ -201,8 +201,15 @@
             }
         </div>
     </div>
-
-    
+    @if (User.IsInRole(SD.AdminRole))
+    {
+        <div class="book-actions">
+            <form method="post" class="actions-form">
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                <button type="submit" class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</button>
+            </form>
+        </div>
+    }
 </div>
 
 <style>

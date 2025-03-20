@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookDiary.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250320065908_ratingfixed")]
-    partial class ratingfixed
+    [Migration("20250320171452_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -202,10 +202,6 @@ namespace BookDiary.DataAccess.Migrations
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -802,19 +798,19 @@ namespace BookDiary.DataAccess.Migrations
                     b.HasOne("BookDiary.Models.Author", "Author")
                         .WithMany("Books")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BookDiary.Models.Genre", "Genre")
                         .WithMany("Books")
                         .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BookDiary.Models.Series", "Series")
                         .WithMany("Books")
                         .HasForeignKey("SeriesId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Author");
 
@@ -834,7 +830,7 @@ namespace BookDiary.DataAccess.Migrations
                     b.HasOne("BookDiary.Models.Language", "Language")
                         .WithMany("BookPublishingHouses")
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BookDiary.Models.PublishingHouse", "PublishingHouse")
@@ -874,7 +870,7 @@ namespace BookDiary.DataAccess.Migrations
                     b.HasOne("BookDiary.Models.User", "User")
                         .WithMany("MyComments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -923,13 +919,13 @@ namespace BookDiary.DataAccess.Migrations
                     b.HasOne("BookDiary.Models.Book", "Book")
                         .WithMany("CurrentReads")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BookDiary.Models.User", "User")
                         .WithMany("CurrentReads")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");
@@ -942,13 +938,13 @@ namespace BookDiary.DataAccess.Migrations
                     b.HasOne("BookDiary.Models.Book", "Book")
                         .WithMany("Notes")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BookDiary.Models.User", "User")
                         .WithMany("Notes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");
@@ -1014,7 +1010,7 @@ namespace BookDiary.DataAccess.Migrations
                     b.HasOne("BookDiary.Models.User", "User")
                         .WithMany("Shelves")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -1025,13 +1021,13 @@ namespace BookDiary.DataAccess.Migrations
                     b.HasOne("BookDiary.Models.Book", "Book")
                         .WithMany("ShelfBooks")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BookDiary.Models.Shelf", "Shelf")
                         .WithMany("ShelfBooks")
                         .HasForeignKey("ShelfId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");

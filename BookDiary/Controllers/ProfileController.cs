@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BookDiary.Models.ViewModels.BookViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BookDiary.Controllers
 {
@@ -69,6 +70,69 @@ namespace BookDiary.Controllers
             }
 
             return View(uservm);
+        }
+        public async Task<IActionResult> Edit()
+        {
+            var books =  _bookService.GetAll();
+
+            // Create SelectList with correct parameters
+            ViewBag.Books = new SelectList(books, "Id", "Title"); // Use Title instead of Name
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            var user = new EditProfileViewModel
+            {
+                Id = currentUser.Id,
+                Name = currentUser.Name,
+                Bio = currentUser.Bio,
+                Birthdate = currentUser.Birthdate,
+                // Initialize FavouriteBook to avoid null reference
+                FavouriteBook = new BookSeriesViewModel()
+            };
+
+            if (currentUser.ProfilePictureURL != null)
+            {
+                user.ProfilePictureURL = currentUser.ProfilePictureURL;
+            }
+
+            if (currentUser.FavouriteBookId != null)
+            {
+                Book book1 = _bookService.GetAll().Where(b => b.Id == currentUser.FavouriteBookId).FirstOrDefault();
+                if (book1 != null)
+                {
+                    user.FavouriteBook.Id = book1.Id;
+                    user.FavouriteBook.Title = book1.Title;
+                    user.FavouriteBook.CoverImageURL = book1.CoverImageURL;
+
+                    // Set the selected value in the dropdown
+                    ViewBag.Books = new SelectList(books, "Id", "Title", book1.Id);
+                }
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditProfileViewModel model)
+        {
+            var user = new User
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Bio = model.Bio,
+                Birthdate = model.Birthdate,
+            };
+            if (model.ProfilePictureURL != null)
+            {
+                user.ProfilePictureURL = model.ProfilePictureURL;
+            }
+            if (model.FavouriteBook != null)
+            {
+                var book = model.FavouriteBook.Id;
+                user.FavouriteBookId= book;
+            }
+            await _userService.Update(user);
+            return RedirectToAction("Index");
+
         }
     }
 }
