@@ -1,10 +1,13 @@
 using System.Diagnostics;
 using System.Linq.Expressions;
 using BookDiary.Core.IServices;
+using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels;
+using BookDiary.Models.ViewModels.CurrentReadViewModels;
 using BookDiary.Models.ViewModels.NewsViewModels;
 using BookDiary.Models.ViewModels.UserViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookDiary.Controllers
@@ -17,9 +20,10 @@ namespace BookDiary.Controllers
         private readonly IBookService _bookService;
         private readonly IGenreService _genreService;
         private readonly IUserService _userService;
+        private readonly UserManager<User> _userManager;
+        private readonly ICurrentReadService _currentReadService;
 
-
-        public HomeController(ILogger<HomeController> logger,INewsService newsService,IGenreService genreService,IAuthorService authorService,IBookService bookService,IUserService userService)
+        public HomeController(ILogger<HomeController> logger,UserManager<User> userManager,ICurrentReadService currentReadService, INewsService newsService,IGenreService genreService,IAuthorService authorService,IBookService bookService,IUserService userService)
         {
             _logger = logger;
             _newsService = newsService;
@@ -27,6 +31,8 @@ namespace BookDiary.Controllers
             _bookService = bookService;
             _genreService = genreService;
             _userService = userService;
+            _userManager = userManager;
+            _currentReadService = currentReadService;
         }
 
         public async Task<IActionResult> LoggedIndex()
@@ -44,6 +50,24 @@ namespace BookDiary.Controllers
                 users.Add(user);
             }
 
+            var currentUser = await _userManager.GetUserAsync(User);
+            var crs = await _currentReadService.Find(x => x.UserId == currentUser.Id);
+            List<CurrentReadIndexViewModel> currentReads = new List<CurrentReadIndexViewModel>();
+            foreach (var item in crs)
+            {
+                Book book = await _bookService.GetById(item.BookId);
+                var currentread = new CurrentReadIndexViewModel
+                {
+                    Id = item.Id,
+                    Userid = item.UserId,
+                    BookId = item.BookId,
+                    BookName = book.Title,
+                    CoverImageURL = book.CoverImageURL,
+                    Pages = item.CurrentPage,
+                    TotalPages = book.BookPages
+                };
+                currentReads.Add(currentread);
+            }
 
             var newsList = await _newsService.GetTop5Services();
 
@@ -63,7 +87,8 @@ namespace BookDiary.Controllers
                 BooksCount = bookscount,
                 GenresCount = genrecount,
                 AuthorsCount = authorscount,
-                Users = users
+                Users = users,
+                CurrentReads=currentReads
             };
             return View(model);
         

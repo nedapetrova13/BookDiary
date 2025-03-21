@@ -35,10 +35,11 @@ namespace BookDiary.Controllers
             private readonly ICommentService _commentService;
             private readonly UserManager<User> _userManager;
             private readonly IUserService _userService;
+            private readonly ICurrentReadService _currentReadService;
 
 
 
-        public BookController(IBookService bookService,IUserService userService,UserManager<User> userManager, ICommentService commentService,ICommentBookService commentBookService, IShelfBookService shelfBookService, IShelfService shelfService, IBookPublishingHouseService bookPublishingHouse,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService,ILanguageService languageService, IPublishingHouseService pubHouseService)
+        public BookController(IBookService bookService,IUserService userService,ICurrentReadService currentReadService, UserManager<User> userManager, ICommentService commentService,ICommentBookService commentBookService, IShelfBookService shelfBookService, IShelfService shelfService, IBookPublishingHouseService bookPublishingHouse,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService,ILanguageService languageService, IPublishingHouseService pubHouseService)
             {
                 _bookService = bookService;
                 _authorService = authorService;
@@ -55,6 +56,7 @@ namespace BookDiary.Controllers
                 _commentService = commentService;
                 _userManager = userManager;
                 _userService = userService;
+                _currentReadService = currentReadService;
             
             }
 
@@ -452,5 +454,6 @@ namespace BookDiary.Controllers
             await _commentBookService.DeleteBookComment(bookId, commentid);
             return RedirectToAction("Info", new { BookId = bookId });
         }
+        
     }
 }

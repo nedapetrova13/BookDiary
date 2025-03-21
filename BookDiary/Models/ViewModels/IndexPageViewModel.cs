@@ -1,4 +1,5 @@
-﻿using BookDiary.Models.ViewModels.NewsViewModels;
+﻿using BookDiary.Models.ViewModels.CurrentReadViewModels;
+using BookDiary.Models.ViewModels.NewsViewModels;
 using BookDiary.Models.ViewModels.UserViewModels;
 
 namespace BookDiary.Models.ViewModels
@@ -10,5 +11,6 @@ namespace BookDiary.Models.ViewModels
         public int AuthorsCount { get; set; }
         public List<NewsCreateViewModel> News { get; set; }
         public List<UserIndexViewModel> Users { get; set; }
+        public List<CurrentReadIndexViewModel> CurrentReads { get; set; }
     }
 }

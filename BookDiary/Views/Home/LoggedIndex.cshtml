@@ -846,29 +846,32 @@
             <div class="currently-reading mb-5">
                 <h4 class="section-title">Четете в момента</h4>
                 <div class="current-reads-container" id="currentReadsContainer">
-                   @*  @if (Model.CurrentlyReadingBooks != null && Model.CurrentlyReadingBooks.Any())
+                     @if (Model.CurrentReads != null && Model.CurrentReads.Any())
                     {
-                        @foreach (var book in Model.CurrentlyReadingBooks)
+                        @foreach (var book in Model.CurrentReads)
                         {
                             <div class="current-book-card">
                                 <div class="book-thumbnail">
-                                    <img src="@book.CoverImageUrl" alt="@book.Title" onerror="this.src='/img/default-book-cover.jpg'">
+                                    <img src="@book.CoverImageURL" alt="@book.BookName" onerror="this.src='/img/default-book-cover.jpg'">
                                 </div>
                                 <div class="book-details">
-                                    <h5 class="book-title">@book.Title</h5>
-                                    <p class="book-author">@book.AuthorName</p>
+                                    <h5 class="book-title">@book.BookName</h5>
+                                    
                                     <div class="reading-progress">
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: @(book.ReadingProgress)%;"
-                                                 aria-valuenow="@book.ReadingProgress" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
                                         <div class="progress-text">
-                                            <span>@book.ReadingProgress%</span>
-                                            <span>@book.CurrentPage / @book.TotalPages стр.</span>
+                                            <span>Progress</span>
+                                            <span class="progress-percentage">@Math.Round((double)book.Pages / book.TotalPages * 100)%</span>
                                         </div>
+
+                                        <div class="progress-container">
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: @Math.Round((double)book.Pages / book.TotalPages * 100)%"></div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                     <div class="book-actions">
-                                        <a href="@Url.Action("UpdateProgress", "Book", new { id = book.Id })" class="btn btn-sm btn-primary">
+                                        <a asp-controller="CurrentRead" asp-action="Index" class="btn btn-sm btn-primary">
                                             <i class="bi bi-arrow-clockwise"></i> Обнови прогрес
                                         </a>
                                     </div>
@@ -877,7 +880,7 @@
                         }
                     }
                     else
-                    { *@
+                    { 
                         <div class="empty-state">
                             <div class="empty-icon">
                                 <i class="bi bi-book"></i>
@@ -888,7 +891,7 @@
                                 <i class="bi bi-search"></i> Намери книга
                             </a>
                         </div>
-                    @* } *@
+                     } 
                 </div>
             </div>
 

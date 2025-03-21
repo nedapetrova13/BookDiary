@@ -37,8 +37,8 @@
                     <div class="dropdown-divider"></div>
 
                     <!-- Set Current Read Option -->
-                    <form method="post" asp-controller="Book" asp-action="SetCurrentRead" class="px-3 py-2">
-                        <input type="hidden" name="BookId" value="@Model.Id" />
+                    <form method="post" asp-controller="CurrentRead" asp-action="SetCurrentRead" class="px-3 py-2">
+                        <input type="hidden" name="bookid" value="@Model.Id" />
                         <button type="submit" class="btn btn-sm btn-outline-primary w-100">
                             <i class="fas fa-book-reader"></i> Set as Current Read
                         </button>
