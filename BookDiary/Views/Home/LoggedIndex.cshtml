@@ -986,48 +986,7 @@
                 </div>
             </div>
 
-            <!-- Reading Goal Progress Section -->
-            <div class="reading-goals mb-5">
-                <h4 class="section-title">Годишна цел за четене</h4>
-                <div class="goal-container">
-                    <div class="goal-progress-card">
-                        <div class="goal-info">
-                            <div class="goal-stats">
-                                <div class="books-completed">
-                                    <h5></h5>
-                                    <p>Прочетени книги</p>
-                                </div>
-                                <div class="goal-target">
-                                    <h5></h5>
-                                    <p>Годишна цел</p>
-                                </div>
-                            </div>
-                            <div class="circular-progress">
-                                <div class="progress-circle" >
-                                    <div class="progress-circle-inner">
-                                        <div class="progress-text">Reading ptogress</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pages-stats">
-                            <div class="stat">
-                                <i class="bi bi-file-earmark-text"></i>
-                                <div>
-                                    <span>280</span>
-                                    <p>Страници прочетени</p>
-                                </div>
-                            </div>
-                           
-                        </div>
-                        <div class="goal-footer">
-                            <a href="@Url.Action("ReadingGoals", "User")" class="btn btn-outline-primary">
-                                <i class="bi bi-pencil"></i> Промени целта
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         }
 
         @if (User.IsInRole(SD.AdminRole))

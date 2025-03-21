@@ -114,25 +114,25 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditProfileViewModel model)
         {
-            var user = new User
+            var currentUser = await _userManager.GetUserAsync(User);
+            if(currentUser == null)
             {
-                Id = model.Id,
-                Name = model.Name,
-                Bio = model.Bio,
-                Birthdate = model.Birthdate,
-            };
-            if (model.ProfilePictureURL != null)
-            {
-                user.ProfilePictureURL = model.ProfilePictureURL;
+                return RedirectToAction("Index", "Home", null);
             }
-            if (model.FavouriteBook != null)
+            currentUser.Name = model.Name;
+            currentUser.FavouriteBookId = model.FavouriteBook.Id;
+            currentUser.Bio = model.Bio;
+            currentUser.Birthdate = model.Birthdate;
+            currentUser.ProfilePictureURL = model.ProfilePictureURL;
+            var result = await _userManager.UpdateAsync(currentUser);
+            if (result.Succeeded)
             {
-                var book = model.FavouriteBook.Id;
-                user.FavouriteBookId= book;
+                return RedirectToAction("UserProfile");
             }
-            await _userService.Update(user);
-            return RedirectToAction("Index");
-
+            else
+            {
+                return RedirectToAction("Index", "Home", null);
+            }
         }
     }
 }

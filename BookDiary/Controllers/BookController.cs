@@ -306,7 +306,8 @@ namespace BookDiary.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(User);
 
-            var shelves = _shelfService.GetAll().Where(x => !x.ShelfBooks.Any(b => b.BookId == bookId)).ToList();  
+            var shelves1 = _shelfService.GetAll().Where(x => !x.ShelfBooks.Any(b => b.BookId == bookId && x.UserId==currentUser.Id)).ToList();
+            var shelves = await _shelfService.Find(x => x.UserId == currentUser.Id && !x.ShelfBooks.Any(b => b.BookId == bookId));
             ViewBag.Shelves = new SelectList(shelves, "Id", "Name");
             
             var bookcvm = await _bookService.GetById(bookId);

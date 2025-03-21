@@ -193,8 +193,7 @@
             }
 
         keyframes shine {
-            0%
-
+        0%
         {
             transform: translateX(-100%);
         }
@@ -226,6 +225,81 @@
 
             .pages-info p {
                 margin: 5px 0;
+            }
+
+        .quick-update {
+            margin: 15px 0;
+        }
+
+        .inline-update-form {
+            margin-bottom: 15px;
+        }
+
+        .page-control {
+            display: flex;
+            align-items: center;
+            max-width: 100%;
+            background-color: #f5f5f5;
+            border-radius: 6px;
+            padding: 2px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-btn {
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+            background-color: var(--secondary-color);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+            .page-btn.minus {
+                border-radius: 6px 0 0 6px;
+            }
+
+            .page-btn.plus {
+                border-radius: 0 0 0 0;
+            }
+
+            .page-btn:hover {
+                background-color: var(--accent-color);
+            }
+
+        .page-input {
+            flex: 1;
+            height: 36px;
+            border: none;
+            text-align: center;
+            font-size: 16px;
+            background-color: white;
+            width: 60px;
+            padding: 0 5px;
+        }
+
+            .page-input:focus {
+                outline: none;
+            }
+
+        .page-save-btn {
+            height: 36px;
+            padding: 0 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 6px 6px 0;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+            .page-save-btn:hover {
+                background-color: var(--dark-brown);
             }
 
         .card-actions {
@@ -542,10 +616,34 @@
                                 <p><span class="pages-left">@(read.TotalPages - read.Pages)</span> pages left</p>
                             </div>
 
+                            <div class="quick-update">
+                                <form asp-controller="CurrentRead" asp-action="Edit" method="post" class="inline-update-form">
+                                    <input type="hidden" name="bookid" value="@read.BookId">
+                                    <div class="page-control">
+                                        <button type="button" class="page-btn minus" onclick="decrementPage(this)">-</button>
+                                        <input type="number" name="pages" value="@read.Pages" min="0" max="@read.TotalPages" class="page-input">
+                                        <button type="button" class="page-btn plus" onclick="incrementPage(this)">+</button>
+                                        <button type="submit" class="page-save-btn">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+
                             <div class="card-actions">
-                                <a href="#" class="btn btn-update" onclick="openUpdateModal('@read.Id', '@read.BookName', @read.Pages, @read.TotalPages)">Update Progress</a>
-                                <a href="/CurrentRead/MarkAsRead/@read.Id" class="btn btn-mark-read">Mark as Read</a>
-                                <a href="/CurrentRead/Delete/@read.Id" class="btn btn-delete">Delete</a>
+                                <form method="post" asp-controller="Shelf" asp-action="MarkRead" class="px-3 py-2">
+                                    <input type="hidden" name="bookid" value="@read.BookId" />
+                                    <button type="submit" class="btn btn-mark-read">
+                                        <i class="fas fa-book-reader"></i> Mark as read
+                                    </button>
+                                </form>
+@*                                 <a method="post" asp-controller="Shelf" asp-action="MarkRead" asp-route-bookid="@read.BookId" class="btn btn-mark-read">Mark as Read</a>
+ *@                                <form method="post" asp-controller="CurrentRead" asp-action="DeleteCurrentRead" class="delete-comment-form">
+
+                                    <input type="hidden" name="bookId" value="@read.BookId" />
+                                    <button type="submit" class="btn btn-delete">
+
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -600,6 +698,27 @@
     </div>
 
     <script>
+        // Increment page number
+        function incrementPage(button) {
+            const input = button.parentElement.querySelector('.page-input');
+            const currentValue = parseInt(input.value) || 0;
+            const maxValue = parseInt(input.max);
+
+            if (currentValue < maxValue) {
+                input.value = currentValue + 1;
+            }
+        }
+
+        // Decrement page number
+        function decrementPage(button) {
+            const input = button.parentElement.querySelector('.page-input');
+            const currentValue = parseInt(input.value) || 0;
+
+            if (currentValue > 0) {
+                input.value = currentValue - 1;
+            }
+        }
+
         // Function to open the update modal
         function openUpdateModal(id, title, currentPage, totalPages) {
             document.getElementById('readId').value = id;

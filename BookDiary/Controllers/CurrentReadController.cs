@@ -1,6 +1,9 @@
 ﻿using BookDiary.Core.IServices;
+using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels.CurrentReadViewModels;
+using BookDiary.Models.ViewModels.NewsViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,19 +46,50 @@ namespace BookDiary.Controllers
             }
             return View(currentReads);
         }
+
         [HttpPost]
         public async Task<IActionResult> SetCurrentRead(int bookid)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-
-            CurrentRead cr = new CurrentRead
+            var currentreads = await _currentReadService.Get(x => x.UserId == currentUser.Id && x.BookId == bookid);
+            if (currentreads == null)
             {
-                BookId = bookid,
-                UserId = currentUser.Id,
-                CurrentPage = 0
-            };
-            await _currentReadService.Add(cr);
+                CurrentRead cr = new CurrentRead
+                {
+                    BookId = bookid,
+                    UserId = currentUser.Id,
+                    CurrentPage = 0
+                };
+                await _currentReadService.Add(cr);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+
+            }
             return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteCurrentRead(int bookId)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+  
+            await _currentReadService.DeleteCurrentRead(bookId, currentUser.Id);
+           return RedirectToAction("Index");
+        }
+
+        
+        [HttpPost]
+        public async Task<IActionResult> Edit(int bookid, int pages)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            CurrentRead currentread = await  _currentReadService.Get(x => x.BookId == bookid && x.UserId == currentUser.Id);
+            currentread.CurrentPage = pages;
+            await _currentReadService.Update(currentread);
+            return RedirectToAction("Index");
+
         }
     }
 }

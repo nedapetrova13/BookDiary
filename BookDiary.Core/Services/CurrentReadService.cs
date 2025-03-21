@@ -29,14 +29,19 @@ namespace BookDiary.Core.Services
             await _repo.Delete(id);
         }
 
+        public async Task DeleteCurrentRead(int bookid, string userid)
+        {
+            await _repo.DeleteMapping<CurrentRead>(bt => bt.BookId == bookid && bt.UserId == userid);
+        }
+
         public async Task<List<CurrentRead>> Find(Expression<Func<CurrentRead, bool>> filter)
         {
             return await _repo.Find(filter);
         }
 
-        public Task<CurrentRead> Get(Expression<Func<CurrentRead, bool>> filter)
+        public async Task<CurrentRead> Get(Expression<Func<CurrentRead, bool>> filter)
         {
-            throw new NotImplementedException();
+            return await _repo.Get(filter);
         }
 
         public IQueryable<CurrentRead> GetAll()

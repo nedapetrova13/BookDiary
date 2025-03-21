@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Net;
 using BookDiary.Core.IServices;
 using BookDiary.Core.Services;
@@ -21,14 +22,17 @@ namespace BookDiary.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IBookService _bookService;
         private readonly IShelfBookService _shelfBookService;
+        private readonly ICurrentReadService _currentReadService;
 
-       public ShelfController(IShelfService shelfService,IShelfBookService shelfBookService, IUserService userService,UserManager<User> userManager,IBookService bookService)
+
+       public ShelfController(IShelfService shelfService,IShelfBookService shelfBookService, IUserService userService,UserManager<User> userManager,IBookService bookService,ICurrentReadService currentReadService)
         {
            _shelfService = shelfService;
             _userService = userService;
             _userManager = userManager;
             _bookService = bookService;
             _shelfBookService = shelfBookService;
+            _currentReadService = currentReadService;
         }
 
         public async Task<IActionResult> Index(string userid)
@@ -69,6 +73,49 @@ namespace BookDiary.Controllers
             await _shelfService.Add(shelf);
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> MarkRead(int bookid)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            var book = _bookService.GetById(bookid);
+            var isshelf = _shelfService.GetAll().Any(x=>x.Name=="Прочетени книги" && x.UserId==currentUser.Id);
+            if (!isshelf)
+            {
+                var shelf = new Shelf
+                {
+                    Name = "Прочетени книги",
+                    UserId = currentUser.Id,
+                    Description = "Шкаф с всички прочетени книги",
+                };
+                await _shelfService.Add(shelf);
+                var bs = new ShelfBook
+                {
+                    BookId = bookid,
+                    ShelfId = shelf.Id
+                };
+                await _shelfBookService.Add(bs);
+            }
+            else
+            {
+                Shelf sh = await _shelfService.Get(x => x.Name == "Прочетени книги");
+                var bs = new ShelfBook
+                {
+                    BookId = bookid,
+                    ShelfId = sh.Id
+                };
+                await _shelfBookService.Add(bs);
+            }
+            var currentRead = await _currentReadService.Get(x => x.UserId == currentUser.Id && x.BookId == bookid);
+            if (currentRead != null)
+            {
+
+                await _currentReadService.DeleteCurrentRead(bookid, currentUser.Id);
+            }
+            return RedirectToAction("Index");
+        }
+        
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
