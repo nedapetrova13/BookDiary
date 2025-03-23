@@ -835,10 +835,7 @@
                         <div class="action-icon"><i class="bi bi-bookshelf"></i></div>
                         <h5>Моите шкафове</h5>
                     </a>
-                    <a asp-area="" asp-controller="Book" asp-action="ReadingList" class="action-card pulse-effect">
-                        <div class="action-icon"><i class="bi bi-book-half"></i></div>
-                        <h5>Списък за четене</h5>
-                    </a>
+                   
                 </div>
             </div>
 
@@ -859,7 +856,7 @@
                                     
                                     <div class="reading-progress">
                                         <div class="progress-text">
-                                            <span>Progress</span>
+                                            <span>Прогрес</span>
                                             <span class="progress-percentage">@Math.Round((double)book.Pages / book.TotalPages * 100)%</span>
                                         </div>
 

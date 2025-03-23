@@ -40,7 +40,7 @@ namespace BookDiary.Controllers
 
 
         public BookController(IBookService bookService,IUserService userService,ICurrentReadService currentReadService, UserManager<User> userManager, ICommentService commentService,ICommentBookService commentBookService, IShelfBookService shelfBookService, IShelfService shelfService, IBookPublishingHouseService bookPublishingHouse,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService,ILanguageService languageService, IPublishingHouseService pubHouseService)
-            {
+        {
                 _bookService = bookService;
                 _authorService = authorService;
                 _genreService = genreService;
@@ -58,7 +58,7 @@ namespace BookDiary.Controllers
                 _userService = userService;
                 _currentReadService = currentReadService;
             
-            }
+        }
 
         public async Task<IActionResult> Index(BookFilterViewModel? filter)
         {

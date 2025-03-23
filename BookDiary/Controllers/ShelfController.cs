@@ -99,7 +99,7 @@ namespace BookDiary.Controllers
             }
             else
             {
-                Shelf sh = await _shelfService.Get(x => x.Name == "Прочетени книги");
+                Shelf sh = await _shelfService.Get(x => x.Name == "Прочетени книги" && x.UserId == currentUser.Id);
                 var bs = new ShelfBook
                 {
                     BookId = bookid,

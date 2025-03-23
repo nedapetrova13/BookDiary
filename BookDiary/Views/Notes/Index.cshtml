@@ -1,0 +1,111 @@
+﻿@model IEnumerable<BookDiary.Models.ViewModels.NotesViewModels.IndexBookNotesViewModel>
+
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-5 fw-bold text-dark mb-0"><i class="fas fa-book-reader me-2"></i>Моите книги с бележки</h1>
+            <p class="text-muted lead">Преглед на книгите, за които имате записани бележки</p>
+        </div>
+        
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8 text-center">
+                <div class="card border-0 shadow-sm p-5">
+                    <i class="fas fa-book-open text-muted mb-3" style="font-size: 4rem;"></i>
+                    <h3>Все още нямате книги с бележки</h3>
+                    <p class="text-muted">Започнете да добавяте бележки към любимите си книги, за да ги видите тук.</p>
+                    <div class="mt-4">
+                        <a asp-action="Add" class="btn px-4 py-2 text-white" style="background-color: #8B6B4F;">
+                            <i class="fas fa-plus-circle me-2"></i>Добави нова бележка
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            @foreach (var book in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 book-card border-0 shadow-sm hover-effect">
+                        <div class="position-relative book-cover-container">
+                            @if (!string.IsNullOrEmpty(book.BookCover))
+                            {
+                                <img src="@book.BookCover" class="card-img-top book-cover" alt="Корица на книгата">
+                            }
+                            else
+                            {
+                                <div class="no-cover-placeholder d-flex align-items-center justify-content-center text-white" style="background-color: #8B6B4F; height: 320px;">
+                                    <i class="fas fa-book fa-3x"></i>
+                                </div>
+                            }
+                            <div class="position-absolute bottom-0 end-0 m-2">
+                                <span class="badge rounded-pill" style="background-color: #5C4033;">
+                                    <i class="fas fa-bookmark me-1"></i>С бележки
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                           
+                            <div class="mt-auto pt-3 d-grid gap-2">
+                                <a asp-controller="Notes" asp-action="BookNotes" asp-route-bookId="@book.BookId" asp-route-userId="@book.UserId"
+                                   class="btn btn-outline-dark">
+                                    <i class="fas fa-sticky-note me-2"></i>Виж бележките
+                                </a>
+                                <a asp-controller="Notes" asp-action="Add" asp-route-bookId="@book.BookId"
+                                   class="btn btn-sm text-white" style="background-color: #8B6B4F;">
+                                    <i class="fas fa-plus-circle me-1"></i>Добави бележка
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .book-card {
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+
+    .hover-effect:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+
+    .book-cover {
+        height: 320px;
+        object-fit: cover;
+    }
+
+    .book-cover-container {
+        overflow: hidden;
+    }
+
+    .book-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Optional: Add animation when cards appear
+            $(".book-card").each(function(index) {
+                $(this).css({
+                    'animation-delay': (index * 0.1) + 's',
+                    'animation': 'fadeInUp 0.5s ease forwards'
+                });
+            });
+        });
+    </script>
+}

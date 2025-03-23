@@ -1,0 +1,192 @@
+﻿@model IEnumerable<BookDiary.Models.ViewModels.NotesViewModels.NotesInfoViewModel>
+
+<style>
+    .note-card {
+        transition: all 0.3s ease;
+        border-left: 5px solid #8B6B4F;
+        background-color: #fff;
+    }
+
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+
+    .note-header {
+        background-color: rgba(139, 107, 79, 0.1);
+    }
+
+    .note-content {
+        white-space: pre-line;
+        max-height: 200px;
+        overflow: hidden;
+        position: relative;
+    }
+
+        .note-content.expanded {
+            max-height: none;
+        }
+
+    .fade-out {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background-image: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+    }
+
+    .actions-bar {
+        border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .chapter-badge {
+        background-color: #5C4033;
+        color: white;
+        font-size: 0.8rem;
+    }
+
+    .empty-notes {
+        background-color: rgba(139, 107, 79, 0.05);
+        border: 2px dashed #8B6B4F;
+    }
+
+    /* Animation for cards */
+    keyframes fadeInUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .animate-in {
+        animation: fadeInUp 0.5s ease forwards;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Моите книги с бележки</a></li>
+                    <li class="breadcrumb-item active">Бележки за книгата</li>
+                </ol>
+            </nav>
+            <h1 class="display-5 fw-bold text-dark mb-0">
+                <i class="fas fa-sticky-note me-2"></i>Бележки за книгата
+            </h1>
+        </div>
+       
+    </div>
+
+   
+      <div class="row g-4">
+            @foreach (var note in Model)
+            {
+                <div class="col-12 animate-in" >
+                    <div class="card note-card shadow-sm">
+                        <div class="card-header note-header py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0 fw-bold">@note.Title</h5>
+                                <span class="badge rounded-pill chapter-badge">
+                                    <i class="fas fa-bookmark me-1"></i>@note.BookChapter
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="note-content" id="content-@note.Id">
+                                @note.NoteContent
+                                <div class="fade-out" id="fade-@note.Id"></div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <button class="btn btn-sm btn-link text-muted expand-button" data-note-id="@note.Id">
+                                    Прочети повече <i class="fas fa-chevron-down ms-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-footer actions-bar bg-white py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                
+                                <div>
+                                    <a asp-action="Edit" asp-route-id="@note.Id" class="btn btn-outline-primary btn-sm me-2">
+                                        <i class="fas fa-edit me-1"></i> Редактирай
+                                    </a>
+                                   
+                                <form method="post" asp-controller="Notes" asp-action="Delete" style="display:inline;">
+                                    <button class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-controller="Notes" asp-route-id="@note.Id">
+                                        <i class="fas fa-trash-alt me-1"></i> Изтрий
+                                    </button>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+
+            // Expandable note content
+            $(".expand-button").on("click", function() {
+                var noteId = $(this).data("note-id");
+                var contentElement = $("#content-" + noteId);
+                var fadeElement = $("#fade-" + noteId);
+
+                if (contentElement.hasClass("expanded")) {
+                    contentElement.removeClass("expanded");
+                    fadeElement.show();
+                    $(this).html('Прочети повече <i class="fas fa-chevron-down ms-1"></i>');
+                } else {
+                    contentElement.addClass("expanded");
+                    fadeElement.hide();
+                    $(this).html('Прочети по-малко <i class="fas fa-chevron-up ms-1"></i>');
+                }
+            });
+
+            // Check if content needs expand button
+            $(".note-content").each(function() {
+                var noteId = $(this).attr("id").split("-")[1];
+                if ($(this)[0].scrollHeight <= 200) {
+                    $("#fade-" + noteId).hide();
+                    $(this).siblings(".text-center").hide();
+                }
+            });
+        });
+
+        // Copy note content to clipboard
+        function copyNoteContent(noteId) {
+            var content = $("#content-" + noteId).text().trim();
+            navigator.clipboard.writeText(content).then(function() {
+                // Show temporary success message
+                var button = $('button[onclick="copyNoteContent(\'' + noteId + '\')"]');
+                var originalHtml = button.html();
+                button.html('<i class="fas fa-check me-1"></i> Копирано');
+                button.removeClass('btn-outline-secondary').addClass('btn-success');
+
+                setTimeout(function() {
+                    button.html(originalHtml);
+                    button.removeClass('btn-success').addClass('btn-outline-secondary');
+                }, 2000);
+            });
+        }
+    </script>
+}

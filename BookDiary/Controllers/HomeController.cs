@@ -22,8 +22,11 @@ namespace BookDiary.Controllers
         private readonly IUserService _userService;
         private readonly UserManager<User> _userManager;
         private readonly ICurrentReadService _currentReadService;
+        private readonly IShelfService _shelfService;
+        private readonly IShelfBookService _shelfBookService;
 
-        public HomeController(ILogger<HomeController> logger,UserManager<User> userManager,ICurrentReadService currentReadService, INewsService newsService,IGenreService genreService,IAuthorService authorService,IBookService bookService,IUserService userService)
+
+        public HomeController(ILogger<HomeController> logger,UserManager<User> userManager, IShelfService shelfService, IShelfBookService shelfBookService, ICurrentReadService currentReadService, INewsService newsService,IGenreService genreService,IAuthorService authorService,IBookService bookService,IUserService userService)
         {
             _logger = logger;
             _newsService = newsService;
@@ -33,6 +36,8 @@ namespace BookDiary.Controllers
             _userService = userService;
             _userManager = userManager;
             _currentReadService = currentReadService;
+            _shelfService = shelfService;
+            _shelfBookService = shelfBookService;
         }
 
         public async Task<IActionResult> LoggedIndex()

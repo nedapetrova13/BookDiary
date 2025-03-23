@@ -51,7 +51,13 @@
                             <i class="fas fa-book-reader"></i> Mark as read
                         </button>
                     </form>
-
+                    <div class="dropdown-divider"></div>
+                    <form method="get" asp-controller="Notes" asp-action="Add" class="px-3 py-2">
+                        <input type="hidden" name="bookid" value="@Model.Id" />
+                        <button type="submit" class="btn btn-sm btn-outline-primary w-100">
+                            <i class="fas fa-book-reader"></i>AddNotes
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

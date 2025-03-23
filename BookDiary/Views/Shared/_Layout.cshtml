@@ -5,507 +5,863 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BookDiary</title>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BookDiary.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #5C4033;
-            --hover-color: #8B6B4F;
-            --bg-color: #F5E6DA;
-            --sidebar-bg: #E3D5C5;
-            --menu-hover: #D7C4AF;
-            --transition-speed: 0.3s;
+            --bd-primary: #5C4033;
+            --bd-primary-light: #8B6B4F;
+            --bd-secondary: #D2B48C;
+            --bd-tertiary: #E6D1B1;
+            --bd-background: #F5E6DA;
+            --bd-text: #3A2921;
+            --bd-accent: #A0522D;
+            --bd-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --bd-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+            --bd-border-radius: 12px;
+            --bd-transition: all 0.3s ease;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--primary-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: background-color var(--transition-speed);
+            background-color: var(--bd-background);
+            color: var(--bd-text);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
         }
 
-        .sidebar {
-            background-color: var(--sidebar-bg);
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Main Layout */
+        .bd-layout {
+            display: flex;
             min-height: 100vh;
-            width: 250px;
-            transition: width var(--transition-speed), transform var(--transition-speed);
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 100;
         }
 
-        .sidebar-collapsed {
+        /* Sidebar */
+        .bd-sidebar {
+            width: 250px;
+            background-color: var(--bd-background);
+            border-right: 1px solid rgba(92, 64, 51, 0.1);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: var(--bd-shadow-md);
+            transition: var(--bd-transition);
+        }
+
+        .bd-collapsed .bd-sidebar {
             width: 80px;
         }
 
-        .sidebar-toggle {
+        /* Sidebar toggle button */
+        .bd-sidebar-toggle {
             position: absolute;
-            top: 10px;
+            top: 20px;
             right: -15px;
             width: 30px;
             height: 30px;
-            background-color: var(--primary-color);
+            background-color: var(--bd-primary);
+            color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            color: white;
-            box-shadow: 0 0 5px rgba(0,0,0,0.2);
-            z-index: 101;
-            transition: transform var(--transition-speed);
+            z-index: 1001;
+            box-shadow: var(--bd-shadow-sm);
+            border: 2px solid white;
         }
 
-        .sidebar-collapsed .sidebar-toggle {
+        .bd-collapsed .bd-sidebar-toggle i {
             transform: rotate(180deg);
         }
 
-        .logo-container {
-            padding: 20px 0;
+        /* Sidebar content */
+        .bd-sidebar-content {
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            height: 100%;
+            overflow-x: hidden;
         }
 
-        .logo-img {
-            max-width: 120px;
-            transition: max-width var(--transition-speed);
+        /* Logo */
+        .bd-logo {
+            padding: 20px;
+            text-align: center;
         }
 
-        .sidebar-collapsed .logo-img {
+        .bd-logo img {
+            max-width: 150px;
+            transition: var(--bd-transition);
+        }
+
+        .bd-collapsed .bd-logo img {
             max-width: 50px;
         }
 
-        .nav-item {
-            margin: 5px 0;
+        /* Navigation */
+        .bd-nav {
+            flex-grow: 1;
+            padding: 0 10px 80px 10px; /* Extra padding at bottom for fixed profile */
+            overflow-y: auto;
         }
 
-        .nav-link {
-            color: var(--primary-color) !important;
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: all var(--transition-speed);
+        .bd-nav::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .bd-nav::-webkit-scrollbar-thumb {
+            background-color: var(--bd-primary-light);
+            border-radius: 10px;
+        }
+
+        .bd-nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .bd-nav-item {
+            margin-bottom: 5px;
+        }
+
+        .bd-nav-link {
             display: flex;
             align-items: center;
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: var(--bd-text);
+            text-decoration: none;
+            transition: var(--bd-transition);
+            position: relative;
+            overflow: hidden;
         }
 
-            .nav-link:hover {
-                background-color: var(--menu-hover);
-                color: var(--hover-color) !important;
-                transform: translateX(5px);
-            }
+        .bd-nav-link:hover {
+            background-color: rgba(139, 107, 79, 0.1);
+            color: var(--bd-primary);
+        }
 
-            .nav-link i {
-                margin-right: 10px;
-                width: 20px;
-                text-align: center;
-            }
+        .bd-nav-icon {
+            width: 24px;
+            text-align: center;
+            font-size: 1.1rem;
+            margin-right: 12px;
+            color: var(--bd-primary);
+        }
 
-        .sidebar-collapsed .nav-text {
+        .bd-collapsed .bd-nav-item {
+            text-align: center;
+        }
+
+        .bd-collapsed .bd-nav-link {
+            padding: 10px 0;
+            justify-content: center;
+        }
+
+        .bd-collapsed .bd-nav-text {
             display: none;
         }
 
-        .submenu {
-            padding-left: 15px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height var(--transition-speed);
+        .bd-collapsed .bd-nav-icon {
+            margin-right: 0;
+            font-size: 1.3rem;
         }
 
-            .submenu.show {
-                max-height: 900px;
-            }
+        /* Active link */
+        .bd-nav-link.active {
+            background-color: var(--bd-primary);
+            color: white;
+        }
 
-        .dropdown-toggle::after {
-            transition: transform var(--transition-speed);
+        .bd-nav-link.active .bd-nav-icon {
+            color: white;
+        }
+
+        /* Category headers */
+        .bd-nav-header {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--bd-primary-light);
+            margin: 20px 10px 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(139, 107, 79, 0.2);
+        }
+
+        .bd-collapsed .bd-nav-header {
+            text-align: center;
+            font-size: 0.6rem;
+        }
+
+        /* Accordion menus */
+        .bd-accordion-button {
+            background-color: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: var(--bd-text);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            transition: var(--bd-transition);
+        }
+
+        .bd-accordion-button:hover {
+            background-color: rgba(139, 107, 79, 0.1);
+            color: var(--bd-primary);
+        }
+
+        .bd-accordion-button:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .bd-accordion-button::after {
+            flex-shrink: 0;
+            width: 1.25rem;
+            height: 1.25rem;
             margin-left: auto;
+            content: "";
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%235C4033'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-size: 1.25rem;
+            transition: transform .2s ease-in-out;
         }
 
-        .dropdown-toggle[aria-expanded="true"]::after {
-            transform: rotate(180deg);
+        .bd-accordion-button:not(.collapsed)::after {
+            transform: rotate(-180deg);
         }
 
-        .content-wrapper {
-            padding: 20px;
-            transition: margin-left var(--transition-speed);
-            flex-grow: 1;
+        .bd-accordion-button.active {
+            background-color: rgba(139, 107, 79, 0.15);
+            color: var(--bd-primary);
+            font-weight: 600;
         }
 
-        media (max-width: 768px) {
-            .sidebar
+        .bd-collapsed .bd-accordion-button {
+            padding: 10px 0;
+            justify-content: center;
+        }
 
-        {
-            transform: translateX(-100%);
+        .bd-collapsed .bd-accordion-button::after {
+            display: none;
+        }
+
+        .bd-collapsed .bd-accordion-body {
+            position: absolute;
+            left: 100%;
             top: 0;
+            width: 200px;
+            background-color: var(--bd-background);
+            border-radius: 0 8px 8px 0;
+            box-shadow: var(--bd-shadow-md);
+            padding: 10px;
+            display: none;
+        }
+
+        .bd-collapsed .bd-nav-item:hover .bd-accordion-body {
+            display: block;
+        }
+
+        /* Submenu */
+        .bd-submenu {
+            list-style: none;
+            padding: 0 0 0 24px;
+            margin: 0;
+        }
+
+        .bd-collapsed .bd-submenu {
+            padding: 0;
+        }
+
+        .bd-submenu .bd-nav-link {
+            padding: 8px 15px;
+            font-size: 0.95rem;
+        }
+
+        /* User profile */
+        .bd-profile {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            background-color: var(--bd-background);
+            border-top: 1px solid rgba(92, 64, 51, 0.1);
+            position: absolute;
+            bottom: 0;
             left: 0;
+            right: 0;
+        }
+
+        .bd-profile-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--bd-tertiary);
+            margin-right: 10px;
+        }
+
+        .bd-profile-avatar img {
+            width: 100%;
             height: 100%;
+            object-fit: cover;
         }
 
-        .sidebar.show {
-            transform: translateX(0);
+        .bd-profile-info {
+            flex-grow: 1;
+            min-width: 0;
         }
 
-        .sidebar-toggle {
-            right: -15px;
+        .bd-profile-name {
+            margin: 0;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--bd-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .content-wrapper {
-            margin-left: 0 !important;
+        .bd-profile-role {
+            margin: 0;
+            font-size: 0.75rem;
+            color: var(--bd-primary-light);
         }
 
-        .mobile-menu-toggle {
-            display: block !important;
+        .bd-collapsed .bd-profile-info {
+            display: none;
         }
 
+        .bd-profile-actions {
+            margin-left: 10px;
         }
 
-        .mobile-menu-toggle {
+        /* Content area */
+        .bd-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: calc(100% - 250px);
+            transition: var(--bd-transition);
+        }
+
+        .bd-collapsed .bd-content {
+            margin-left: 80px;
+            width: calc(100% - 80px);
+        }
+
+        /* Mobile styles */
+        .bd-mobile-toggle {
             display: none;
             position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 99;
-            background-color: var(--primary-color);
+            top: 15px;
+            left: 15px;
+            z-index: 999;
+            background-color: var(--bd-primary);
             color: white;
             border: none;
-            border-radius: 5px;
             padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
-        /* Active link styling */
-        .nav-link.active {
-            background-color: var(--primary-color);
-            color: white !important;
+        .bd-mobile-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        media (max-width: 991px) {
+            .bd-sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .bd-mobile-visible .bd-sidebar {
+                transform: translateX(0);
+            }
+            
+            .bd-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+            
+            .bd-mobile-toggle {
+                display: block;
+            }
+            
+            .bd-mobile-visible .bd-mobile-backdrop {
+                display: block;
+            }
+            
+            .bd-sidebar-toggle {
+                display: none;
+            }
+        }
+
+        /* Tooltip for collapsed mode */
+        .bd-tooltip {
+            position: relative;
+        }
+
+        .bd-collapsed .bd-tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            background-color: var(--bd-primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-left: 10px;
+        }
+
+        .bd-collapsed .bd-tooltip:hover::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent var(--bd-primary) transparent transparent;
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
-    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+    <button class="bd-mobile-toggle" id="bdMobileToggle">
         <i class="fas fa-bars"></i>
     </button>
 
-    <div class="d-flex">
-        <nav class="sidebar" id="sidebar">
-            @* <div class="sidebar-toggle" id="sidebarToggle"> *@
-            @*     <i class="fas fa-chevron-left"></i> *@
-            @* </div> *@
+    <div class="bd-mobile-backdrop" id="bdMobileBackdrop"></div>
 
-            <div class="logo-container">
-                <a asp-area="" asp-controller="Home" asp-action="LoggedIndex">
-                    <img src="~/img/Untitled_design-removebg-preview.png" alt="BookDiary Logo" class="logo-img">
-                </a>
+    <div class="bd-layout">
+        <!-- Sidebar -->
+        <aside class="bd-sidebar">
+            <div class="bd-sidebar-toggle" id="bdSidebarToggle">
+                <i class="fas fa-chevron-left"></i>
             </div>
-
-            <ul class="navbar-nav w-100">
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="LoggedIndex">
-                        <i class="fas fa-home"></i>
-                        <span class="nav-text">Главна страница</span>
+            
+            <div class="bd-sidebar-content">
+                <!-- Logo -->
+                <div class="bd-logo">
+                    <a asp-area="" asp-controller="Home" asp-action="LoggedIndex">
+                        <img src="~/img/Untitled_design-removebg-preview.png" alt="BookDiary Logo">
                     </a>
-                </li>
-                <li class="nav-item">
-                    <partial name="_LoginPartial" />
-                </li>
-                @if (User.IsInRole(SD.UserRole)){
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Profile" asp-action="UserProfile">
-                            Профил
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link"  asp-controller="Book" asp-action="Index">
-                            Kниги
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Author" asp-action="Index">
-                            Aвтори
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Series" asp-action="Index">
-                            Поредици
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Shelf" asp-action="Index" >
-                            Шкафове
-                        </a>
-                    </li>
-                    
-                }
-
+                </div>
                 
+                <!-- Navigation -->
+                <nav class="bd-nav">
+                    <ul class="bd-nav-list">
+                        <!-- Home -->
+                        <li class="bd-nav-item bd-tooltip" data-tooltip="Главна страница">
+                            <a class="bd-nav-link" asp-area="" asp-controller="Home" asp-action="LoggedIndex">
+                                <span class="bd-nav-icon"><i class="fas fa-home"></i></span>
+                                <span class="bd-nav-text">Главна страница</span>
+                            </a>
+                        </li>
+                        
+                        @if (User.IsInRole(SD.UserRole))
+                        {
+                            <div class="bd-nav-header">Моите книги</div>
+                            
+                            <!-- Profile -->
+                            <li class="bd-nav-item bd-tooltip" data-tooltip="Профил">
+                                <a class="bd-nav-link" asp-controller="Profile" asp-action="UserProfile">
+                                    <span class="bd-nav-icon"><i class="fas fa-user"></i></span>
+                                    <span class="bd-nav-text">Профил</span>
+                                </a>
+                            </li>
+                            
+                            <!-- Books -->
+                            <li class="bd-nav-item bd-tooltip" data-tooltip="Книги">
+                                <a class="bd-nav-link" asp-controller="Book" asp-action="Index">
+                                    <span class="bd-nav-icon"><i class="fas fa-book"></i></span>
+                                    <span class="bd-nav-text">Kниги</span>
+                                </a>
+                            </li>
+                            
+                            <!-- Authors -->
+                            <li class="bd-nav-item bd-tooltip" data-tooltip="Автори">
+                                <a class="bd-nav-link" asp-controller="Author" asp-action="Index">
+                                    <span class="bd-nav-icon"><i class="fas fa-feather-alt"></i></span>
+                                    <span class="bd-nav-text">Aвтори</span>
+                                </a>
+                            </li>
+                            
+                            <!-- Series -->
+                            <li class="bd-nav-item bd-tooltip" data-tooltip="Поредици">
+                                <a class="bd-nav-link" asp-controller="Series" asp-action="Index">
+                                    <span class="bd-nav-icon"><i class="fas fa-layer-group"></i></span>
+                                    <span class="bd-nav-text">Поредици</span>
+                                </a>
+                            </li>
+                            
+                            <!-- Shelves -->
+                            <li class="bd-nav-item bd-tooltip" data-tooltip="Шкафове">
+                                <a class="bd-nav-link" asp-controller="Shelf" asp-action="Index">
+                                    <span class="bd-nav-icon"><i class="fas fa-bookmark"></i></span>
+                                    <span class="bd-nav-text">Шкафове</span>
+                                </a>
+                            </li>
+                            
+                            <!-- Currently Reading -->
+                            <li class="bd-nav-item bd-tooltip" data-tooltip="В момента чета">
+                                <a class="bd-nav-link" asp-controller="CurrentRead" asp-action="Index">
+                                    <span class="bd-nav-icon"><i class="fas fa-glasses"></i></span>
+                                    <span class="bd-nav-text">В момента чета</span>
+                                </a>
+                            </li>
+                            
+                            <!-- Notes -->
+                            <li class="bd-nav-item bd-tooltip" data-tooltip="Моите записки">
+                                <a class="bd-nav-link" asp-controller="Notes" asp-action="Index">
+                                    <span class="bd-nav-icon"><i class="fas fa-sticky-note"></i></span>
+                                    <span class="bd-nav-text">Моите записки</span>
+                                </a>
+                            </li>
+                        }
 
-                @if (User.IsInRole(SD.AdminRole))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="collapse" data-bs-target="#adminMenu" aria-expanded="false">
-                            <i class="fas fa-user-shield"></i>
-                            <span class="nav-text">Администрация</span>
-                        </a>
-                        <div class="collapse submenu" id="adminMenu">
-                            <ul class="list-unstyled">
-                                <li class="nav-item">
-                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-Author">
-                                        <i class="fas fa-user-edit"></i>
-                                        <span class="nav-text">Автори</span>
-                                    </a>
-                                    <div class="collapse submenu" id="collapse-Author">
-                                        <ul class="list-unstyled">
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="Author" asp-action="Add">
-                                                    <i class="fas fa-plus"></i>
-                                                    <span class="nav-text">Добави</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="Author" asp-action="Index">
-                                                    <i class="fas fa-list"></i>
-                                                    <span class="nav-text">Всички</span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                        @if (User.IsInRole(SD.AdminRole))
+                        {
+                            <div class="bd-nav-header">Администрация</div>
+                            
+                            <!-- Authors Admin -->
+                            <li class="bd-nav-item">
+                                <div class="accordion" id="accordionAuthors">
+                                    <div class="bd-tooltip" data-tooltip="Автори">
+                                        <button class="bd-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAuthors" aria-expanded="false" aria-controls="collapseAuthors">
+                                            <span class="bd-nav-icon"><i class="fas fa-user-edit"></i></span>
+                                            <span class="bd-nav-text">Автори</span>
+                                        </button>
                                     </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-Genre">
-                                        <i class="fas fa-theater-masks"></i>
-                                        <span class="nav-text">Жанрове</span>
-                                    </a>
-                                    <div class="collapse submenu" id="collapse-Genre">
-                                        <ul class="list-unstyled">
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="Genre" asp-action="Add">
-                                                    <i class="fas fa-plus"></i>
-                                                    <span class="nav-text">Добави</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="Genre" asp-action="Index">
-                                                    <i class="fas fa-list"></i>
-                                                    <span class="nav-text">Всички</span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                    <div id="collapseAuthors" class="accordion-collapse collapse" data-bs-parent="#accordionAuthors">
+                                        <div class="bd-accordion-body">
+                                            <ul class="bd-submenu">
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Добави автор">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="Author" asp-action="Add">
+                                                        <span class="bd-nav-icon"><i class="fas fa-plus"></i></span>
+                                                        <span class="bd-nav-text">Добави</span>
+                                                    </a>
+                                                </li>
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Всички новини">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="News" asp-action="Index">
+                                                        <span class="bd-nav-icon"><i class="fas fa-list"></i></span>
+                                                        <span class="bd-nav-text">Всички</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-Tag">
-                                        <i class="fas fa-tags"></i>
-                                        <span class="nav-text">Характеристики</span>
-                                    </a>
-                                    <div class="collapse submenu" id="collapse-Tag">
-                                        <ul class="list-unstyled">
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Add">
-                                                    <i class="fas fa-plus"></i>
-                                                    <span class="nav-text">Добави</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Index">
-                                                    <i class="fas fa-list"></i>
-                                                    <span class="nav-text">Всички</span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                </div>
+                            </li>
+                            
+                            <!-- Books Admin -->
+                            <li class="bd-nav-item">
+                                <div class="accordion" id="accordionBooks">
+                                    <div class="bd-tooltip" data-tooltip="Книги">
+                                        <button class="bd-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBooks" aria-expanded="false" aria-controls="collapseBooks">
+                                            <span class="bd-nav-icon"><i class="fas fa-book"></i></span>
+                                            <span class="bd-nav-text">Книги</span>
+                                        </button>
                                     </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-Language">
-                                        <i class="fas fa-language"></i>
-                                        <span class="nav-text">Езици</span>
-                                    </a>
-                                    <div class="collapse submenu" id="collapse-Language">
-                                        <ul class="list-unstyled">
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="Language" asp-action="Add">
-                                                    <i class="fas fa-plus"></i>
-                                                    <span class="nav-text">Добави</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="Language" asp-action="Index">
-                                                    <i class="fas fa-list"></i>
-                                                    <span class="nav-text">Всички</span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                    <div id="collapseBooks" class="accordion-collapse collapse" data-bs-parent="#accordionBooks">
+                                        <div class="bd-accordion-body">
+                                            <ul class="bd-submenu">
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Добави книга">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="Book" asp-action="Add">
+                                                        <span class="bd-nav-icon"><i class="fas fa-plus"></i></span>
+                                                        <span class="bd-nav-text">Добави</span>
+                                                    </a>
+                                                </li>
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Всички книги">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="Book" asp-action="Index">
+                                                        <span class="bd-nav-icon"><i class="fas fa-list"></i></span>
+                                                        <span class="bd-nav-text">Всички</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-PublishingHouse">
-                                        <i class="fas fa-building"></i>
-                                        <span class="nav-text">Издателски къщи</span>
-                                    </a>
-                                    <div class="collapse submenu" id="collapse-PublishingHouse">
-                                        <ul class="list-unstyled">
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Add">
-                                                    <i class="fas fa-plus"></i>
-                                                    <span class="nav-text">Добави</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Index">
-                                                    <i class="fas fa-list"></i>
-                                                    <span class="nav-text">Всички</span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                </div>
+                            </li>
+                             <!-- Genres Admin -->
+                            <li class="bd-nav-item">
+                                <div class="accordion" id="accordionGenres">
+                                    <div class="bd-tooltip" data-tooltip="Жанрове">
+                                        <button class="bd-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGenres" aria-expanded="false" aria-controls="collapseGenres">
+                                            <span class="bd-nav-icon"><i class="fas fa-theater-masks"></i></span>
+                                            <span class="bd-nav-text">Жанрове</span>
+                                        </button>
                                     </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-News">
-                                        <i class="fas fa-newspaper"></i>
-                                        <span class="nav-text">Новини</span>
-                                    </a>
-                                    <div class="collapse submenu" id="collapse-News">
-                                        <ul class="list-unstyled">
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="News" asp-action="Add">
-                                                    <i class="fas fa-plus"></i>
-                                                    <span class="nav-text">Добави</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="News" asp-action="Index">
-                                                    <i class="fas fa-list"></i>
-                                                    <span class="nav-text">Всички</span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                    <div id="collapseGenres" class="accordion-collapse collapse" data-bs-parent="#accordionGenres">
+                                        <div class="bd-accordion-body">
+                                            <ul class="bd-submenu">
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Добави жанр">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="Genre" asp-action="Add">
+                                                        <span class="bd-nav-icon"><i class="fas fa-plus"></i></span>
+                                                        <span class="bd-nav-text">Добави</span>
+                                                    </a>
+                                                </li>
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Всички жанрове">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="Genre" asp-action="Index">
+                                                        <span class="bd-nav-icon"><i class="fas fa-list"></i></span>
+                                                        <span class="bd-nav-text">Всички</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-Book">
-                                        <i class="fas fa-book"></i>
-                                        <span class="nav-text">Книги</span>
-                                    </a>
-                                    <div class="collapse submenu" id="collapse-Book">
-                                        <ul class="list-unstyled">
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="Book" asp-action="Add">
-                                                    <i class="fas fa-plus"></i>
-                                                    <span class="nav-text">Добави</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="Book" asp-action="Index">
-                                                    <i class="fas fa-list"></i>
-                                                    <span class="nav-text">Всички</span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                </div>
+                            </li>
+                            
+                            <!-- Tags Admin -->
+                            <li class="bd-nav-item">
+                                <div class="accordion" id="accordionTags">
+                                    <div class="bd-tooltip" data-tooltip="Характеристики">
+                                        <button class="bd-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTags" aria-expanded="false" aria-controls="collapseTags">
+                                            <span class="bd-nav-icon"><i class="fas fa-tags"></i></span>
+                                            <span class="bd-nav-text">Характеристики</span>
+                                        </button>
                                     </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapse-Series">
-                                        <i class="fas fa-layer-group"></i>
-                                        <span class="nav-text">Поредици</span>
-                                    </a>
-                                    <div class="collapse submenu" id="collapse-Series">
-                                        <ul class="list-unstyled">
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="Series" asp-action="Add">
-                                                    <i class="fas fa-plus"></i>
-                                                    <span class="nav-text">Добави</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" asp-area="" asp-controller="Series" asp-action="Index">
-                                                    <i class="fas fa-list"></i>
-                                                    <span class="nav-text">Всички</span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                    <div id="collapseTags" class="accordion-collapse collapse" data-bs-parent="#accordionTags">
+                                        <div class="bd-accordion-body">
+                                            <ul class="bd-submenu">
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Добави характеристика">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="Tag" asp-action="Add">
+                                                        <span class="bd-nav-icon"><i class="fas fa-plus"></i></span>
+                                                        <span class="bd-nav-text">Добави</span>
+                                                    </a>
+                                                </li>
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Всички характеристики">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="Tag" asp-action="Index">
+                                                        <span class="bd-nav-icon"><i class="fas fa-list"></i></span>
+                                                        <span class="bd-nav-text">Всички</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                }
-                else{
-
-                }
-            </ul>
-        </nav>
-
-        <div class="content-wrapper" id="contentWrapper">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
-        </div>
+                                </div>
+                            </li>
+                            
+                            <!-- Languages Admin -->
+                            <li class="bd-nav-item">
+                                <div class="accordion" id="accordionLanguages">
+                                    <div class="bd-tooltip" data-tooltip="Езици">
+                                        <button class="bd-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLanguages" aria-expanded="false" aria-controls="collapseLanguages">
+                                            <span class="bd-nav-icon"><i class="fas fa-language"></i></span>
+                                            <span class="bd-nav-text">Езици</span>
+                                        </button>
+                                    </div>
+                                    <div id="collapseLanguages" class="accordion-collapse collapse" data-bs-parent="#accordionLanguages">
+                                        <div class="bd-accordion-body">
+                                            <ul class="bd-submenu">
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Добави език">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="Language" asp-action="Add">
+                                                        <span class="bd-nav-icon"><i class="fas fa-plus"></i></span>
+                                                        <span class="bd-nav-text">Добави</span>
+                                                    </a>
+                                                </li>
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Всички езици">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="Language" asp-action="Index">
+                                                        <span class="bd-nav-icon"><i class="fas fa-list"></i></span>
+                                                        <span class="bd-nav-text">Всички</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                            <!-- Publishing Houses Admin -->
+                            <li class="bd-nav-item">
+                                <div class="accordion" id="accordionPublishers">
+                                    <div class="bd-tooltip" data-tooltip="Издателски къщи">
+                                        <button class="bd-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePublishers" aria-expanded="false" aria-controls="collapsePublishers">
+                                            <span class="bd-nav-icon"><i class="fas fa-building"></i></span>
+                                            <span class="bd-nav-text">Издателски къщи</span>
+                                        </button>
+                                    </div>
+                                    <div id="collapsePublishers" class="accordion-collapse collapse" data-bs-parent="#accordionPublishers">
+                                        <div class="bd-accordion-body">
+                                            <ul class="bd-submenu">
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Добави издателска къща">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Add">
+                                                        <span class="bd-nav-icon"><i class="fas fa-plus"></i></span>
+                                                        <span class="bd-nav-text">Добави</span>
+                                                    </a>
+                                                </li>
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Всички издателски къщи">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="PublishingHouse" asp-action="Index">
+                                                        <span class="bd-nav-icon"><i class="fas fa-list"></i></span>
+                                                        <span class="bd-nav-text">Всички</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                            <!-- News Admin -->
+                            <li class="bd-nav-item">
+                                <div class="accordion" id="accordionNews">
+                                    <div class="bd-tooltip" data-tooltip="Новини">
+                                        <button class="bd-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNews" aria-expanded="false" aria-controls="collapseNews">
+                                            <span class="bd-nav-icon"><i class="fas fa-newspaper"></i></span>
+                                            <span class="bd-nav-text">Новини</span>
+                                        </button>
+                                    </div>
+                                    <div id="collapseNews" class="accordion-collapse collapse" data-bs-parent="#accordionNews">
+                                        <div class="bd-accordion-body">
+                                            <ul class="bd-submenu">
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Добави новина">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="News" asp-action="Add">
+                                                        <span class="bd-nav-icon"><i class="fas fa-plus"></i></span>
+                                                        <span class="bd-nav-text">Добави</span>
+                                                    </a>
+                                                </li>
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Всички новини">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="News" asp-action="Index">
+                                                        <span class="bd-nav-icon"><i class="fas fa-list"></i></span>
+                                                        <span class="bd-nav-text">Всички</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                          
+                            <!-- Series Admin -->
+                            <li class="bd-nav-item">
+                                <div class="accordion" id="accordionSeries">
+                                    <div class="bd-tooltip" data-tooltip="Поредици">
+                                        <button class="bd-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeries" aria-expanded="false" aria-controls="collapseSeries">
+                                            <span class="bd-nav-icon"><i class="fas fa-layer-group"></i></span>
+                                            <span class="bd-nav-text">Поредици</span>
+                                        </button>
+                                    </div>
+                                    <div id="collapseSeries" class="accordion-collapse collapse" data-bs-parent="#accordionSeries">
+                                        <div class="bd-accordion-body">
+                                            <ul class="bd-submenu">
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Добави поредица">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="Series" asp-action="Add">
+                                                        <span class="bd-nav-icon"><i class="fas fa-plus"></i></span>
+                                                        <span class="bd-nav-text">Добави</span>
+                                                    </a>
+                                                </li>
+                                                <li class="bd-nav-item bd-tooltip" data-tooltip="Всички поредици">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="Series" asp-action="Index">
+                                                        <span class="bd-nav-icon"><i class="fas fa-list"></i></span>
+                                                        <span class="bd-nav-text">Всички</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+                
+                <!-- User profile -->
+                <div class="bd-profile">
+                    <div class="bd-profile-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Book+User&background=D2B48C&color=5C4033" alt="User Avatar">
+                    </div>
+                    <div class="bd-profile-info">
+                        <p class="bd-profile-name">@User.Identity?.Name</p>
+                        <p class="bd-profile-role">@(User.IsInRole(SD.AdminRole) ? "Администратор" : "Читател")</p>
+                    </div>
+                    <div class="bd-profile-actions">
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main content -->
+        <main class="bd-content">
+            @RenderBody()
+        </main>
     </div>
 
     <script>
         $(document).ready(function() {
-            // Sidebar toggle functionality
-            $("#sidebarToggle").click(function() {
-                $("#sidebar").toggleClass("sidebar-collapsed");
-                adjustContentMargin();
+            // Sidebar toggle
+            $("#bdSidebarToggle").click(function() {
+                $("body").toggleClass("bd-collapsed");
             });
-
+            
             // Mobile menu toggle
-            $("#mobileMenuToggle").click(function() {
-                $("#sidebar").toggleClass("show");
+            $("#bdMobileToggle").click(function() {
+                $("body").toggleClass("bd-mobile-visible");
             });
-
+            
+            // Close menu when clicking outside on mobile
+            $("#bdMobileBackdrop").click(function() {
+                $("body").removeClass("bd-mobile-visible");
+            });
+            
             // Detect current page and set active class
             const currentUrl = window.location.pathname;
-            $('.nav-link').each(function() {
+            $('.bd-nav-link').each(function() {
                 const linkUrl = $(this).attr('href');
-                if (linkUrl && currentUrl.includes(linkUrl) && linkUrl !== '/') {
+                if (linkUrl && currentUrl.includes(linkUrl) && linkUrl !== '/' && linkUrl.length > 1) {
                     $(this).addClass('active');
-
-                    // Open parent collapses if needed
-                    const parentCollapses = $(this).parents('.collapse');
-                    parentCollapses.each(function() {
-                        const collapseId = $(this).attr('id');
-                        $(`[data-bs-target="#${collapseId}"]`).click();
-                    });
-                }
-            });
-
-            // Adjust content margin based on sidebar state
-            function adjustContentMargin() {
-                if ($("#sidebar").hasClass("sidebar-collapsed")) {
-                    $("#contentWrapper").css("margin-left", "80px");
-                } else {
-                    $("#contentWrapper").css("margin-left", "0");
-                }
-            }
-
-            // Initial adjustment
-            adjustContentMargin();
-
-            // Adjust on window resize
-            $(window).resize(function() {
-                if (window.innerWidth <= 768) {
-                    $("#contentWrapper").css("margin-left", "0");
-                } else {
-                    adjustContentMargin();
-                }
-            });
-
-            // Close sidebar when clicking outside on mobile
-            $(document).click(function(event) {
-                if (window.innerWidth <= 768) {
-                    if (!$(event.target).closest('#sidebar').length &&
-                        !$(event.target).closest('#mobileMenuToggle').length &&
-                        $('#sidebar').hasClass('show')) {
-                        $('#sidebar').removeClass('show');
+                    
+                    // If in a submenu, open the accordion
+                    const accordionBody = $(this).closest('.accordion-collapse');
+                    if (accordionBody.length) {
+                        accordionBody.addClass('show');
+                        accordionBody.prev().find('.bd-accordion-button').removeClass('collapsed').addClass('active');
                     }
                 }
             });
+            
+            // Fix for accordion buttons
+            $('.bd-accordion-button').on('click', function() {
+                $('.bd-accordion-button').removeClass('active');
+                if (!$(this).hasClass('collapsed')) {
+                    $(this).addClass('active');
+                }
+            });
+            
+            // Custom styling for login partial
+            $('.bd-profile-actions form button').addClass('btn btn-link text-decoration-none p-0 text-primary');
+            $('.bd-profile-actions a').addClass('btn btn-link text-decoration-none p-0 text-primary');
         });
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+                                                  
+              
