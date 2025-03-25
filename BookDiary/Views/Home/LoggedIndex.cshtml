@@ -898,42 +898,28 @@
                 <div class="recent-books-section">
                     <h4 class="section-title">Наскоро прочетени</h4>
                     <div class="recent-books-container">
-                       @*  @if (Model. != null && Model.RecentlyReadBooks.Any())
+                         @if (Model.ReadBooks != null && Model.ReadBooks.Any())
                         {
-                            @foreach (var book in Model.RecentlyReadBooks.Take(3))
+                            @foreach (var book in Model.ReadBooks.Take(3))
                             {
                                 <div class="recent-book-card">
                                     <div class="book-cover">
-                                        <img src="@book.CoverImageUrl" alt="@book.Title" onerror="this.src='/img/default-book-cover.jpg'">
+                                        <img src="@book.CoverImageURL" alt="@book.Title" onerror="this.src='/img/default-book-cover.jpg'">
                                     </div>
                                     <div class="book-info">
                                         <h5>@book.Title</h5>
-                                        <p class="book-author">@book.AuthorName</p>
-                                        <div class="book-rating">
-                                            @for (int i = 1; i <= 5; i++)
-                                            {
-                                                @if (i <= book.Rating)
-                                                {
-                                                    <i class="bi bi-star-fill"></i>
-                                                }
-                                                else
-                                                {
-                                                    <i class="bi bi-star"></i>
-                                                }
-                                            }
-                                        </div>
-                                        <div class="completed-date">
-                                            <i class="bi bi-calendar-check"></i> Завършена на @book.CompletedDate.ToString("dd.MM.yyyy")
-                                        </div>
+                                        <p class="book-author">@book.Author</p>
+                                       
+                                        
                                     </div>
                                 </div>
                             }
                             <div class="view-all-link">
                                 <a href="@Url.Action("ReadBooks", "Shelf")">Виж всички прочетени книги <i class="bi bi-arrow-right"></i></a>
                             </div>
-                        } *@
-                        @* else
-                        { *@
+                        } 
+                         else
+                        { 
                             <div class="empty-state small">
                                 <div class="empty-icon">
                                     <i class="bi bi-journal-check"></i>
@@ -941,7 +927,7 @@
                                 <h5>Няма наскоро прочетени книги</h5>
                                 <p>Когато завършите четене на книга, тя ще се появи тук.</p>
                             </div>
-                        @* } *@
+                         } 
                     </div>
                 </div>
 

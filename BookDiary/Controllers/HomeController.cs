@@ -1,14 +1,16 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq.Expressions;
 using BookDiary.Core.IServices;
 using BookDiary.Core.Services;
 using BookDiary.Models;
 using BookDiary.Models.ViewModels;
+using BookDiary.Models.ViewModels.BookViewModels;
 using BookDiary.Models.ViewModels.CurrentReadViewModels;
 using BookDiary.Models.ViewModels.NewsViewModels;
 using BookDiary.Models.ViewModels.UserViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookDiary.Controllers
 {
@@ -74,8 +76,29 @@ namespace BookDiary.Controllers
                 currentReads.Add(currentread);
             }
 
-            var newsList = await _newsService.GetTop5Services();
+            var shelfid =await  _shelfService.Get(x => x.Name == "Прочетени книги");
+            var shelf = await _shelfService.GetById(shelfid.Id);
+            var books = _shelfService.GetAll()
+             .Where(b => b.Id == shelfid.Id)
+             .SelectMany(b => b.ShelfBooks.Select(x => x.Book))
+             .ToList();
+            List<BookSeriesViewModel> list = new List<BookSeriesViewModel>();
+            foreach (var b in books)
+            {
 
+                var bookvm = new BookSeriesViewModel
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    CoverImageURL = b.CoverImageURL,
+                };
+                list.Add(bookvm);
+            }
+
+
+
+            var newsList = await _newsService.GetTop5Services();
+            
             var viewModelList = newsList.Select(news => new NewsCreateViewModel
             {
                 Title = news.Title,
@@ -83,6 +106,7 @@ namespace BookDiary.Controllers
                
                 
             }).ToList();
+
             var authorscount = _authorService.GetAll().Count();
             var bookscount = _bookService.GetAll().Count();
             var genrecount = _genreService.GetAll().Count();
@@ -93,7 +117,8 @@ namespace BookDiary.Controllers
                 GenresCount = genrecount,
                 AuthorsCount = authorscount,
                 Users = users,
-                CurrentReads=currentReads
+                CurrentReads=currentReads,
+                ReadBooks=list
             };
             return View(model);
         

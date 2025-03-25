@@ -75,7 +75,7 @@ namespace BookDiary.DataAccess.Repository
         }
         public async Task<T> GetById(int id)
         {
-            var entity = dbSet.Find(id);
+            var entity =  await dbSet.FindAsync(id);
             if (entity == null)
             {
                 throw new ArgumentException("id is null");
