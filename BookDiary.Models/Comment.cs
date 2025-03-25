@@ -18,7 +18,10 @@ namespace BookDiary.Models
         public User User { get; set; }
         public string Content {  get; set; }
         public int Rating { get; set; }
-        public ICollection<CommentBook> CommentBooks { get; set; }  
-        public ICollection<CommentNews> CommentNews { get; set; }
+         [ForeignKey(nameof(Book))]
+        public int BookId { get; set; }
+        public Book Book { get; set; }
+        public ICollection<Book> Books { get; set; }  
+      
     }
 }

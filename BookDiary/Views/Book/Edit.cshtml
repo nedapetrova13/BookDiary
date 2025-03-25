@@ -59,6 +59,25 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="LanguageId" asp-items="@ViewBag.Languages" class="form-select border-0 border-bottom rounded-0" required>
+                                        <option value="">Изберете език</option>
+                                    </select>
+                                    <label asp-for="LanguageId">Език</label>
+                                    <span asp-validation-for="LanguageId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- Publishing House -->
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select asp-for="PublishingHouseId" asp-items="@ViewBag.PublishingHouses" class="form-select border-0 border-bottom rounded-0" required>
+                                        <option value="">Изберете издателство</option>
+                                    </select>
+                                    <label asp-for="PublishingHouseId">Издателство</label>
+                                    <span asp-validation-for="PublishingHouseId" class="text-danger"></span>
+                                </div>
+                            </div>
                             <!-- Description -->
                             <div class="col-12">
                                 <div class="mb-4">

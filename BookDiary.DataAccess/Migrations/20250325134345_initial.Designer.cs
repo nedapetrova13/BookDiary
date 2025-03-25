@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookDiary.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250320171452_initial")]
+    [Migration("20250325134345_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -89,6 +89,12 @@ namespace BookDiary.DataAccess.Migrations
                     b.Property<int>("Chapters")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CommentBookId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CommentUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("CoverImageURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -98,6 +104,12 @@ namespace BookDiary.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("GenreId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PublishingHouseId")
                         .HasColumnType("int");
 
                     b.Property<double>("Rating")
@@ -116,38 +128,15 @@ namespace BookDiary.DataAccess.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.HasIndex("SeriesId");
-
-                    b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("BookDiary.Models.BookPublishingHouse", b =>
-                {
-                    b.Property<int>("PublishingHouseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PublishingDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("PublishingHouseId", "BookId");
-
-                    b.HasIndex("BookId");
-
                     b.HasIndex("LanguageId");
 
-                    b.ToTable("BooksPublishingHouses");
+                    b.HasIndex("PublishingHouseId");
+
+                    b.HasIndex("SeriesId");
+
+                    b.HasIndex("CommentUserId", "CommentBookId");
+
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("BookDiary.Models.BookTag", b =>
@@ -190,70 +179,27 @@ namespace BookDiary.DataAccess.Migrations
 
             modelBuilder.Entity("BookDiary.Models.Comment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("BookDiary.Models.CommentBook", b =>
-                {
-                    b.Property<int>("CommentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.HasKey("CommentId", "BookId");
+                    b.HasKey("UserId", "BookId");
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("CommentsBooks");
-                });
-
-            modelBuilder.Entity("BookDiary.Models.CommentNews", b =>
-                {
-                    b.Property<int>("NewsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CommentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.HasKey("NewsId", "CommentId");
-
-                    b.HasIndex("CommentId");
-
-                    b.ToTable("CommentsNews");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("BookDiary.Models.CurrentRead", b =>
@@ -807,43 +753,36 @@ namespace BookDiary.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookDiary.Models.Series", "Series")
-                        .WithMany("Books")
-                        .HasForeignKey("SeriesId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Genre");
-
-                    b.Navigation("Series");
-                });
-
-            modelBuilder.Entity("BookDiary.Models.BookPublishingHouse", b =>
-                {
-                    b.HasOne("BookDiary.Models.Book", "Book")
-                        .WithMany("BookPublishingHouse")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("BookDiary.Models.Language", "Language")
-                        .WithMany("BookPublishingHouses")
+                        .WithMany("Books")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BookDiary.Models.PublishingHouse", "PublishingHouse")
-                        .WithMany("bookPublishingHouses")
+                        .WithMany("Books")
                         .HasForeignKey("PublishingHouseId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Book");
+                    b.HasOne("BookDiary.Models.Series", "Series")
+                        .WithMany("Books")
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BookDiary.Models.Comment", null)
+                        .WithMany("Books")
+                        .HasForeignKey("CommentUserId", "CommentBookId");
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Genre");
 
                     b.Navigation("Language");
 
                     b.Navigation("PublishingHouse");
+
+                    b.Navigation("Series");
                 });
 
             modelBuilder.Entity("BookDiary.Models.BookTag", b =>
@@ -867,51 +806,21 @@ namespace BookDiary.DataAccess.Migrations
 
             modelBuilder.Entity("BookDiary.Models.Comment", b =>
                 {
-                    b.HasOne("BookDiary.Models.User", "User")
-                        .WithMany("MyComments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BookDiary.Models.CommentBook", b =>
-                {
                     b.HasOne("BookDiary.Models.Book", "Book")
                         .WithMany("Comments")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("BookDiary.Models.Comment", "Comment")
-                        .WithMany("CommentBooks")
-                        .HasForeignKey("CommentId")
+                    b.HasOne("BookDiary.Models.User", "User")
+                        .WithMany("MyComments")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Book");
 
-                    b.Navigation("Comment");
-                });
-
-            modelBuilder.Entity("BookDiary.Models.CommentNews", b =>
-                {
-                    b.HasOne("BookDiary.Models.Comment", "Comment")
-                        .WithMany("CommentNews")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("BookDiary.Models.News", "News")
-                        .WithMany("Comments")
-                        .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Comment");
-
-                    b.Navigation("News");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BookDiary.Models.CurrentRead", b =>
@@ -1109,8 +1018,6 @@ namespace BookDiary.DataAccess.Migrations
 
             modelBuilder.Entity("BookDiary.Models.Book", b =>
                 {
-                    b.Navigation("BookPublishingHouse");
-
                     b.Navigation("BookTags");
 
                     b.Navigation("Comments");
@@ -1135,9 +1042,7 @@ namespace BookDiary.DataAccess.Migrations
 
             modelBuilder.Entity("BookDiary.Models.Comment", b =>
                 {
-                    b.Navigation("CommentBooks");
-
-                    b.Navigation("CommentNews");
+                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("BookDiary.Models.Genre", b =>
@@ -1149,17 +1054,12 @@ namespace BookDiary.DataAccess.Migrations
 
             modelBuilder.Entity("BookDiary.Models.Language", b =>
                 {
-                    b.Navigation("BookPublishingHouses");
-                });
-
-            modelBuilder.Entity("BookDiary.Models.News", b =>
-                {
-                    b.Navigation("Comments");
+                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("BookDiary.Models.PublishingHouse", b =>
                 {
-                    b.Navigation("bookPublishingHouses");
+                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("BookDiary.Models.Question", b =>

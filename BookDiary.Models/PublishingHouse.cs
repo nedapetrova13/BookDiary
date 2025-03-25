@@ -14,7 +14,7 @@ namespace BookDiary.Models
         [Required(ErrorMessage = "Името е заядължително")]
         public string Name { get; set; }
         public int YearFounded { get; set; }
-        public ICollection<BookPublishingHouse> bookPublishingHouses { get; set; }  
+        public ICollection<Book> Books { get; set; }  
 
     }
 }

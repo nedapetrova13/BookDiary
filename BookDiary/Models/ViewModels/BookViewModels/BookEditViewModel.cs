@@ -14,12 +14,8 @@ namespace BookDiary.Models.ViewModels.BookViewModels
         public string? BookFormat { get; set; }
         public int BookPages { get; set; }
         public int Chapters { get; set; }
-        public List<BookDiary.Models.PublishingHouse> PHList { get; set; } = new List<BookDiary.Models.PublishingHouse>();
-
-        public int? PublishingHouseId { get; set; }
-        public List<BookDiary.Models.Language> LanguageList { get; set; } = new List<BookDiary.Models.Language>();
-
-        public int? LanguageId { get; set; }
+        public int PublishingHouseId { get; set; }
+        public int LanguageId { get; set; }
     }
 
 }

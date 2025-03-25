@@ -28,10 +28,8 @@ namespace BookDiary.Controllers
             private readonly IBookTagService _bookTagService;
             private readonly ILanguageService _languageService;
             private readonly IPublishingHouseService _pubHouseService;
-            private readonly IBookPublishingHouseService _bookPublishingHouse;
             private readonly IShelfService _shelfService;
             private readonly IShelfBookService _shelfBookService;
-            private readonly ICommentBookService _commentBookService;
             private readonly ICommentService _commentService;
             private readonly UserManager<User> _userManager;
             private readonly IUserService _userService;
@@ -39,7 +37,7 @@ namespace BookDiary.Controllers
 
 
 
-        public BookController(IBookService bookService,IUserService userService,ICurrentReadService currentReadService, UserManager<User> userManager, ICommentService commentService,ICommentBookService commentBookService, IShelfBookService shelfBookService, IShelfService shelfService, IBookPublishingHouseService bookPublishingHouse,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService,ILanguageService languageService, IPublishingHouseService pubHouseService)
+        public BookController(IBookService bookService,IUserService userService,ICurrentReadService currentReadService, UserManager<User> userManager, ICommentService commentService, IShelfBookService shelfBookService, IShelfService shelfService,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService,ILanguageService languageService, IPublishingHouseService pubHouseService)
         {
                 _bookService = bookService;
                 _authorService = authorService;
@@ -49,10 +47,8 @@ namespace BookDiary.Controllers
                 _bookTagService = bookTagService;
                 _languageService = languageService;
                 _pubHouseService = pubHouseService;
-                _bookPublishingHouse = bookPublishingHouse;
                 _shelfService = shelfService;
                 _shelfBookService = shelfBookService;
-                _commentBookService = commentBookService;
                 _commentService = commentService;
                 _userManager = userManager;
                 _userService = userService;
@@ -88,12 +84,12 @@ namespace BookDiary.Controllers
             }
             if (filter.PublishingHouseId != null)
             {
-                query = query.AsQueryable().Include(x => x.BookPublishingHouse).Where(b => b.BookPublishingHouse.Any(b=>b.PublishingHouseId == filter.PublishingHouseId));
+                query = query.Where(g => g.PublishingHouseId == filter.PublishingHouseId);
 
             }
             if (filter.LanguageId != null)
             {
-                query = query.AsQueryable().Include(x => x.BookPublishingHouse).Where(b => b.BookPublishingHouse.Any(b => b.LanguageId == filter.LanguageId));
+                query = query.Where(g => g.LanguageId == filter.LanguageId);
 
             }
             var list = _bookService.GetAll();
@@ -148,33 +144,36 @@ namespace BookDiary.Controllers
                 SeriesId = bookcvm.SeriesId,
                 CoverImageURL = bookcvm.CoverImageURL,
                 BookPages = bookcvm.BookPages,
-                Chapters = bookcvm.Chapters
+                Chapters = bookcvm.Chapters,
+                LanguageId=bookcvm.LanguageId,
+                PublishingHouseId=bookcvm.PublishingHouseId
+                
             };
 
             await _bookService.Add(book);
-            var bphl = new BookPublishingHouse
-            {
-                BookId = book.Id,
-                PublishingHouseId = bookcvm.PublishingHouseId,
-                LanguageId = bookcvm.LanguageId,
-            };
-            await _bookPublishingHouse.Add(bphl);
+            
             return RedirectToAction("Index");
             
         }
         [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Edit(int id)
-            {
+        {
                 var authors = _authorService.GetAll();
                 var genres =  _genreService.GetAll();
                 var series =  _seriesService.GetAll();
                 var tags =  _tagService.GetAll();
+                var languages = _languageService.GetAll();
+                var publishinghouses = _pubHouseService.GetAll();
                 ViewBag.Genres = new SelectList(genres, "Id", "Name");
                 ViewBag.Authors = new SelectList(authors, "Id", "Name");
                 ViewBag.Series = new SelectList(series, "Id", "Title");
                 ViewBag.Tags = new SelectList(tags, "Id", "Name");
+                ViewBag.Languages = new SelectList(languages, "Id", "Name");
+                ViewBag.PublishingHouses = new SelectList(publishinghouses, "Id", "Name");
+                
                 var book = await _bookService.GetById(id);
+                
                 var model = new BookEditViewModel
                 {
                     Id = book.Id,
@@ -186,10 +185,11 @@ namespace BookDiary.Controllers
                     Chapters = book.Chapters,
                     GenreId = book.GenreId,
                     CoverImageURL = book.CoverImageURL,
-                    
+                    LanguageId = book.LanguageId,
+                    PublishingHouseId= book.PublishingHouseId,
                 };
                 return View(model);
-            }
+        }
         [Authorize(Roles = "Admin")]
 
         [HttpPost]
@@ -205,8 +205,11 @@ namespace BookDiary.Controllers
                 BookPages = model.BookPages,
                 Chapters = model.Chapters,
                 GenreId = model.GenreId,
-                CoverImageURL = model.CoverImageURL
+                CoverImageURL = model.CoverImageURL,
+                LanguageId=model.LanguageId,
+                PublishingHouseId=model.PublishingHouseId
             };
+
                     await _bookService.Update(book);
                     return RedirectToAction("Index");
 
@@ -286,21 +289,7 @@ namespace BookDiary.Controllers
             };
             return View(model);
         }
-        [Authorize(Roles = "Admin")]
-
-        [HttpPost]
-        public async Task<IActionResult> AssignLangandPH(BookLanguagePHVM? model)
-        {
-            var book = new BookPublishingHouse()
-            {
-                BookId = model.BookId,
-                LanguageId = model.LanguageId,
-                PublishingHouseId = model.PublishingHouseId,
-                PublishingDate = model.PublishingDate,
-            };
-            await _bookPublishingHouse.Add(book);
-            return RedirectToAction("Index");
-        }
+        
 
         public async Task<IActionResult> Info(int bookId)
         {
@@ -340,18 +329,22 @@ namespace BookDiary.Controllers
              .Select(b => b.BookFormat.ToString()) // Convert the enum to a string
              .FirstOrDefault();
             
-            var language = _languageService.GetAll()
-                .Where(b => b.BookPublishingHouses.Select(bt=>bt.BookId==bookId).FirstOrDefault())
-                .SelectMany(b => b.BookPublishingHouses.Select(bp => bp.Language.Name))
-                .FirstOrDefault();
-           
-            var publishinghouse = _pubHouseService.GetAll()
-                 .Where(ph => ph.bookPublishingHouses.Any(bph => bph.BookId == bookId))
-                 .Select(ph => ph.Name)
-                 .FirstOrDefault();
-            
+            var language = _bookService.GetAll()
+                .Where(b => b.Id == bookId)
+               .Include(bt => bt.Language)
+               .Select(a => a.Language.Name)
+               .FirstOrDefault();
 
-            var comments = await _commentService.Find(x => x.CommentBooks.Any(bt => bt.BookId == bookId));
+
+            var publishinghouse = _bookService.GetAll()
+                 .Where(b => b.Id == bookId)
+                 .Include(bt => bt.PublishingHouse)
+                 .Select(a => a.PublishingHouse.Name)
+                 .FirstOrDefault();
+
+
+
+            var comments = await _commentService.Find(x => x.BookId==bookId);
 
           
             List<CommentUserViewModel> comuser = new List<CommentUserViewModel>();
@@ -439,20 +432,17 @@ namespace BookDiary.Controllers
                 UserId = currentUser.Id,
                 Content=comment.Content,
                 Rating = comment.Rating,
+                BookId = comment.BookId,
+
             };
             await _commentService.Add(com);
-            CommentBook cb = new CommentBook
-            {
-                BookId = comment.BookId,
-                CommentId = com.Id,
-            };
-            await _commentBookService.Add(cb);
+            
             return RedirectToAction("Info", new { bookId = comment.BookId });
         }
         [HttpPost]
         public async Task<IActionResult> DeleteComment(int bookId, int commentid)
         {
-            await _commentBookService.DeleteBookComment(bookId, commentid);
+            await _commentService.Delete(commentid);
             return RedirectToAction("Info", new { BookId = bookId });
         }
         

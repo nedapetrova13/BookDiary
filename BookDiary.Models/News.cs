@@ -15,7 +15,7 @@ namespace BookDiary.Models
         public string Title {  get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
         public string Content {  get; set; }
-        public ICollection<CommentNews> Comments { get; set; }  
+       
 
     }
 }

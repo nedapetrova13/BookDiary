@@ -43,12 +43,9 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
 
 builder.Services.AddScoped<IAuthorService, AuthorService>();
-builder.Services.AddScoped<IBookPublishingHouseService, BookPublishingHouseService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IBookTagService, BookTagService>(); 
 builder.Services.AddScoped<ICityService, CityService>();
-builder.Services.AddScoped<ICommentBookService, CommentBookService>();
-builder.Services.AddScoped<ICommentNewsService, CommentNewsService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ICurrentReadService, CurrentReadService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
@@ -345,6 +342,8 @@ using (var scope = app.Services.CreateScope())
                 BookPages = 320,
                 Description = "Представете си, че сте прекарали първите 10 години от своя живот без родители, живеейки под стълбите в дома на семейство, което ви мрази. И на единайсетия си рожден ден откривате, че сте истински магьосник!\r\n\r\nТочно това се случва с Хари Потър в този пленяващ забавен роман.",
                 Chapters = 17,
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id,
                 CoverImageURL = "https://www.ciela.com/media/catalog/product/cache/9a7ceae8a5abbd0253425b80f9ef99a5/h/a/hari_potar_i_filosofskiat_kamak_hrm.jpg"
             },
            new Book
@@ -355,6 +354,8 @@ using (var scope = app.Services.CreateScope())
                 BookPages = 360,
                 Description = "След като успешно преживява първата си година в Хогуортс, Хари Потър се завръща за още приключения. Но странни събития започват да се случват, когато древна магия се пробужда в Стаята на тайните.",
                 Chapters = 18,
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id,
                 CoverImageURL = "https://www.ciela.com/media/catalog/product/cache/9a7ceae8a5abbd0253425b80f9ef99a5/h/a/hari_potar_i_staiata_na_tainite_hrm.jpg"
             },
 
@@ -366,7 +367,9 @@ using (var scope = app.Services.CreateScope())
                 BookPages = 435,
                 Description = "Сириус Блек, страховит магьосник, е избягал от затвора Азкабан и всички вярват, че е по следите на Хари Потър. Но дали истината е такава, каквато изглежда?",
                 Chapters = 22,
-                CoverImageURL = "https://egmontbulgaria.com/media/cache/product_original/product-images/29/26/97895444655751469431553.jpg?1469431553"
+                CoverImageURL = "https://egmontbulgaria.com/media/cache/product_original/product-images/29/26/97895444655751469431553.jpg?1469431553",
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
             },
 
             new Book
@@ -377,6 +380,8 @@ using (var scope = app.Services.CreateScope())
                 BookPages = 835,
                 Description = "Първата книга от епичната фентъзи сага „Песен за огън и лед“. В нея се разказва за борбата за власт между благородническите фамилии на Вестерос, където всеки ход може да е последен.",
                 Chapters = 73,
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Бард").Id,
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id,
                 CoverImageURL = "https://www.book.store.bg/lrgimg/17366/pesen-za-ogyn-i-led-kniga-1-igra-na-tronove.jpg"
             },
 
@@ -388,6 +393,8 @@ using (var scope = app.Services.CreateScope())
                 BookPages = 969,
                 Description = "Докато войната бушува из Вестерос, различни претенденти за трона започват да се борят за властта. Древни сили започват да се пробуждат, а северът е изправен пред нова заплаха.",
                 Chapters = 69,
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Бард").Id,
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id,
                 CoverImageURL = "https://www.ateabooks.com/5822/-2-sblusuk-na-krale.jpg"
             },
 
@@ -399,6 +406,8 @@ using (var scope = app.Services.CreateScope())
                 BookPages = 1128,
                 Description = "Третата част от поредицата „Песен за огън и лед“, където борбата за власт става още по-кървава, а съдбите на любимите герои се преплитат в неочаквани обрати.",
                 Chapters = 82,
+                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Бард").Id,
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id,
                 CoverImageURL = "https://www.bard.bg/files/mf/books/876_pic_1.jpg"
             },
 
@@ -410,6 +419,8 @@ using (var scope = app.Services.CreateScope())
                 BookPages = 447,
                 Description = "Jack Torrance takes a job as the winter caretaker at the Overlook Hotel, but sinister forces begin to influence him.",
                 Chapters = 58,
+                PublishingHouseId = dbContext.PublishingHouses.First(ph => ph.Name == "Бард").Id,
+                LanguageId = dbContext.Languages.First(l => l.Name == "Английски").Id,
                 CoverImageURL = "https://libris.to/media/jacket/02933315_shining.jpg"
             },
             new Book
@@ -420,6 +431,8 @@ using (var scope = app.Services.CreateScope())
                 BookPages = 199,
                 Description = "A bullied teenage girl discovers her telekinetic abilities and uses them to unleash a night of horror.",
                 Chapters = 17,
+                PublishingHouseId = dbContext.PublishingHouses.First(ph => ph.Name == "Бард").Id,
+                LanguageId = dbContext.Languages.First(l => l.Name == "Английски").Id,
                 CoverImageURL = "https://th.bing.com/th/id/R.2c05123acc614da649f8be9a2ca4d8fb?rik=YteGOBdAvgOfcQ&riu=http%3a%2f%2fprodimage.images-bn.com%2fpimages%2f9780307743664_p0_v1_s1200x630.jpg&ehk=nJYIcUr2L%2fE0HjoqDWBESaX7Hh8FOQtF6bXZsNJaXNs%3d&risl=&pid=ImgRaw&r=0"
             },
             new Book
@@ -430,6 +443,8 @@ using (var scope = app.Services.CreateScope())
                 BookPages = 256,
                 Description = "Hercule Poirot investigates a murder aboard the luxurious Orient Express train.",
                 Chapters = 30,
+                PublishingHouseId = dbContext.PublishingHouses.First(ph => ph.Name == "Изток-Запад").Id,
+                LanguageId = dbContext.Languages.First(l => l.Name == "Английски").Id,
                 CoverImageURL = "https://www.pluggedin.com/wp-content/uploads/2020/01/murder-on-the-orient-express-cover.jpg"
             }
 
@@ -439,68 +454,7 @@ using (var scope = app.Services.CreateScope())
         dbContext.Books.AddRange(books); 
         await dbContext.SaveChangesAsync();
     }
-    if (!dbContext.BooksPublishingHouses.Any())
-    {
-        var bph = new List<BookPublishingHouse>
-        {
-            new BookPublishingHouse
-            {
-                BookId=dbContext.Books.First(b=>b.Title=="Хари Потър и Философският камък").Id,
-                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
-                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
-            },
-            new BookPublishingHouse
-            {
-                BookId=dbContext.Books.First(b=>b.Title=="Хари Потър и Стаята на тайните").Id,
-                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
-                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
-            },
-            new BookPublishingHouse
-            {
-                BookId=dbContext.Books.First(b=>b.Title=="Хари Потър и Затворникът от Азкабан").Id,
-                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
-                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
-            },
-             new BookPublishingHouse
-            {
-                BookId=dbContext.Books.First(b=>b.Title=="Игра на тронове").Id,
-                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Бард").Id,
-                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
-            },
-              new BookPublishingHouse
-            {
-                BookId=dbContext.Books.First(b=>b.Title=="Сблъсък на крале").Id,
-                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Бард").Id,
-                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
-            },
-               new BookPublishingHouse
-            {
-                BookId=dbContext.Books.First(b=>b.Title=="Вихър от мечове").Id,
-                PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Бард").Id,
-                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
-            },
-             new BookPublishingHouse
-            {
-                BookId = dbContext.Books.First(b => b.Title == "The Shining").Id,
-                PublishingHouseId = dbContext.PublishingHouses.First(ph => ph.Name == "Бард").Id,
-                LanguageId = dbContext.Languages.First(l => l.Name == "Английски").Id
-            },
-            new BookPublishingHouse
-            {
-                BookId = dbContext.Books.First(b => b.Title == "Carrie").Id,
-                PublishingHouseId = dbContext.PublishingHouses.First(ph => ph.Name == "Бард").Id,
-                LanguageId = dbContext.Languages.First(l => l.Name == "Английски").Id
-            },
-            new BookPublishingHouse
-            {
-                BookId = dbContext.Books.First(b => b.Title == "Murder on the Orient Express").Id,
-                PublishingHouseId = dbContext.PublishingHouses.First(ph => ph.Name == "Изток-Запад").Id,
-                LanguageId = dbContext.Languages.First(l => l.Name == "Английски").Id
-            }
-        };
-        dbContext.BooksPublishingHouses.AddRange(bph);
-        await dbContext.SaveChangesAsync();
-    }
+    
 }
 
 using (var scope = app.Services.CreateScope())
