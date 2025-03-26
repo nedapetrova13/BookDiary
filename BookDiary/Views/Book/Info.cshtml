@@ -95,7 +95,6 @@
                                 box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
                                 transition: all 0.3s ease;
                                     ">
-                                        <option selected disabled>Избери шкаф</option>
                                         @foreach (var item in (SelectList)ViewBag.Shelves)
                                         {
                                             <option value="@item.Value">@item.Text</option>
@@ -144,10 +143,10 @@
                                 </a>
                             }
                         </div>
-                       
 
 
-                            <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 15px;">
+
+                        <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 15px;">
                             @if (Model.IsRead == false)
                             {
                                 <form method="post" asp-controller="CurrentRead" asp-action="SetCurrentRead" style="width: 100%;">
@@ -197,8 +196,8 @@
                                         <span>Прочетена</span>
                                     </button>
                                 </form>
-                                }
-                                else{
+                            }
+                            else{
                                 <form method="post" asp-controller="CurrentRead" asp-action="SetCurrentRead" style="width: 100%;">
                                     <input type="hidden" name="bookid" value="@Model.Id" />
                                     <button type="submit" style="
@@ -218,7 +217,7 @@
                                             box-shadow: none;
                                             text-align: left;
                                             opacity: 0.8;
-                                                ">
+                                    ">
                                         <i class="fas fa-book-reader" style="font-size: 1.2rem; color: #9e9e9e; min-width: 24px; text-align: center;"></i>
                                         <span>В процес на четене</span>
                                     </button>
@@ -242,15 +241,15 @@
                                             box-shadow: none;
                                             text-align: left;
                                             opacity: 0.8;
-                                                ">
+                                    ">
                                         <i class="fas fa-check-circle" style="font-size: 1.2rem; color: #9e9e9e; min-width: 24px; text-align: center;"></i>
                                         <span>Прочетена</span>
                                     </button>
                                 </form>
-                                }
-                                <form method="get" asp-controller="Notes" asp-action="Add" style="width: 100%;">
-                                    <input type="hidden" name="bookid" value="@Model.Id" />
-                                    <button type="submit" style="
+                            }
+                            <form method="get" asp-controller="Notes" asp-action="Add" style="width: 100%;">
+                                <input type="hidden" name="bookid" value="@Model.Id" />
+                                <button type="submit" style="
                             background-color: #f5f0e8;
                             border: 1px solid #d2b48c;
                             color: #5d4037;
@@ -266,13 +265,13 @@
                             transition: all 0.3s ease;
                             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
                             text-align: left;
-                                    ">
-                                        <i class="fas fa-pen-fancy" style="font-size: 1.2rem; color: #8b6b4c; min-width: 24px; text-align: center;"></i>
-                                        <span>Добави записки</span>
-                                    </button>
-                                </form>
-                            </div>
-                        
+                                ">
+                                    <i class="fas fa-pen-fancy" style="font-size: 1.2rem; color: #8b6b4c; min-width: 24px; text-align: center;"></i>
+                                    <span>Добави записки</span>
+                                </button>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -280,67 +279,66 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Get the accordion button and icon
-                const accordionButton = document.querySelector('#accordionFlushExample .accordion-button');
-                const icon = accordionButton.querySelector('i');
+            // Get the accordion button and icon
+            const accordionButton = document.querySelector('#accordionFlushExample .accordion-button');
+            const icon = accordionButton.querySelector('i');
 
-                // Add hover effect for accordion button
-                accordionButton.addEventListener('mouseenter', function() {
-                    this.style.background = 'linear-gradient(135deg, #7d5f42, #9a7a58)';
-                });
+            // Add hover effect for accordion button
+            accordionButton.addEventListener('mouseenter', function() {
+            this.style.background = 'linear-gradient(135deg, #7d5f42, #9a7a58)';
+            });
 
-                accordionButton.addEventListener('mouseleave', function() {
-                    if (!this.classList.contains('collapsed')) {
-                        this.style.background = 'linear-gradient(135deg, #7d5f42, #9a7a58)';
-                    } else {
-                        this.style.background = 'linear-gradient(135deg, #8b6b4c, #a68763)';
-                    }
-                });
+            accordionButton.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('collapsed')) {
+            this.style.background = 'linear-gradient(135deg, #7d5f42, #9a7a58)';
+            } else {
+            this.style.background = 'linear-gradient(135deg, #8b6b4c, #a68763)';
+            }
+            });
 
-                // Rotate icon when accordion is opened/closed
-                accordionButton.addEventListener('click', function() {
-                    if (this.classList.contains('collapsed')) {
-                        icon.style.transform = 'rotate(90deg)';
-                        this.style.background = 'linear-gradient(135deg, #7d5f42, #9a7a58)';
-                    } else {
-                        icon.style.transform = 'rotate(0)';
-                        this.style.background = 'linear-gradient(135deg, #8b6b4c, #a68763)';
-                    }
-                });
+            // Rotate icon when accordion is opened/closed
+            accordionButton.addEventListener('click', function() {
+            if (this.classList.contains('collapsed')) {
+            icon.style.transform = 'rotate(90deg)';
+            this.style.background = 'linear-gradient(135deg, #7d5f42, #9a7a58)';
+            } else {
+            icon.style.transform = 'rotate(0)';
+            this.style.background = 'linear-gradient(135deg, #8b6b4c, #a68763)';
+            }
+            });
 
-                // Add hover effects for all buttons
-                document.querySelectorAll('#flush-collapseOne button').forEach(button => {
-                    if (!button.classList.contains('accordion-button')) {
-                        button.addEventListener('mouseenter', function() {
-                            if (this.style.backgroundColor === 'rgb(245, 240, 232)') {
-                                this.style.backgroundColor = '#e6dccb';
-                                this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-                                this.style.transform = 'translateY(-2px)';
-                            } else if (this.style.background.includes('gradient')) {
-                                this.style.background = 'linear-gradient(to right, #7d5f42, #9a7a58)';
-                                this.style.boxShadow = '0 4px 10px rgba(0,0,0,0.15)';
-                                this.style.transform = 'translateY(-2px)';
-                            }
-                        });
+            // Add hover effects for all buttons
+            document.querySelectorAll('#flush-collapseOne button').forEach(button => {
+            if (!button.classList.contains('accordion-button')) {
+            button.addEventListener('mouseenter', function() {
+            if (this.style.backgroundColor === 'rgb(245, 240, 232)') {
+            this.style.backgroundColor = '#e6dccb';
+            this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+            this.style.transform = 'translateY(-2px)';
+            } else if (this.style.background.includes('gradient')) {
+            this.style.background = 'linear-gradient(to right, #7d5f42, #9a7a58)';
+            this.style.boxShadow = '0 4px 10px rgba(0,0,0,0.15)';
+            this.style.transform = 'translateY(-2px)';
+            }
+            });
 
-                        button.addEventListener('mouseleave', function() {
-                            if (this.style.backgroundColor === 'rgb(230, 220, 203)') {
-                                this.style.backgroundColor = '#f5f0e8';
-                                this.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
-                                this.style.transform = 'translateY(0)';
-                            } else if (this.style.background.includes('gradient')) {
-                                this.style.background = 'linear-gradient(to right, #8b6b4c, #a68763)';
-                                this.style.boxShadow = '0 3px 8px rgba(0,0,0,0.1)';
-                                this.style.transform = 'translateY(0)';
-                            }
-                        });
-                    }
-                });
+            button.addEventListener('mouseleave', function() {
+            if (this.style.backgroundColor === 'rgb(230, 220, 203)') {
+            this.style.backgroundColor = '#f5f0e8';
+            this.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
+            this.style.transform = 'translateY(0)';
+            } else if (this.style.background.includes('gradient')) {
+            this.style.background = 'linear-gradient(to right, #8b6b4c, #a68763)';
+            this.style.boxShadow = '0 3px 8px rgba(0,0,0,0.1)';
+            this.style.transform = 'translateY(0)';
+            }
+            });
+            }
+            });
             });
         </script>
 
     }
-    <!-- Tags & Description -->
     <div class="book-tags-section">
         <h2 class="section-title">Характеристики</h2>
         <div class="tags-container">
@@ -362,13 +360,16 @@
         <p class="book-description">@Model.Description</p>
     </div>
 
-    <!-- Comment Section -->
     <div class="book-comments-section">
         <h2 class="section-title">Коментари и оценки</h2>
 
-        <!-- Comment Form -->
-        <div class="comment-form-container" id="comment-form">
-            <h3 class="comment-form-title">Добави свой коментар</h3>
+        @if (!Model.CommentUsers.Any(c => c.UserName == User.Identity.Name))
+        {
+
+
+
+            <div class="comment-form-container" id="comment-form">
+                <h3 class="comment-form-title">Добави свой коментар</h3>
             <form method="post" asp-controller="Book" asp-action="AddComment" class="comment-form">
                 <input type="hidden" name="BookId" value="@Model.Id" />
 
@@ -385,7 +386,7 @@
 
                 <div class="form-group">
                     <label for="commentText">Твоя коментар:</label>
-                    <textarea id="commentText" name="Content" rows="4" class="form-control comment-textarea" placeholder="Сподели своето мнение за книгата..."></textarea>
+                    <textarea id="commentText" name="Content" rows="4" class="form-control comment-textarea" required placeholder="Сподели своето мнение за книгата..."></textarea>
                 </div>
 
                 <button type="submit" class="btn btn-primary comment-submit-btn">
@@ -393,7 +394,7 @@
                 </button>
             </form>
         </div>
-
+        }
         <div class="comments-list">
             @if (Model.CommentUsers != null && Model.CommentUsers.Count > 0)
             {
@@ -421,7 +422,7 @@
                         </div>
                         <div class="comment-content">@comment.Content</div>
                         <div class="comment-footer">
-                            @if (User.Identity.Name == comment.UserName || User.IsInRole(SD.AdminRole))
+                            @if (User.Identity.Name == comment.UserName || User.IsInRole(SD.AdminRole)) //това не работи защото катоusername се възприема имейлът 
                             {
                                 <form method="post" asp-controller="Book" asp-action="DeleteComment" class="delete-comment-form">
                                     <input type="hidden" name="CommentId" value="@comment.Id" />

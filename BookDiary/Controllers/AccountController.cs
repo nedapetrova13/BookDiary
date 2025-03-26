@@ -51,7 +51,7 @@ namespace BookDiary.Controllers
             // Create new user
             var user = new User
             {
-                UserName = model.Email, // Using email as username
+                UserName = model.Name, 
                 Email = model.Email,
                 Name = model.Name,
             };

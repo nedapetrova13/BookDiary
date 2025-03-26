@@ -23,7 +23,7 @@ namespace BookDiary.DataAccess.Repository
         public async Task Add(T entity)
         {
             await dbSet.AddAsync(entity);
-             await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task Delete(int id)

@@ -296,7 +296,7 @@ namespace BookDiary.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
 
             var shelves1 = _shelfService.GetAll().Where(x => !x.ShelfBooks.Any(b => b.BookId == bookId && x.UserId==currentUser.Id)).ToList();
-            var shelves = await _shelfService.Find(x => x.UserId == currentUser.Id && !x.ShelfBooks.Any(b => b.BookId == bookId));
+            var shelves = await _shelfService.Find(x => x.UserId == currentUser.Id && !x.ShelfBooks.Any(b => b.BookId == bookId) && x.Name!="Прочетени книги");
             ViewBag.Shelves = new SelectList(shelves, "Id", "Name");
             
             var bookcvm = await _bookService.GetById(bookId);
@@ -363,12 +363,6 @@ namespace BookDiary.Controllers
                 comuser.Add(com);
             }
 
-            Shelf sh = await _shelfService.Get(x => x.Name == "Прочетени книги" && x.UserId == currentUser.Id);
-            var books = await _shelfBookService.Get(x => x.BookId == bookcvm.Id && x.ShelfId == sh.Id);
-
-
-            
-
             var book = new BookAdminViewModel()
             {
                 Id = bookcvm.Id,
@@ -384,14 +378,24 @@ namespace BookDiary.Controllers
                 PublishingHouseName= publishinghouse,
                 CommentUsers = comuser
             };
-            if (books == null)
+            Shelf sh = await _shelfService.Get(x => x.Name == "Прочетени книги" && x.UserId == currentUser.Id);
+            if (sh != null)
             {
-                book.IsRead = false;
+                var books = await _shelfBookService.Get(x => x.BookId == bookcvm.Id && x.ShelfId == sh.Id);
+                if (books == null)
+                {
+                    book.IsRead = false;
+                }
+                else
+                {
+                    book.IsRead = true;
+                }
             }
             else
             {
-                book.IsRead = true;
+                book.IsRead = false;
             }
+            
             if (series != null)
             {
                 book.SeriesName = series.Title;
@@ -441,16 +445,22 @@ namespace BookDiary.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(User);
 
+            var existingComment = await _commentService.Find(x => x.BookId == comment.BookId && x.UserId == currentUser.Id);
+            if (existingComment.Any()) 
+            {
+                TempData["error"] = "Вече сте коментирали тази книга!";
+                return RedirectToAction("Info", new { bookId = comment.BookId });
+            }
+
             Comment com = new Comment
             {
                 UserId = currentUser.Id,
-                Content=comment.Content,
+                Content = comment.Content,
                 Rating = comment.Rating,
                 BookId = comment.BookId,
-
             };
             await _commentService.Add(com);
-            
+
             return RedirectToAction("Info", new { bookId = comment.BookId });
         }
         [HttpPost]

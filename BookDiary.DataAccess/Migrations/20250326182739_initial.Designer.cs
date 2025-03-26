@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookDiary.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250326104203_initial")]
+    [Migration("20250326182739_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -84,12 +84,6 @@ namespace BookDiary.DataAccess.Migrations
                     b.Property<int>("Chapters")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CommentBookId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CommentUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("CoverImageURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -128,8 +122,6 @@ namespace BookDiary.DataAccess.Migrations
                     b.HasIndex("PublishingHouseId");
 
                     b.HasIndex("SeriesId");
-
-                    b.HasIndex("CommentUserId", "CommentBookId");
 
                     b.ToTable("Books");
                 });
@@ -660,10 +652,6 @@ namespace BookDiary.DataAccess.Migrations
                         .HasForeignKey("SeriesId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("BookDiary.Models.Comment", null)
-                        .WithMany("Books")
-                        .HasForeignKey("CommentUserId", "CommentBookId");
-
                     b.Navigation("Author");
 
                     b.Navigation("Genre");
@@ -857,11 +845,6 @@ namespace BookDiary.DataAccess.Migrations
                     b.Navigation("Notes");
 
                     b.Navigation("ShelfBooks");
-                });
-
-            modelBuilder.Entity("BookDiary.Models.Comment", b =>
-                {
-                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("BookDiary.Models.Genre", b =>

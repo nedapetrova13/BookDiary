@@ -306,9 +306,7 @@ namespace BookDiary.DataAccess.Migrations
                     BookPages = table.Column<int>(type: "int", nullable: false),
                     BookFormat = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Chapters = table.Column<int>(type: "int", nullable: false),
-                    CommentBookId = table.Column<int>(type: "int", nullable: true),
-                    CommentUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Chapters = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -523,11 +521,6 @@ namespace BookDiary.DataAccess.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_CommentUserId_CommentBookId",
-                table: "Books",
-                columns: new[] { "CommentUserId", "CommentBookId" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Books_GenreId",
                 table: "Books",
                 column: "GenreId");
@@ -591,34 +584,11 @@ namespace BookDiary.DataAccess.Migrations
                 name: "IX_ShelvesBooks_BookId",
                 table: "ShelvesBooks",
                 column: "BookId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Books_Comments_CommentUserId_CommentBookId",
-                table: "Books",
-                columns: new[] { "CommentUserId", "CommentBookId" },
-                principalTable: "Comments",
-                principalColumns: new[] { "UserId", "BookId" });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Comments_AspNetUsers_UserId",
-                table: "Comments");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Books_Authors_AuthorId",
-                table: "Books");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Series_Authors_AuthorId",
-                table: "Series");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Books_Comments_CommentUserId_CommentBookId",
-                table: "Books");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -636,6 +606,9 @@ namespace BookDiary.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "BooksTags");
+
+            migrationBuilder.DropTable(
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "CurrentReads");
@@ -656,19 +629,10 @@ namespace BookDiary.DataAccess.Migrations
                 name: "Tags");
 
             migrationBuilder.DropTable(
-                name: "Shelves");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Authors");
-
-            migrationBuilder.DropTable(
-                name: "Comments");
-
-            migrationBuilder.DropTable(
                 name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "Shelves");
 
             migrationBuilder.DropTable(
                 name: "Genres");
@@ -681,6 +645,12 @@ namespace BookDiary.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Series");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Authors");
         }
     }
 }

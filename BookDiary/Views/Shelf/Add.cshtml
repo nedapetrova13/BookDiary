@@ -12,7 +12,6 @@
                         <input type="hidden" asp-for="UserId" />
                         <input type="hidden" asp-for="Id" />
                         <div class="row g-4">
-                            <!-- Shelf Name -->
                             <div class="col-12">
                                 <div class="form-floating mb-3">
                                     <input type="text" asp-for="Name" class="form-control border-0 border-bottom rounded-0" required placeholder="Име на шкафа" />
@@ -20,7 +19,6 @@
                                     <span asp-validation-for="Name" class="text-danger"></span>
                                 </div>
                             </div>
-                            <!-- Shelf Description -->
                             <div class="col-12">
                                 <div class="form-floating mb-3">
                                     <textarea asp-for="Description" class="form-control border-0 shadow-sm" style="min-height: 120px;" placeholder="Описаие на твоя шкаф"></textarea>
@@ -28,18 +26,19 @@
                                     <span asp-validation-for="Description" class="text-danger"></span>
                                 </div>
                             </div>
-                            <!-- Submit Button -->
                             <div class="col-12 mt-3">
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                     <a href="javascript:history.back()" class="btn btn-outline-secondary px-4 py-2">
                                         <i class="fas fa-times me-2"></i>Отказ
                                     </a>
-                                    <div href="javascript:history.back(-2)">
-                                        <button type="submit" asp-action="Add" asp-controller="Shelf" class="btn text-white px-4 py-2" style="background-color: #5C4033;">
-                                            <i class="fas fa-plus-circle me-2"></i>Създай шкаф
+                                    <div>
+                                        <!-- Add Button -->
+                                        <button type="submit" asp-action="Add" asp-controller="Shelf"
+                                                class="btn text-white px-4 py-2" style="background-color: #5C4033;"
+                                                onclick="setTimeout(() => history.go(-1), 100);">
+                                            <i class="fas fa-plus-circle me-2"></i> Създай шкаф
                                         </button>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>
