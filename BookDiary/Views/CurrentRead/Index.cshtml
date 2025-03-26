@@ -552,7 +552,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>My Current Reads</h1>
+            <h1>Книгите, които чета в момента</h1>
         </header>
 
         @if (Model != null && Model.Any())
@@ -560,28 +560,28 @@
             <div class="stats-summary">
                 <div class="stat-card">
                     <div class="stat-value">@Model.Count()</div>
-                    <div class="stat-label">Books in Progress</div>
+                    <div class="stat-label">Книги в процес на четене</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">@Model.Sum(r => r.Pages)</div>
-                    <div class="stat-label">Pages Read</div>
+                    <div class="stat-label">Прочетени страници</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">@Model.Sum(r => r.TotalPages - r.Pages)</div>
-                    <div class="stat-label">Pages Left</div>
+                    <div class="stat-label">Оставаши страници</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">@Math.Round(Model.Average(r => (double)r.Pages / r.TotalPages * 100))%</div>
-                    <div class="stat-label">Average Progress</div>
+                    <div class="stat-label">Среден прогрес</div>
                 </div>
             </div>
 
             <div class="banner">
-                <h2>Happy Reading!</h2>
-                <p>Track your progress, update your current page, and enjoy your reading journey.</p>
+                <h2>Приятно четене!</h2>
+                <p>Проследи прогреса си, обнови страницата, до която си стигнал, наслади се на четенето.</p>
             </div>
 
-            <h2 class="section-title">Your Current Books</h2>
+            <h2 class="section-title">Книгите ти</h2>
 
             <div class="reads-grid">
                 @foreach (var read in Model)
@@ -601,7 +601,7 @@
                             <h3 class="book-title">@read.BookName</h3>
 
                             <div class="progress-text">
-                                <span>Progress</span>
+                                <span>Прогрес</span>
                                 <span class="progress-percentage">@Math.Round((double)read.Pages / read.TotalPages * 100)%</span>
                             </div>
 
@@ -612,8 +612,8 @@
                             </div>
 
                             <div class="pages-info">
-                                <p>Page <span class="current-page">@read.Pages</span> of <span class="total-pages">@read.TotalPages</span></p>
-                                <p><span class="pages-left">@(read.TotalPages - read.Pages)</span> pages left</p>
+                                <p>Страница <span class="current-page">@read.Pages</span> от <span class="total-pages">@read.TotalPages</span></p>
+                                <p><span class="pages-left">@(read.TotalPages - read.Pages)</span> оставащи страници</p>
                             </div>
 
                             <div class="quick-update">
@@ -623,25 +623,25 @@
                                         <button type="button" class="page-btn minus" onclick="decrementPage(this)">-</button>
                                         <input type="number" name="pages" value="@read.Pages" min="0" max="@read.TotalPages" class="page-input">
                                         <button type="button" class="page-btn plus" onclick="incrementPage(this)">+</button>
-                                        <button type="submit" class="page-save-btn">Save</button>
+                                        <button type="submit" class="page-save-btn">Запази</button>
                                     </div>
                                 </form>
                             </div>
 
                             <div class="card-actions">
-                                <form method="post" asp-controller="Shelf" asp-action="MarkRead" class="px-3 py-2">
+                                <form method="post" asp-controller="Shelf" asp-action="MarkRead" class="px-3 ">
                                     <input type="hidden" name="bookid" value="@read.BookId" />
                                     <button type="submit" class="btn btn-mark-read">
-                                        <i class="fas fa-book-reader"></i> Mark as read
+                                        <i class="fas fa-book-reader"></i> Маркирай като прочетена
                                     </button>
                                 </form>
-@*                                 <a method="post" asp-controller="Shelf" asp-action="MarkRead" asp-route-bookid="@read.BookId" class="btn btn-mark-read">Mark as Read</a>
+@*                                 <a method="post" asp-controller="Shelf" asp-action="MarkRead" asp-route-bookid="@read.BookId" class="btn btn-mark-read">Mark as Read</a
  *@                                <form method="post" asp-controller="CurrentRead" asp-action="DeleteCurrentRead" class="delete-comment-form">
 
                                     <input type="hidden" name="bookId" value="@read.BookId" />
                                     <button type="submit" class="btn btn-delete">
 
-                                        <i class="fas fa-trash"></i> Delete
+                                        <i class="fas fa-trash"></i> няма да продължа книгата
                                     </button>
                                 </form>
                             </div>
@@ -653,22 +653,20 @@
         else
         {
             <div class="empty-state">
-                <h2>No books in progress</h2>
-                <p>You haven't added any books to your reading list yet.</p>
-                <a href="/Book" class="btn btn-add">Browse Books</a>
+                <h2>Все още не сте почнали да четете</h2>
+                <p>Не сте добавили книга в този списък</p>
+                <a asp-controller="Book" asp-action="Index" class="btn btn-add">Разгледай книгите</a>
             </div>
         }
 
-        <div class="footer">
-            Book Diary &copy; @DateTime.Now.Year - Track your reading journey
-        </div>
+        
     </div>
 
     <!-- Update Progress Modal -->
-    <div class="modal-backdrop" id="updateModal">
+    @* <div class="modal-backdrop" id="updateModal">
         <div class="modal">
             <div class="modal-header">
-                <h4 class="modal-title">Update Reading Progress</h4>
+                <h4 class="modal-title">обнови прогреса си</h4>
                 <button type="button" class="close-btn" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -695,7 +693,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> *@
 
     <script>
         // Increment page number

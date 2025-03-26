@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BookDiary.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" asp-append-version="true"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -568,7 +569,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="bd-nav-item bd-tooltip" data-tooltip="Всички новини">
-                                                    <a class="bd-nav-link" asp-area="" asp-controller="News" asp-action="Index">
+                                                    <a class="bd-nav-link" asp-area="" asp-controller="Author" asp-action="Index">
                                                         <span class="bd-nav-icon"><i class="fas fa-list"></i></span>
                                                         <span class="bd-nav-text">Всички</span>
                                                     </a>
@@ -812,7 +813,7 @@
             @RenderBody()
         </main>
     </div>
-
+    <partial name="_Notification"/>
     <script>
         $(document).ready(function() {
             // Sidebar toggle

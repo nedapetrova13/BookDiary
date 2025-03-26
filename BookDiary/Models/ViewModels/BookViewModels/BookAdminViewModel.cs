@@ -19,5 +19,6 @@ namespace BookDiary.Models.ViewModels.BookViewModels
         public string? PublishingHouseName { get; set; }
         public List<string>? SelectedTags { get; set; } = new List<string>();
         public List<CommentUserViewModel> CommentUsers { get; set; }
+        public bool? IsRead { get; set; }
     }
 }

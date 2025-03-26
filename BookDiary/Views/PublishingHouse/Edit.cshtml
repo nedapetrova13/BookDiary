@@ -11,14 +11,14 @@
                     <form method="post">
                         <div class="mb-4">
                             <div class="form-floating">
-                                <input type="text" asp-for="Name" class="form-control border-0 border-bottom rounded-0" placeholder="Име на издателство" />
+                                <input type="text" asp-for="Name" class="form-control border-0 border-bottom rounded-0" required placeholder="Име на издателство" />
                                 <label asp-for="Name">Име</label>
                             </div>
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <div class="mb-4">
                             <div class="form-floating">
-                                <input type="number" asp-for="YearFounded" class="form-control border-0 border-bottom rounded-0" placeholder="Година на основаване" />
+                                <input type="number" asp-for="YearFounded" class="form-control border-0 border-bottom rounded-0" required placeholder="Година на основаване" />
                                 <label asp-for="YearFounded">Година на основаване</label>
                             </div>
                             <span asp-validation-for="YearFounded" class="text-danger"></span>

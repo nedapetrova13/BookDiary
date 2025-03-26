@@ -18,14 +18,10 @@ namespace BookDiary.Models
         [EnumDataType(typeof(GenderEnum))]
         public string? Gender { get; set; }
        
-        [ForeignKey(nameof(Book))]
-        public int? FavouriteBookId { get; set; }
-        public Book Book { get; set; }
         public ICollection<Shelf>? Shelves { get; set; }   
         public string? ProfilePictureURL { get; set; }   
         public string? Bio { get; set; }
         public ICollection<CurrentRead>? CurrentReads { get; set; }
-        public ICollection<QuestionGenreBook>? QuestionGenreBooks { get; set; }
         public ICollection<Notes>? Notes { get; set; }
         public ICollection<Comment>? MyComments { get; set; }
 

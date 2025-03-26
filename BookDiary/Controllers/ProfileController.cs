@@ -57,18 +57,7 @@ namespace BookDiary.Controllers
             {
                 uservm.ProfilePictureURL = currentUser.ProfilePictureURL;
             }
-            if (currentUser.FavouriteBookId != null)
-            {
-                Book book1 = _bookService.GetAll().Where(b => b.Id == currentUser.FavouriteBookId).FirstOrDefault();
-                BookSeriesViewModel book = new BookSeriesViewModel
-                {
-                    Id = book1.Id,
-                    Title = book1.Title,
-                    CoverImageURL = book1.CoverImageURL,
-                };
-                uservm.FavouriteBook= book;
-            }
-
+            
             return View(uservm);
         }
         public async Task<IActionResult> Edit()
@@ -86,7 +75,6 @@ namespace BookDiary.Controllers
                 Bio = currentUser.Bio,
                 Birthdate = currentUser.Birthdate,
                 // Initialize FavouriteBook to avoid null reference
-                FavouriteBook = new BookSeriesViewModel()
             };
 
             if (currentUser.ProfilePictureURL != null)
@@ -94,19 +82,7 @@ namespace BookDiary.Controllers
                 user.ProfilePictureURL = currentUser.ProfilePictureURL;
             }
 
-            if (currentUser.FavouriteBookId != null)
-            {
-                Book book1 = _bookService.GetAll().Where(b => b.Id == currentUser.FavouriteBookId).FirstOrDefault();
-                if (book1 != null)
-                {
-                    user.FavouriteBook.Id = book1.Id;
-                    user.FavouriteBook.Title = book1.Title;
-                    user.FavouriteBook.CoverImageURL = book1.CoverImageURL;
-
-                    // Set the selected value in the dropdown
-                    ViewBag.Books = new SelectList(books, "Id", "Title", book1.Id);
-                }
-            }
+            
 
             return View(user);
         }
@@ -120,7 +96,6 @@ namespace BookDiary.Controllers
                 return RedirectToAction("Index", "Home", null);
             }
             currentUser.Name = model.Name;
-            currentUser.FavouriteBookId = model.FavouriteBook.Id;
             currentUser.Bio = model.Bio;
             currentUser.Birthdate = model.Birthdate;
             currentUser.ProfilePictureURL = model.ProfilePictureURL;

@@ -75,27 +75,33 @@ namespace BookDiary.Controllers
                 };
                 currentReads.Add(currentread);
             }
+            List<BookSeriesViewModel> list = new List<BookSeriesViewModel>();
 
             var shelfid =await  _shelfService.Get(x => x.Name == "Прочетени книги");
-            var shelf = await _shelfService.GetById(shelfid.Id);
-            var books = _shelfService.GetAll()
-             .Where(b => b.Id == shelfid.Id)
-             .SelectMany(b => b.ShelfBooks.Select(x => x.Book))
-             .ToList();
-            List<BookSeriesViewModel> list = new List<BookSeriesViewModel>();
-            foreach (var b in books)
+            if(shelfid == null)
             {
-
-                var bookvm = new BookSeriesViewModel
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    CoverImageURL = b.CoverImageURL,
-                };
-                list.Add(bookvm);
+               list = new List<BookSeriesViewModel>();
             }
+            else
+            {
+                var shelf = await _shelfService.GetById(shelfid.Id);
+                var books = _shelfService.GetAll()
+                 .Where(b => b.Id == shelfid.Id)
+                 .SelectMany(b => b.ShelfBooks.Select(x => x.Book))
+                 .ToList();
+                foreach (var b in books)
+                {
 
+                    var bookvm = new BookSeriesViewModel
+                    {
+                        Id = b.Id,
+                        Title = b.Title,
+                        CoverImageURL = b.CoverImageURL,
+                    };
+                    list.Add(bookvm);
+                }
 
+            }
 
             var newsList = await _newsService.GetTop5Services();
             

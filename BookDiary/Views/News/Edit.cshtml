@@ -11,7 +11,7 @@
                     <form method="post">
                         <div class="mb-4">
                             <div class="form-floating">
-                                <input type="text" asp-for="Title" class="form-control border-0 border-bottom rounded-0" placeholder="Заглавие" />
+                                <input type="text" asp-for="Title" class="form-control border-0 border-bottom rounded-0" required placeholder="Заглавие" />
                                 <label asp-for="Title">Заглавие</label>
                             </div>
                             <span asp-validation-for="Title" class="text-danger"></span>
@@ -19,7 +19,7 @@
 
                         <div class="mb-4">
                             <label asp-for="Content" class="form-label fw-bold mb-2">Съдържание</label>
-                            <textarea asp-for="Content" class="form-control border-0 shadow-sm" style="min-height: 150px;" placeholder="Въведете съдържание на новината..."></textarea>
+                            <textarea asp-for="Content" class="form-control border-0 shadow-sm" style="min-height: 150px;" required placeholder="Въведете съдържание на новината..."></textarea>
                             <span asp-validation-for="Content" class="text-danger"></span>
                         </div>
 

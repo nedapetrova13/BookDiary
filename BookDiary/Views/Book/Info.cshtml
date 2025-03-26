@@ -3,69 +3,8 @@
 @model BookDiary.Models.ViewModels.BookViewModels.BookAdminViewModel;
 
 <div class="book-admin-container">
-    @if (User.IsInRole(SD.UserRole))
-    {
-        <!-- Consolidated Actions Dropdown (Top Right) -->
-        <div class="book-actions-panel">
-            <div class="dropdown consolidated-actions-dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="actionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-cog"></i> Book Actions
-                </button>
-                <div class="dropdown-menu actions-dropdown-menu" aria-labelledby="actionsDropdown">
-                    <!-- Add to Shelf Option -->
-                    <h6 class="dropdown-header">Add to Shelf</h6>
-                    @if (ViewBag.Shelves != null && ((SelectList)ViewBag.Shelves).Count() > 0)
-                    {
-                        <form method="post" asp-controller="Shelf" asp-action="AddBookToShelf" class="px-3 py-2">
-                            <input type="hidden" name="BookId" value="@Model.Id" />
-                            <select name="ShelfId" class="form-select shelf-select mb-2">
-                                <option selected disabled>Select a shelf</option>
-                                @foreach (var item in (SelectList)ViewBag.Shelves)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
-                            <button class="submit-btn" type="submit" asp-action="AddBookToShelf" asp-controller="Book">Добави</button>
-                        </form>
-                    }
-                    else
-                    {
-                        <span class="dropdown-item disabled">No available shelves</span>
-                        <a class="dropdown-item" asp-controller="Shelf" asp-action="Add">Create new shelf</a>
-                    }
 
-                    <div class="dropdown-divider"></div>
-
-                    <!-- Set Current Read Option -->
-                    <form method="post" asp-controller="CurrentRead" asp-action="SetCurrentRead" class="px-3 py-2">
-                        <input type="hidden" name="bookid" value="@Model.Id" />
-                        <button type="submit" class="btn btn-sm btn-outline-primary w-100">
-                            <i class="fas fa-book-reader"></i> Set as Current Read
-                        </button>
-                    </form>
-
-                    <div class="dropdown-divider"></div>
-                    <form method="post" asp-controller="Shelf" asp-action="MarkRead" class="px-3 py-2">
-                        <input type="hidden" name="bookid" value="@Model.Id" />
-                        <button type="submit" class="btn btn-sm btn-outline-primary w-100">
-                            <i class="fas fa-book-reader"></i> Mark as read
-                        </button>
-                    </form>
-                    <div class="dropdown-divider"></div>
-                    <form method="get" asp-controller="Notes" asp-action="Add" class="px-3 py-2">
-                        <input type="hidden" name="bookid" value="@Model.Id" />
-                        <button type="submit" class="btn btn-sm btn-outline-primary w-100">
-                            <i class="fas fa-book-reader"></i>AddNotes
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    }
-
-    <!-- Book Cover & Details Row -->
     <div class="book-main-row">
-        <!-- Book Cover -->
         <div class="book-cover-container">
             <div class="book-cover-wrapper">
                 <img src="@Model.CoverImageURL" alt="Cover of @Model.Title" class="book-cover-image" onerror="this.src='/images/placeholder-cover.jpg'" />
@@ -73,7 +12,11 @@
         </div>
         <!-- Book Details -->
         <div class="book-details-container">
-            <h1 class="book-title">@Model.Title</h1>
+            <div style="display: flex align-items: center;">
+                <h1 class="book-title">@Model.Title</h1>
+
+            </div>
+
             <div class="book-metadata">
                 <span class="author-link">
                     <a asp-area="" asp-controller="Author" asp-action="Info" asp-route-AuthorName="@Model.AuthorName" class="author-name">👤 @Model.AuthorName</a>
@@ -91,25 +34,315 @@
             @if (Model.SeriesName != null)
             {
                 <p class="series-info">
-                    📚 Part of: <a asp-area="" asp-controller="Series" asp-action="Info" asp-route-SeriesName="@Model.SeriesName" class="series-link">@Model.SeriesName</a>
+                    📚 Част от поредицата: <a asp-area="" asp-controller="Series" asp-action="Info" asp-route-SeriesName="@Model.SeriesName" class="series-link">@Model.SeriesName</a>
                 </p>
             }
             <div class="book-stats">
                 <div class="stat-item">
-                    <div class="stat-label">Pages</div>
+                    <div class="stat-label">Страници:</div>
                     <div class="stat-value">@Model.BookPages</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-label">Chapters</div>
+                    <div class="stat-label">Глави:</div>
                     <div class="stat-value">@Model.Chapters</div>
                 </div>
             </div>
         </div>
     </div>
+    @if (User.IsInRole(SD.UserRole))
+    {
+        <div class="accordion accordion-flush" id="accordionFlushExample" style="border-radius: 15px; box-shadow: 0 5px 15px rgba(98, 74, 46, 0.12); margin: 20px 0; background-color: #f8f5f0; overflow: hidden;">
+            <div class="accordion-item" style="border: none; background: transparent;">
+                <h2 class="accordion-header" style="position: relative;">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne" style="
+                background: linear-gradient(135deg, #8b6b4c, #a68763);
+                color: #fff;
+                font-weight: 600;
+                padding: 15px 25px;
+                letter-spacing: 0.5px;
+                font-size: 1.1rem;
+                text-transform: capitalize;
+                box-shadow: none;
+                transition: all 0.3s ease;
+                border: none;
+                    ">
+                        <i class="fas fa-book" style="margin-right: 10px; transition: transform 0.3s ease;"></i>
+                        Действия с книга
+                        <span style="position: absolute; right: 20px; opacity: 0.8; font-size: 0.9rem;">
 
+                        </span>
+                    </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" style="background-color: #f0e9dd;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; padding: 20px; justify-content: space-between; align-items: flex-start;">
+                        <div style="flex: 1 1 300px; min-width: 250px; background-color: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); border-left: 4px solid #8b6b4c;">
+                            <h6 style="color: #5d4037; font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #e6dccb;">
+                                <i class="fas fa-bookmark" style="margin-right: 8px;"></i>
+                                Добави в шкаф
+                            </h6>
+                            @if (ViewBag.Shelves != null && ((SelectList)ViewBag.Shelves).Count() > 0)
+                            {
+                                <form method="post" asp-controller="Shelf" asp-action="AddBookToShelf" style="width: 100%;">
+                                    <input type="hidden" name="BookId" value="@Model.Id" />
+                                    <select name="ShelfId" class="form-select shelf-select mb-2" style="
+                                border: 1px solid #d2b48c;
+                                border-radius: 8px;
+                                padding: 10px 15px;
+                                width: 100%;
+                                color: #5d4037;
+                                background-color: #f9f6f2;
+                                font-size: 1rem;
+                                box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+                                transition: all 0.3s ease;
+                                    ">
+                                        <option selected disabled>Избери шкаф</option>
+                                        @foreach (var item in (SelectList)ViewBag.Shelves)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                    <button type="submit" asp-action="AddBookToShelf" asp-controller="Book" style="
+                                background: linear-gradient(to right, #8b6b4c, #a68763);
+                                color: white;
+                                border: none;
+                                border-radius: 8px;
+                                width: 100%;
+                                padding: 10px;
+                                font-weight: 600;
+                                margin-top: 10px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                gap: 8px;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+                                    ">
+                                        <i class="fas fa-plus-circle"></i> Добави
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <div style="padding: 15px; background-color: #f9f6f2; border-radius: 8px; margin-bottom: 10px; color: #8d6e63; font-style: italic;">
+                                    Няма налични шкафове
+                                </div>
+                                <a asp-controller="Shelf" asp-action="Add" style="
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            background-color: #f0e9dd;
+                            padding: 10px 15px;
+                            border-radius: 8px;
+                            color: #8b6b4c;
+                            text-decoration: none;
+                            font-weight: 500;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                                ">
+                                    <i class="fas fa-plus"></i> Създай нов шкаф
+                                </a>
+                            }
+                        </div>
+                       
+
+
+                            <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 15px;">
+                            @if (Model.IsRead == false)
+                            {
+                                <form method="post" asp-controller="CurrentRead" asp-action="SetCurrentRead" style="width: 100%;">
+                                    <input type="hidden" name="bookid" value="@Model.Id" />
+                                    <button type="submit" style="
+                            background-color: #f5f0e8;
+                            border: 1px solid #d2b48c;
+                            color: #5d4037;
+                            border-radius: 8px;
+                            width: 100%;
+                            padding: 15px;
+                            font-weight: 600;
+                            display: flex;
+                            align-items: center;
+                            justify-content: flex-start;
+                            gap: 10px;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                            text-align: left;
+                                    ">
+                                        <i class="fas fa-book-reader" style="font-size: 1.2rem; color: #8b6b4c; min-width: 24px; text-align: center;"></i>
+                                        <span>В процес на четене</span>
+                                    </button>
+                                </form>
+
+                                <form method="post" asp-controller="Shelf" asp-action="MarkRead" style="width: 100%;">
+                                    <input type="hidden" name="bookid" value="@Model.Id" />
+                                    <button type="submit" style="
+                            background-color: #f5f0e8;
+                            border: 1px solid #d2b48c;
+                            color: #5d4037;
+                            border-radius: 8px;
+                            width: 100%;
+                            padding: 15px;
+                            font-weight: 600;
+                            display: flex;
+                            align-items: center;
+                            justify-content: flex-start;
+                            gap: 10px;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                            text-align: left;
+                                    ">
+                                        <i class="fas fa-check-circle" style="font-size: 1.2rem; color: #8b6b4c; min-width: 24px; text-align: center;"></i>
+                                        <span>Прочетена</span>
+                                    </button>
+                                </form>
+                                }
+                                else{
+                                <form method="post" asp-controller="CurrentRead" asp-action="SetCurrentRead" style="width: 100%;">
+                                    <input type="hidden" name="bookid" value="@Model.Id" />
+                                    <button type="submit" style="
+                                            background-color: #f2f2f2;
+                                            border: 1px solid #d9d9d9;
+                                            color: #9e9e9e;
+                                            border-radius: 8px;
+                                            width: 100%;
+                                            padding: 15px;
+                                            font-weight: 600;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: flex-start;
+                                            gap: 10px;
+                                            cursor: default;
+                                            transition: all 0.3s ease;
+                                            box-shadow: none;
+                                            text-align: left;
+                                            opacity: 0.8;
+                                                ">
+                                        <i class="fas fa-book-reader" style="font-size: 1.2rem; color: #9e9e9e; min-width: 24px; text-align: center;"></i>
+                                        <span>В процес на четене</span>
+                                    </button>
+                                </form>
+                                <form method="post" asp-controller="Shelf" asp-action="MarkRead" style="width: 100%;">
+                                    <input type="hidden" name="bookid" value="@Model.Id" />
+                                    <button type="submit" style="
+                                            background-color: #f2f2f2;
+                                            border: 1px solid #d9d9d9;
+                                            color: #9e9e9e;
+                                            border-radius: 8px;
+                                            width: 100%;
+                                            padding: 15px;
+                                            font-weight: 600;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: flex-start;
+                                            gap: 10px;
+                                            cursor: default;
+                                            transition: all 0.3s ease;
+                                            box-shadow: none;
+                                            text-align: left;
+                                            opacity: 0.8;
+                                                ">
+                                        <i class="fas fa-check-circle" style="font-size: 1.2rem; color: #9e9e9e; min-width: 24px; text-align: center;"></i>
+                                        <span>Прочетена</span>
+                                    </button>
+                                </form>
+                                }
+                                <form method="get" asp-controller="Notes" asp-action="Add" style="width: 100%;">
+                                    <input type="hidden" name="bookid" value="@Model.Id" />
+                                    <button type="submit" style="
+                            background-color: #f5f0e8;
+                            border: 1px solid #d2b48c;
+                            color: #5d4037;
+                            border-radius: 8px;
+                            width: 100%;
+                            padding: 15px;
+                            font-weight: 600;
+                            display: flex;
+                            align-items: center;
+                            justify-content: flex-start;
+                            gap: 10px;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                            text-align: left;
+                                    ">
+                                        <i class="fas fa-pen-fancy" style="font-size: 1.2rem; color: #8b6b4c; min-width: 24px; text-align: center;"></i>
+                                        <span>Добави записки</span>
+                                    </button>
+                                </form>
+                            </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Get the accordion button and icon
+                const accordionButton = document.querySelector('#accordionFlushExample .accordion-button');
+                const icon = accordionButton.querySelector('i');
+
+                // Add hover effect for accordion button
+                accordionButton.addEventListener('mouseenter', function() {
+                    this.style.background = 'linear-gradient(135deg, #7d5f42, #9a7a58)';
+                });
+
+                accordionButton.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('collapsed')) {
+                        this.style.background = 'linear-gradient(135deg, #7d5f42, #9a7a58)';
+                    } else {
+                        this.style.background = 'linear-gradient(135deg, #8b6b4c, #a68763)';
+                    }
+                });
+
+                // Rotate icon when accordion is opened/closed
+                accordionButton.addEventListener('click', function() {
+                    if (this.classList.contains('collapsed')) {
+                        icon.style.transform = 'rotate(90deg)';
+                        this.style.background = 'linear-gradient(135deg, #7d5f42, #9a7a58)';
+                    } else {
+                        icon.style.transform = 'rotate(0)';
+                        this.style.background = 'linear-gradient(135deg, #8b6b4c, #a68763)';
+                    }
+                });
+
+                // Add hover effects for all buttons
+                document.querySelectorAll('#flush-collapseOne button').forEach(button => {
+                    if (!button.classList.contains('accordion-button')) {
+                        button.addEventListener('mouseenter', function() {
+                            if (this.style.backgroundColor === 'rgb(245, 240, 232)') {
+                                this.style.backgroundColor = '#e6dccb';
+                                this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+                                this.style.transform = 'translateY(-2px)';
+                            } else if (this.style.background.includes('gradient')) {
+                                this.style.background = 'linear-gradient(to right, #7d5f42, #9a7a58)';
+                                this.style.boxShadow = '0 4px 10px rgba(0,0,0,0.15)';
+                                this.style.transform = 'translateY(-2px)';
+                            }
+                        });
+
+                        button.addEventListener('mouseleave', function() {
+                            if (this.style.backgroundColor === 'rgb(230, 220, 203)') {
+                                this.style.backgroundColor = '#f5f0e8';
+                                this.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
+                                this.style.transform = 'translateY(0)';
+                            } else if (this.style.background.includes('gradient')) {
+                                this.style.background = 'linear-gradient(to right, #8b6b4c, #a68763)';
+                                this.style.boxShadow = '0 3px 8px rgba(0,0,0,0.1)';
+                                this.style.transform = 'translateY(0)';
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+
+    }
     <!-- Tags & Description -->
     <div class="book-tags-section">
-        <h2 class="section-title">Tags</h2>
+        <h2 class="section-title">Характеристики</h2>
         <div class="tags-container">
             @if (Model.SelectedTags != null && Model.SelectedTags.Any())
             {
@@ -120,27 +353,27 @@
             }
             else
             {
-                <p class="no-tags">No tags available</p>
+                <p class="no-tags">В момента няма характеристики</p>
             }
         </div>
     </div>
     <div class="book-description-section">
-        <h2 class="section-title">Description</h2>
+        <h2 class="section-title">Описание</h2>
         <p class="book-description">@Model.Description</p>
     </div>
 
     <!-- Comment Section -->
     <div class="book-comments-section">
-        <h2 class="section-title">Comments and Ratings</h2>
+        <h2 class="section-title">Коментари и оценки</h2>
 
         <!-- Comment Form -->
         <div class="comment-form-container" id="comment-form">
-            <h3 class="comment-form-title">Add Your Comment</h3>
+            <h3 class="comment-form-title">Добави свой коментар</h3>
             <form method="post" asp-controller="Book" asp-action="AddComment" class="comment-form">
                 <input type="hidden" name="BookId" value="@Model.Id" />
 
                 <div class="rating-container">
-                    <label>Your Rating:</label>
+                    <label>Твоята оценка:</label>
                     <div class="star-rating">
                         <input type="radio" id="star5" name="Rating" value="5" /><label for="star5"></label>
                         <input type="radio" id="star4" name="Rating" value="4" /><label for="star4"></label>
@@ -151,17 +384,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="commentText">Your Comment:</label>
-                    <textarea id="commentText" name="Content" rows="4" class="form-control comment-textarea" placeholder="Share your thoughts about this book..."></textarea>
+                    <label for="commentText">Твоя коментар:</label>
+                    <textarea id="commentText" name="Content" rows="4" class="form-control comment-textarea" placeholder="Сподели своето мнение за книгата..."></textarea>
                 </div>
 
                 <button type="submit" class="btn btn-primary comment-submit-btn">
-                    <i class="fas fa-paper-plane"></i> Submit Comment
+                    <i class="fas fa-paper-plane"></i> Изпрати коментар
                 </button>
             </form>
         </div>
 
-        <!-- Comments List -->
         <div class="comments-list">
             @if (Model.CommentUsers != null && Model.CommentUsers.Count > 0)
             {
@@ -195,7 +427,7 @@
                                     <input type="hidden" name="CommentId" value="@comment.Id" />
                                     <input type="hidden" name="BookId" value="@Model.Id" />
                                     <button type="submit" class="btn btn-sm btn-outline-danger delete-comment-btn">
-                                        <i class="fas fa-trash"></i> Delete
+                                        <i class="fas fa-trash"></i> Изтрий
                                     </button>
                                 </form>
                             }
@@ -207,7 +439,7 @@
             {
                 <div class="no-comments">
                     <i class="fas fa-comment-slash"></i>
-                    <p>No comments yet. Be the first to share your thoughts!</p>
+                    <p>Все още няма коментари. Бъди първия, който коментира!</p>
                 </div>
             }
         </div>
@@ -216,15 +448,235 @@
     {
         <div class="book-actions">
             <form method="post" class="actions-form">
-                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-                <button type="submit" class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</button>
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Промени</a>
+                <button type="submit" class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Изтрий</button>
             </form>
         </div>
     }
 </div>
 
 <style>
-    
+    .favorite-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        margin-left: 10px;
+        padding: 0;
+        transition: color 0.3s ease;
+    }
+
+        .favorite-btn .favorite-icon {
+            color: #ccc; 
+        }
+
+        .favorite-btn[data-is-favorited="true"] .favorite-icon {
+            color: #ffd700; 
+        }
+        .favorite-btn:hover .favorite-icon {
+            color: #ffeb3b; 
+        }
+    .ui-bookmark {
+  --icon-size: 24px;
+  --icon-secondary-color: rgb(77, 77, 77);
+  --icon-hover-color: rgb(97, 97, 97);
+  --icon-primary-color: gold;
+  --icon-circle-border: 1px solid var(--icon-primary-color);
+  --icon-circle-size: 35px;
+  --icon-anmt-duration: 0.3s;
+}
+
+.ui-bookmark input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+.ui-bookmark .bookmark {
+  width: var(--icon-size);
+  height: auto;
+  fill: var(--icon-secondary-color);
+  cursor: pointer;
+  -webkit-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: relative;
+  -webkit-transform-origin: top;
+  -ms-transform-origin: top;
+  transform-origin: top;
+}
+
+.bookmark::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  -webkit-box-shadow: 0 30px 0 -4px var(--icon-primary-color),
+    30px 0 0 -4px var(--icon-primary-color),
+    0 -30px 0 -4px var(--icon-primary-color),
+    -30px 0 0 -4px var(--icon-primary-color),
+    -22px 22px 0 -4px var(--icon-primary-color),
+    -22px -22px 0 -4px var(--icon-primary-color),
+    22px -22px 0 -4px var(--icon-primary-color),
+    22px 22px 0 -4px var(--icon-primary-color);
+  box-shadow: 0 30px 0 -4px var(--icon-primary-color),
+    30px 0 0 -4px var(--icon-primary-color),
+    0 -30px 0 -4px var(--icon-primary-color),
+    -30px 0 0 -4px var(--icon-primary-color),
+    -22px 22px 0 -4px var(--icon-primary-color),
+    -22px -22px 0 -4px var(--icon-primary-color),
+    22px -22px 0 -4px var(--icon-primary-color),
+    22px 22px 0 -4px var(--icon-primary-color);
+  border-radius: 50%;
+  -webkit-transform: scale(0);
+  -ms-transform: scale(0);
+  transform: scale(0);
+}
+
+.bookmark::before {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: var(--icon-circle-border);
+  opacity: 0;
+}
+
+/* actions */
+
+.ui-bookmark:hover .bookmark {
+  fill: var(--icon-hover-color);
+}
+
+.ui-bookmark input:checked + .bookmark::after {
+  -webkit-animation: circles var(--icon-anmt-duration)
+    cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: circles var(--icon-anmt-duration)
+    cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  -webkit-animation-delay: var(--icon-anmt-duration);
+  animation-delay: var(--icon-anmt-duration);
+}
+
+.ui-bookmark input:checked + .bookmark {
+  fill: var(--icon-primary-color);
+  -webkit-animation: bookmark var(--icon-anmt-duration) forwards;
+  animation: bookmark var(--icon-anmt-duration) forwards;
+  -webkit-transition-delay: 0.3s;
+  -o-transition-delay: 0.3s;
+  transition-delay: 0.3s;
+}
+
+.ui-bookmark input:checked + .bookmark::before {
+  -webkit-animation: circle var(--icon-anmt-duration)
+    cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: circle var(--icon-anmt-duration)
+    cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  -webkit-animation-delay: var(--icon-anmt-duration);
+  animation-delay: var(--icon-anmt-duration);
+}
+
+-webkit-keyframes bookmark {
+  50% {
+    -webkit-transform: scaleY(0.6);
+    transform: scaleY(0.6);
+  }
+
+  100% {
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1);
+  }
+}
+
+keyframes bookmark {
+  50% {
+    -webkit-transform: scaleY(0.6);
+    transform: scaleY(0.6);
+  }
+
+  100% {
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1);
+  }
+}
+
+-webkit-keyframes circle {
+  from {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  90% {
+    width: var(--icon-circle-size);
+    height: var(--icon-circle-size);
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+keyframes circle {
+  from {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  90% {
+    width: var(--icon-circle-size);
+    height: var(--icon-circle-size);
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+-webkit-keyframes circles {
+  from {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  to {
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+keyframes circles {
+  from {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  to {
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
     .book-admin-container {
         max-width: 1200px;
         width: 85%;
@@ -272,73 +724,149 @@
         box-shadow: 0 15px 35px rgba(98, 74, 46, 0.2);
     }
 
-    /* Consolidated Actions Dropdown */
     .book-actions-panel {
-        position: absolute;
-        top: 2rem;
-        right: 2rem;
-        z-index: 10;
+        display: flex;
+        justify-content: flex-end;
+        margin: 1.5rem 0;
     }
 
     .consolidated-actions-dropdown .dropdown-toggle {
-        background: linear-gradient(to right, #8b6b4c, #a68763);
+        background-color: var(--primary-medium);
         border: none;
-        border-radius: 8px;
-        padding: 0.6rem 1.2rem;
-        color: white;
-        font-weight: 500;
+        border-radius: 20px;
+        padding: 8px 18px;
+        color: var(--text-light);
+        font-weight: 600;
+        box-shadow: 0 3px 8px var(--shadow);
         transition: all 0.3s ease;
-        box-shadow: 0 2px 5px rgba(98, 74, 46, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
         .consolidated-actions-dropdown .dropdown-toggle:hover,
         .consolidated-actions-dropdown .dropdown-toggle:focus {
-            background: linear-gradient(to right, #7d5f42, #9a7a58);
-            box-shadow: 0 4px 8px rgba(98, 74, 46, 0.25);
+            background-color: var(--primary-dark);
             transform: translateY(-2px);
+            box-shadow: 0 5px 10px var(--shadow);
+        }
+
+        .consolidated-actions-dropdown .dropdown-toggle:active {
+            transform: translateY(0);
+        }
+
+        .consolidated-actions-dropdown .dropdown-toggle i {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .consolidated-actions-dropdown .dropdown-toggle[aria-expanded="true"] i {
+            transform: rotate(90deg);
         }
 
     .actions-dropdown-menu {
-        background: #f5f0e8;
-        border: none;
+        min-width: 240px;
         border-radius: 12px;
-        box-shadow: 0 5px 15px rgba(98, 74, 46, 0.15);
-        padding: 0.5rem;
-        min-width: 280px;
+        overflow: hidden;
+        background-color: var(--page-color);
+        box-shadow: 0 8px 20px var(--shadow);
+        padding: 0.5rem 0;
+        margin-top: 10px;
+        background-color: wheat;
     }
 
-    .dropdown-header {
-        color: #5d4037;
-        font-weight: 600;
-        font-size: 0.9rem;
-    }
-
-    .dropdown-item {
-        color: #795548;
-        padding: 0.5rem 1rem;
-        transition: all 0.2s ease;
-        border-radius: 6px;
-    }
-
-        .dropdown-item:hover {
-            background-color: #e8dfd4;
-            color: #5d4037;
+        .actions-dropdown-menu .dropdown-header {
+            color: var(--primary-dark);
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: rgba(93, 64, 55, 0.1);
         }
 
-    .dropdown-divider {
-        border-top: 1px solid #e0d5c7;
-        margin: 0.5rem 0;
+        .actions-dropdown-menu .dropdown-divider {
+            margin: 0.2rem 0;
+            border-color: rgba(93, 64, 55, 0.1);
+        }
+
+        .actions-dropdown-menu .form-select {
+            background-color: white;
+            border: 1px solid var(--primary-light);
+            border-radius: 8px;
+            color: var(--text-dark);
+            padding: 8px 12px;
+            transition: all 0.2s ease;
+        }
+
+            .actions-dropdown-menu .form-select:focus {
+                border-color: var(--primary-medium);
+                box-shadow: 0 0 0 3px rgba(93, 64, 55, 0.2);
+            }
+
+    .submit-btn {
+        background-color: var(--primary-medium);
+        color: var(--text-light);
+        border: none;
+        border-radius: 15px;
+        padding: 5px 15px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        width: 100%;
+        margin-top: 5px;
     }
 
-    .shelf-select {
-        background-color: #fff;
-        border: 1px solid #e0d5c7;
-        border-radius: 6px;
-        padding: 0.5rem;
-        color: #5d4037;
-        font-size: 0.95rem;
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+    .actions-dropdown-menu .dropdown-item {
+        color: var(--primary-medium);
+        padding: 8px 16px;
+        transition: all 0.2s ease;
     }
 
+        .actions-dropdown-menu .dropdown-item:hover {
+            background-color: rgba(93, 64, 55, 0.1);
+            color: var(--primary-dark);
+        }
+
+    .actions-dropdown-menu .btn-outline-primary {
+        color: var(--primary-medium);
+        border-color: var(--primary-light);
+        background-color: transparent;
+        transition: all 0.2s ease;
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+
+        .actions-dropdown-menu .btn-outline-primary:hover {
+            background-color: var(--primary-medium);
+            border-color: var(--primary-medium);
+            color: var(--text-light);
+        }
+
+        .actions-dropdown-menu .btn-outline-primary i {
+            margin-right: 8px;
+        }
+
+    /* Animation */
+    keyframes fadeInDown {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .actions-dropdown-menu.show {
+        animation: fadeInDown 0.3s ease forwards;
+    }
     /* Book main row */
     .book-main-row {
         display: flex;
@@ -892,6 +1420,7 @@
 </style>
 
 <script>
+   
     document.addEventListener('DOMContentLoaded', function() {
         // Dynamic hover effect for tags
         const tags = document.querySelectorAll('.book-tag');

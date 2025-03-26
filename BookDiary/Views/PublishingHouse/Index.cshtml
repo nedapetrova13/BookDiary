@@ -18,7 +18,6 @@
                         <table class="table table-hover align-middle mb-0 ph-table">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center" width="60">Id</th>
                                     <th scope="col">Име</th>
                                     <th scope="col" width="150">Година на основаване</th>
                                     <th scope="col" class="text-center" width="250">Действия</th>
@@ -28,7 +27,6 @@
                                 @foreach (var ph in Model)
                                 {
                                     <tr>
-                                        <td class="text-center fw-bold">@ph.Id</td>
                                         <td>@ph.Name</td>
                                         <td class="text-center">@ph.YearFounded</td>
                                         <td>

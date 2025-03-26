@@ -19,7 +19,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" asp-for="BookChapter" class="form-control border-0 border-bottom rounded-0" required placeholder="Глава от книгата" />
+                                    <input type="number" asp-for="BookChapter" class="form-control border-0 border-bottom rounded-0" required placeholder="Глава от книгата" />
                                     <label asp-for="BookChapter">Глава от книгата</label>
                                     <span asp-validation-for="BookChapter" class="text-danger"></span>
                                 </div>
@@ -28,7 +28,7 @@
                             <div class="col-12">
                                 <div class="mb-4">
                                     <label asp-for="NoteContent" class="form-label fw-bold mb-2">Съдържание на бележката</label>
-                                    <textarea asp-for="NoteContent" class="form-control border-0 shadow-sm" style="min-height: 180px;" placeholder="Въведете вашите мисли, бележки или цитати от книгата..."></textarea>
+                                    <textarea asp-for="NoteContent" class="form-control border-0 shadow-sm" style="min-height: 180px;" required placeholder="Въведете вашите мисли, бележки или цитати от книгата..."></textarea>
                                     <span asp-validation-for="NoteContent" class="text-danger"></span>
                                 </div>
                             </div>

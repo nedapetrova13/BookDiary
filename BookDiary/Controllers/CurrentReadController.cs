@@ -11,17 +11,21 @@ namespace BookDiary.Controllers
 {
     public class CurrentReadController : Controller
     {
-        private readonly UserManager<User> _userManager;
+        private readonly IShelfService _shelfService;
         private readonly IUserService _userService;
-        private readonly ICurrentReadService _currentReadService;
+        private readonly UserManager<User> _userManager;
         private readonly IBookService _bookService;
+        private readonly IShelfBookService _shelfBookService;
+        private readonly ICurrentReadService _currentReadService;
 
-        public CurrentReadController(UserManager<User> userManager, IUserService userService, ICurrentReadService currentReadService, IBookService bookService)
+        public CurrentReadController(IShelfService shelfService, IUserService userService, UserManager<User> userManager, IBookService bookService, IShelfBookService shelfBookService, ICurrentReadService currentReadService)
         {
-            _userManager = userManager;
+            _shelfService = shelfService;
             _userService = userService;
-            _currentReadService = currentReadService;
+            _userManager = userManager;
             _bookService = bookService;
+            _shelfBookService = shelfBookService;
+            _currentReadService = currentReadService;
         }
 
         public async Task<IActionResult> Index()
@@ -51,22 +55,36 @@ namespace BookDiary.Controllers
         public async Task<IActionResult> SetCurrentRead(int bookid)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            var currentreads = await _currentReadService.Get(x => x.UserId == currentUser.Id && x.BookId == bookid);
-            if (currentreads == null)
+
+            Shelf sh = await _shelfService.Get(x => x.Name == "Прочетени книги" && x.UserId == currentUser.Id);
+            var books = await _shelfBookService.Get(x => x.BookId == bookid && x.ShelfId == sh.Id);
+
+
+            if (books == null)
             {
-                CurrentRead cr = new CurrentRead
+               
+                var currentreads = await _currentReadService.Get(x => x.UserId == currentUser.Id && x.BookId == bookid);
+                if (currentreads == null)
                 {
-                    BookId = bookid,
-                    UserId = currentUser.Id,
-                    CurrentPage = 0
-                };
-                await _currentReadService.Add(cr);
+                    CurrentRead cr = new CurrentRead
+                    {
+                        BookId = bookid,
+                        UserId = currentUser.Id,
+                        CurrentPage = 0
+                    };
+                    await _currentReadService.Add(cr);
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+
+                }
             }
             else
             {
-                return RedirectToAction("Index");
-
+                TempData["error"] = "книгата вече е прочетена";
             }
+
             return RedirectToAction("Index");
         }
         [HttpPost]

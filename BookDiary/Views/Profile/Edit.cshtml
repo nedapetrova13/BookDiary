@@ -8,7 +8,7 @@
         <div class="col-lg-10 mx-auto">
             <div class="card shadow" style="background-color: #f5efe6; color: #5c4033; border-color: #c3a995;">
                 <div class="card-header" style="background-color: #e3d5c4; border-color: #c3a995;">
-                    <h3 class="mb-0" style="color: #5c4033;">Edit Your Profile</h3>
+                    <h3 class="mb-0" style="color: #5c4033;">Обработи профила си</h3>
                 </div>
                 <div class="card-body">
                     <form asp-action="Edit" method="post" enctype="multipart/form-data">
@@ -41,69 +41,35 @@
                             <div class="col-md-8">
                                 <div class="card mb-4" style="background-color: #faeed4; border-color: #c3a995;">
                                     <div class="card-header" style="background-color: #e3d5c4; border-color: #c3a995;">
-                                        <h5 class="mb-0" style="color: #5c4033;">Personal Information</h5>
+                                        <h5 class="mb-0" style="color: #5c4033;">Лична информация</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group mb-3">
                                             <label asp-for="Name" class="form-label" style="color: #5c4033;">Name</label>
-                                            <input asp-for="Name" class="form-control" style="background-color: #f8f2ea; border-color: #c3a995; color: #5c4033;" />
+                                            <input asp-for="Name" required class="form-control" style="background-color: #f8f2ea; border-color: #c3a995; color: #5c4033;" />
                                             <span asp-validation-for="Name" class="text-danger"></span>
                                         </div>
 
                                         <div class="form-group mb-3">
-                                            <label asp-for="Birthdate" class="form-label" style="color: #5c4033;">Birthdate</label>
-                                            <input asp-for="Birthdate" type="date" class="form-control" style="background-color: #f8f2ea; border-color: #c3a995; color: #5c4033;" />
+                                            <label asp-for="Birthdate" class="form-label" style="color: #5c4033;">Дата на раждане</label>
+                                            <input asp-for="Birthdate" type="date"  class="form-control" style="background-color: #f8f2ea; border-color: #c3a995; color: #5c4033;" />
                                             <span asp-validation-for="Birthdate" class="text-danger"></span>
                                         </div>
 
                                         <div class="form-group mb-3">
-                                            <label asp-for="Bio" class="form-label" style="color: #5c4033;">About Me</label>
-                                            <textarea asp-for="Bio" class="form-control" rows="4" style="background-color: #f8f2ea; border-color: #c3a995; color: #5c4033;"></textarea>
+                                            <label asp-for="Bio" class="form-label" style="color: #5c4033;">За мен</label>
+                                            <textarea asp-for="Bio"  class="form-control" rows="4" style="background-color: #f8f2ea; border-color: #c3a995; color: #5c4033;"></textarea>
                                             <span asp-validation-for="Bio" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Favorite Book Section -->
-                                <div class="card" style="background-color: #faeed4; border-color: #c3a995;">
-                                    <div class="card-header" style="background-color: #e3d5c4; border-color: #c3a995;">
-                                        <h5 class="mb-0" style="color: #5c4033;">Favorite Book</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <label asp-for="FavouriteBook.Id" class="form-label" style="color: #5c4033;">Select Your Favorite Book</label>
-                                            @if (ViewBag.Books != null)
-                                            {
-                                                <select asp-for="FavouriteBook.Id" asp-items="ViewBag.Books" class="form-select" style="background-color: #f8f2ea; border-color: #c3a995; color: #5c4033;">
-                                                    <option value="">-- Select a Book --</option>
-                                                </select>
-                                            }
-                                            else
-                                            {
-                                                <p style="color: #8b7a6a;">No books available to select from.</p>
-                                                <input type="hidden" asp-for="FavouriteBook.Id" />
-                                            }
-                                            <span asp-validation-for="FavouriteBook.Id" class="text-danger"></span>
-                                        </div>
-
-                                        @if (Model.FavouriteBook != null && !string.IsNullOrEmpty(Model.FavouriteBook.Title))
-                                        {
-                                            <div class="mt-3">
-                                                <p style="color: #8b7a6a;">Current favorite: <strong style="color: #5c4033;">@Model.FavouriteBook.Title</strong></p>
-
-                                                @if (!string.IsNullOrEmpty(Model.FavouriteBook.CoverImageURL))
-                                                {
-                                                    <img src="@Model.FavouriteBook.CoverImageURL" class="img-fluid rounded mt-2" style="max-height: 100px; border: 2px solid #8b5a2b;" alt="Book Cover">
-                                                }
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-
+                                
                                 <!-- Form Buttons -->
                                 <div class="mt-4 text-end">
-                                    <a asp-action="UserProfile" class="btn me-2" style="background-color: #d4b79c; color: #5c4033; border-color: #c3a995;">Cancel</a>
-                                    <button type="submit" class="btn" style="background-color: #8b5a2b; color: #f8f2ea; border-color: #a67c52;">Save Changes</button>
+                                    <a asp-action="UserProfile" class="btn me-2" style="background-color: #d4b79c; color: #5c4033; border-color: #c3a995;">Отказ</a>
+                                    <button type="submit" class="btn" style="background-color: #8b5a2b; color: #f8f2ea; border-color: #a67c52;">Запази промени</button>
                                 </div>
                             </div>
                         </div>

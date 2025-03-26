@@ -83,21 +83,22 @@
         }
 
         <form asp-action="Login" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
                 <label asp-for="Email">Имейл</label>
-                <input asp-for="Email" class="form-control" placeholder="имейл" />
+                <input asp-for="Email" class="form-control" aria-required="true" placeholder="имейл" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Password">Парола</label>
-                <input asp-for="Password" class="form-control" type="password" placeholder="парола" />
+                <input asp-for="Password" class="form-control" aria-required="true" type="password" placeholder="парола" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <button type="submit" class="btn btn-login">Вход</button>
+            <a class="btn btn-register" asp-controller="Account" asp-action="Register" style="text-decoration: none;"> Нямате профил?   Регистрация</a>
         </form>
     </div>
 

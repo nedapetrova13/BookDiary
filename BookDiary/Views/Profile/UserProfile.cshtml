@@ -24,7 +24,7 @@
                             <h3 class="mt-3" style="color: #5c4033;">@(Model.Name ?? "User")</h3>
 
                             <div class="mt-4">
-                                <a asp-controller="Profile" asp-action="Edit"  class="btn" style="background-color: #8b5a2b; color: #f8f2ea; border-color: #a67c52;">Edit Profile</a>
+                                <a asp-controller="Profile" asp-action="Edit"  class="btn" style="background-color: #8b5a2b; color: #f8f2ea; border-color: #a67c52;">Промени</a>
                             </div> 
                         </div>
 
@@ -32,7 +32,7 @@
                         <div class="col-md-8">
                             <div class="card mb-4" style="background-color: #faeed4; border-color: #c3a995;">
                                 <div class="card-header" style="background-color: #e3d5c4; border-color: #c3a995;">
-                                    <h5 class="mb-0" style="color: #5c4033;">About Me</h5>
+                                    <h5 class="mb-0" style="color: #5c4033;">За мен</h5>
                                 </div>
                                 <div class="card-body">
                                     @if (!string.IsNullOrEmpty(Model.Bio))
@@ -41,47 +41,12 @@
                                     }
                                     else
                                     {
-                                        <p style="color: #8b7a6a;">Tell us about yourself by updating your profile...</p>
+                                        <p style="color: #8b7a6a;">Разкажи нещо за себе си като обновиш прила си...</p>
                                     }
                                 </div>
                             </div>
 
-                            <!-- Favorite Book Section -->
-                            <div class="card" style="background-color: #faeed4; border-color: #c3a995;">
-                                <div class="card-header" style="background-color: #e3d5c4; border-color: #c3a995;">
-                                    <h5 class="mb-0" style="color: #5c4033;">Favorite Book</h5>
-                                </div>
-                                <div class="card-body">
-                                    @if (Model.FavouriteBook != null)
-                                    {
-                                        <div class="row">
-                                            <div class="col-md-4 text-center">
-                                                @if (!string.IsNullOrEmpty(Model.FavouriteBook.CoverImageURL))
-                                                {
-                                                    <img src="@Model.FavouriteBook.CoverImageURL" class="img-fluid rounded" style="max-height: 200px; border: 2px solid #8b5a2b;" alt="Book Cover">
-                                                }
-                                                else
-                                                {
-                                                    <div class="d-flex align-items-center justify-content-center" style="height: 200px; background-color: #e3d5c4; border: 2px solid #8b5a2b;">
-                                                        <span style="color: #8b7a6a;">No Image</span>
-                                                    </div>
-                                                }
-                                            </div>
-                                            <div class="col-md-8">
-                                                <h4 style="color: #5c4033;">@Model.FavouriteBook.Title</h4>
-                                                <a asp-controller="Book" asp-action="Info" asp-route-bookId="@Model.FavouriteBook.Id" class="btn btn-sm mt-3" style="background-color: #8b5a2b; color: #f8f2ea;">View Book</a>
-                                            </div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="text-center py-4">
-                                            <p style="color: #8b7a6a;">You haven't selected a favorite book yet.</p>
-                                            <a href="@Url.Action("Index", "Books")" class="btn btn-sm" style="background-color: #8b5a2b; color: #f8f2ea;">Browse Books</a>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>

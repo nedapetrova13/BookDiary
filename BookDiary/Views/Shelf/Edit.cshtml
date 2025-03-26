@@ -11,14 +11,14 @@
                     <form method="post">
                         <div class="mb-4">
                             <div class="form-floating">
-                                <input type="text" asp-for="Name" class="form-control border-0 border-bottom rounded-0" placeholder="Име на шкафа" />
+                                <input type="text" asp-for="Name" class="form-control border-0 border-bottom rounded-0"  required placeholder="Име на шкафа" />
                                 <label asp-for="Name">Име</label>
                             </div>
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <div class="mb-4">
                             <div class="form-floating">
-                                <textarea asp-for="Description" class="form-control border-0 border-bottom rounded-0" placeholder="Описание" style="height: 100px"></textarea>
+                                <textarea asp-for="Description" class="form-control border-0 border-bottom rounded-0" required placeholder="Описание" style="height: 100px"></textarea>
                                 <label asp-for="Description">Описание</label>
                             </div>
                             <span asp-validation-for="Description" class="text-danger"></span>

@@ -3,8 +3,8 @@
 
 <div class="author-edit-container">
     <div class="form-header">
-        <h1>@(Model.Id > 0 ? "Edit" : "Add") Author</h1>
-        <p class="form-subtitle">Enter the author's information below</p>
+        <h1>@(Model.Id > 0 ? "Edit" : "Add") Автор</h1>
+        <p class="form-subtitle">Въведи информацията на автора по-долу</p>
     </div>
 
     <form method="post" enctype="multipart/form-data" class="author-edit-form">
@@ -12,20 +12,20 @@
 
         <div class="form-grid">
             <div class="form-section personal-info">
-                <h2><i class="fas fa-user"></i> Personal Information</h2>
+                <h2><i class="fas fa-user"></i> Лична информация</h2>
 
                 <div class="form-group">
-                    <label asp-for="Name">Full Name</label>
+                    <label asp-for="Name">Име</label>
                     <div class="input-wrapper">
                         <i class="fas fa-signature input-icon"></i>
-                        <input type="text" asp-for="Name" class="form-control" placeholder="Enter author's full name" required />
+                        <input type="text" asp-for="Name" class="form-control" placeholder="Въведи името на автора" required />
                     </div>
                     <span asp-validation-for="Name" class="validation-error"></span>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label asp-for="BirthDate">Birth Date</label>
+                        <label asp-for="BirthDate">Дата на раждане</label>
                         <div class="input-wrapper">
                             <i class="fas fa-birthday-cake input-icon"></i>
                             <input type="date" asp-for="BirthDate" class="form-control" required />
@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="Gender">Gender</label>
+                        <label asp-for="Gender">Пол</label>
                         <div class="input-wrapper">
                             <i class="fas fa-venus-mars input-icon"></i>
                             <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="form-control"></select>
@@ -44,10 +44,10 @@
             </div>
 
             <div class="form-section contact-info">
-                <h2><i class="fas fa-address-card"></i> Contact Information</h2>
+                <h2><i class="fas fa-address-card"></i>Контакти</h2>
 
                 <div class="form-group">
-                    <label asp-for="Email">Email Address</label>
+                    <label asp-for="Email">Имейл адрес</label>
                     <div class="input-wrapper">
                         <i class="fas fa-envelope input-icon"></i>
                         <input type="email" asp-for="Email" class="form-control" placeholder="author@example.com" required />
@@ -56,7 +56,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="WebSiteLink">Website</label>
+                    <label asp-for="WebSiteLink">Уебсайт</label>
                     <div class="input-wrapper">
                         <i class="fas fa-globe input-icon"></i>
                         <input type="url" asp-for="WebSiteLink" class="form-control" placeholder="https://author-website.com" />
@@ -66,7 +66,7 @@
         </div>
 
         <div class="form-section media-bio">
-            <h2><i class="fas fa-image"></i> Profile Picture</h2>
+            <h2><i class="fas fa-image"></i> Профилна снимка</h2>
 
             <div class="profile-picture-section">
                 <div class="current-picture">
@@ -78,27 +78,27 @@
                     {
                         <div class="profile-placeholder">
                             <i class="fas fa-user-circle"></i>
-                            <span>No Image</span>
+                            <span>Без снимка</span>
                         </div>
                     }
                 </div>
 
                 <div class="picture-input">
                     <div class="form-group">
-                        <label asp-for="ProfilePictureURL">Profile Picture URL</label>
+                        <label asp-for="ProfilePictureURL">Линк на прилна снимка</label>
                         <div class="input-wrapper">
                             <i class="fas fa-link input-icon"></i>
                             <input type="text" asp-for="ProfilePictureURL" class="form-control" placeholder="https://example.com/author-image.jpg" />
                         </div>
                         <span asp-validation-for="ProfilePictureURL" class="validation-error"></span>
-                        <p class="input-help">Enter a URL to an existing image or upload a new one</p>
+                        <p class="input-help">Въведи линк на профилна снимка</p>
                     </div>
 
                     <div class="form-group">
-                        <label for="profileImage">Upload New Image</label>
+                        <label for="profileImage">Качи нова снимка</label>
                         <div class="file-upload-wrapper">
                             <i class="fas fa-upload"></i>
-                            <span class="file-label">Choose a file...</span>
+                            <span class="file-label">Избери файл</span>
                             <input type="file" id="profileImage" name="ProfileImage" accept="image/*" class="file-input" />
                         </div>
                     </div>
@@ -107,20 +107,20 @@
         </div>
 
         <div class="form-section bio-section">
-            <h2><i class="fas fa-book-reader"></i> Biography</h2>
+            <h2><i class="fas fa-book-reader"></i> Биография</h2>
 
             <div class="form-group">
-                <label asp-for="Bio">Author Biography</label>
-                <textarea asp-for="Bio" class="form-control bio-textarea" rows="8" placeholder="Enter the author's biographical information..."></textarea>
+                <label asp-for="Bio">Биография на автора</label>
+                <textarea asp-for="Bio" class="form-control bio-textarea" rows="8" placeholder="Въведи информация за автора"></textarea>
             </div>
         </div>
 
         <div class="form-actions">
             <a asp-action="Index" asp-controller="Author" class="btn-cancel">
-                <i class="fas fa-times"></i> Cancel
+                <i class="fas fa-times"></i> отказ
             </a>
             <button asp-action="Edit" asp-controller="Author" type="submit" class="btn-submit">
-                <i class="fas fa-save"></i> Save Changes
+                <i class="fas fa-save"></i> запази промени
             </button>
         </div>
     </form>

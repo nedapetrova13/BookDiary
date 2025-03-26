@@ -45,7 +45,6 @@ builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IBookTagService, BookTagService>(); 
-builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ICurrentReadService, CurrentReadService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
@@ -53,9 +52,6 @@ builder.Services.AddScoped<ILanguageService, LanguageService>();
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<INotesService, NotesService>();
 builder.Services.AddScoped<IPublishingHouseService, PublishingHouseService>();
-builder.Services.AddScoped<IQuestionGenreBookService, QuestionGenreBookService>();
-builder.Services.AddScoped<IQuestionGenreService, QuestionGenreService>();
-builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<ISeriesService, SeriesService>();
 builder.Services.AddScoped<IShelfBookService, ShelfBookService>();
 builder.Services.AddScoped<IShelfService, ShelfService>();
@@ -344,7 +340,8 @@ using (var scope = app.Services.CreateScope())
                 Chapters = 17,
                 PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
                 LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id,
-                CoverImageURL = "https://www.ciela.com/media/catalog/product/cache/9a7ceae8a5abbd0253425b80f9ef99a5/h/a/hari_potar_i_filosofskiat_kamak_hrm.jpg"
+                CoverImageURL = "https://www.ciela.com/media/catalog/product/cache/9a7ceae8a5abbd0253425b80f9ef99a5/h/a/hari_potar_i_filosofskiat_kamak_hrm.jpg",
+                SeriesId=dbContext.Series.First(s=>s.Title=="Хари Потър").Id
             },
            new Book
             {
@@ -356,7 +353,9 @@ using (var scope = app.Services.CreateScope())
                 Chapters = 18,
                 PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
                 LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id,
-                CoverImageURL = "https://www.ciela.com/media/catalog/product/cache/9a7ceae8a5abbd0253425b80f9ef99a5/h/a/hari_potar_i_staiata_na_tainite_hrm.jpg"
+                CoverImageURL = "https://www.ciela.com/media/catalog/product/cache/9a7ceae8a5abbd0253425b80f9ef99a5/h/a/hari_potar_i_staiata_na_tainite_hrm.jpg",
+                SeriesId=dbContext.Series.First(s=>s.Title=="Хари Потър").Id
+
             },
 
             new Book
@@ -369,7 +368,9 @@ using (var scope = app.Services.CreateScope())
                 Chapters = 22,
                 CoverImageURL = "https://egmontbulgaria.com/media/cache/product_original/product-images/29/26/97895444655751469431553.jpg?1469431553",
                 PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Егмонт").Id,
-                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id
+                LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id,               
+                SeriesId=dbContext.Series.First(s=>s.Title=="Хари Потър").Id
+
             },
 
             new Book
@@ -382,7 +383,9 @@ using (var scope = app.Services.CreateScope())
                 Chapters = 73,
                 PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Бард").Id,
                 LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id,
-                CoverImageURL = "https://www.book.store.bg/lrgimg/17366/pesen-za-ogyn-i-led-kniga-1-igra-na-tronove.jpg"
+                CoverImageURL = "https://www.book.store.bg/lrgimg/17366/pesen-za-ogyn-i-led-kniga-1-igra-na-tronove.jpg",
+                SeriesId=dbContext.Series.First(s=>s.Title=="Песен за огън и лед").Id
+
             },
 
             new Book
@@ -395,7 +398,8 @@ using (var scope = app.Services.CreateScope())
                 Chapters = 69,
                 PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Бард").Id,
                 LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id,
-                CoverImageURL = "https://www.ateabooks.com/5822/-2-sblusuk-na-krale.jpg"
+                CoverImageURL = "https://www.ateabooks.com/5822/-2-sblusuk-na-krale.jpg",
+                SeriesId=dbContext.Series.First(s=>s.Title=="Песен за огън и лед").Id
             },
 
             new Book
@@ -408,7 +412,8 @@ using (var scope = app.Services.CreateScope())
                 Chapters = 82,
                 PublishingHouseId=dbContext.PublishingHouses.First(ph=>ph.Name=="Бард").Id,
                 LanguageId=dbContext.Languages.First(l=>l.Name=="Български").Id,
-                CoverImageURL = "https://www.bard.bg/files/mf/books/876_pic_1.jpg"
+                CoverImageURL = "https://www.bard.bg/files/mf/books/876_pic_1.jpg",
+                SeriesId=dbContext.Series.First(s=>s.Title=="Песен за огън и лед").Id
             },
 
             new Book
@@ -445,7 +450,8 @@ using (var scope = app.Services.CreateScope())
                 Chapters = 30,
                 PublishingHouseId = dbContext.PublishingHouses.First(ph => ph.Name == "Изток-Запад").Id,
                 LanguageId = dbContext.Languages.First(l => l.Name == "Английски").Id,
-                CoverImageURL = "https://www.pluggedin.com/wp-content/uploads/2020/01/murder-on-the-orient-express-cover.jpg"
+                CoverImageURL = "https://www.pluggedin.com/wp-content/uploads/2020/01/murder-on-the-orient-express-cover.jpg",
+                SeriesId=dbContext.Series.First(s=>s.Title=="Детектив Пуаро").Id
             }
 
 
@@ -453,8 +459,43 @@ using (var scope = app.Services.CreateScope())
 
         dbContext.Books.AddRange(books); 
         await dbContext.SaveChangesAsync();
+        
     }
-    
+    if (!dbContext.BooksTags.Any())
+    {
+
+        var booktags = new List<BookTag>
+        {
+            new BookTag
+            {
+                BookId=dbContext.Books.First(b=>b.Title=="Хари Потър и Философският камък").Id,
+                TagId=dbContext.Tags.First(t=>t.Name=="Отворен край").Id
+            },
+            new BookTag
+            {
+                BookId=dbContext.Books.First(b=>b.Title=="Хари Потър и Философският камък").Id,
+                TagId=dbContext.Tags.First(t=>t.Name=="Антигерой").Id
+            },
+            new BookTag
+            {
+                BookId=dbContext.Books.First(b=>b.Title=="Хари Потър и Стаята на тайните").Id,
+                TagId=dbContext.Tags.First(t=>t.Name=="Отворен край").Id
+            },
+            new BookTag
+            {
+                BookId=dbContext.Books.First(b=>b.Title=="Игра на тронове").Id,
+                TagId=dbContext.Tags.First(t=>t.Name=="Отворен край").Id
+            },
+            new BookTag
+            {
+                BookId=dbContext.Books.First(b=>b.Title=="Игра на тронове").Id,
+                TagId=dbContext.Tags.First(t=>t.Name=="Неочакван обрат").Id
+            }
+        };
+
+        dbContext.BooksTags.AddRange(booktags);
+        await dbContext.SaveChangesAsync();
+    }
 }
 
 using (var scope = app.Services.CreateScope())

@@ -123,9 +123,9 @@
 <div class="container py-4">
     <div class="row mb-4">
         <div class="col-12 d-flex justify-content-between align-items-center">
-            <h1 class="display-5 fw-bold text-brown"><i class="fas fa-book-open me-2"></i>My Bookshelves</h1>
+            <h1 class="display-5 fw-bold text-brown"><i class="fas fa-book-open me-2"></i>Моите шкафове</h1>
             <a asp-action="Add" asp-controller="Shelf" asp-route-userid="@Model.FirstOrDefault()?.UserId" class="btn btn-brown btn-lg shadow-sm">
-                <i class="fas fa-plus-circle me-2"></i>Create New Shelf
+                <i class="fas fa-plus-circle me-2"></i>Създай нов шкаф
             </a>
         </div>
     </div>
@@ -135,12 +135,12 @@
         <div class="row justify-content-center mt-5">
             <div class="col-md-8 text-center">
                 <div class="card border-0 shadow-lg p-5 bg-light-beige">
-                    <img src="~/images/empty-shelf.svg" alt="Empty Shelf" class="img-fluid mx-auto mb-4" style="max-width: 200px;" onerror="this.src='https://via.placeholder.com/200x120?text=No+Shelves'">
-                    <h3 class="fw-bold text-brown">No Shelves Yet</h3>
-                    <p class="text-brown">Create your first bookshelf to start organizing your reading journey!</p>
+                    
+                    <h3 class="fw-bold text-brown">Все още няма шкафове</h3>
+                    <p class="text-brown">Създай първия си шкаф и започни да организираш своите книги</p>
                     <div class="mt-4">
                         <a asp-action="Add" asp-controller="Shelf" asp-route-userid="@ViewBag.UserId" class="btn btn-brown btn-lg">
-                            <i class="fas fa-plus-circle me-2"></i>Create First Shelf
+                            <i class="fas fa-plus-circle me-2"></i>Създай първия си шкаф
                         </a>
                     </div>
                 </div>
@@ -159,7 +159,7 @@
                             <div style="display: flex; justify-content: space-between">
                             <h3 class="shelf-title">@shelf.Name</h3>
                                 <a asp-action="Info" asp-controller="Shelf" asp-route-shelfId="@shelf.Id" class="btn btn-sm btn-brown" style=" height: 30px;">
-                                <i class="fas fa-eye me-1"></i> View
+                                <i class="fas fa-eye me-1"></i> Разгледай
                             </a>
                             </div>
                             <div class="shelf-books">

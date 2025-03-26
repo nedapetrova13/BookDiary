@@ -5,7 +5,7 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-lg">
                 <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
-                    <h2 class="mb-0 fw-bold"><i class="fas fa-book-open me-2"></i>Create New Shelf</h2>
+                    <h2 class="mb-0 fw-bold"><i class="fas fa-book-open me-2"></i>Създай своя шкаф</h2>
                 </div>
                 <div class="card-body p-4">
                     <form method="post">
@@ -15,16 +15,16 @@
                             <!-- Shelf Name -->
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" asp-for="Name" class="form-control border-0 border-bottom rounded-0" required placeholder="Shelf Name" />
-                                    <label asp-for="Name">Shelf Name</label>
+                                    <input type="text" asp-for="Name" class="form-control border-0 border-bottom rounded-0" required placeholder="Име на шкафа" />
+                                    <label asp-for="Name">Име</label>
                                     <span asp-validation-for="Name" class="text-danger"></span>
                                 </div>
                             </div>
                             <!-- Shelf Description -->
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    <textarea asp-for="Description" class="form-control border-0 shadow-sm" style="min-height: 120px;" placeholder="Description of your shelf..."></textarea>
-                                    <label asp-for="Description">Description</label>
+                                    <textarea asp-for="Description" class="form-control border-0 shadow-sm" style="min-height: 120px;" placeholder="Описаие на твоя шкаф"></textarea>
+                                    <label asp-for="Description">Описание</label>
                                     <span asp-validation-for="Description" class="text-danger"></span>
                                 </div>
                             </div>
@@ -32,11 +32,14 @@
                             <div class="col-12 mt-3">
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                     <a href="javascript:history.back()" class="btn btn-outline-secondary px-4 py-2">
-                                        <i class="fas fa-times me-2"></i>Cancel
+                                        <i class="fas fa-times me-2"></i>Отказ
                                     </a>
-                                    <button type="submit" asp-action="Add" asp-controller="Shelf" class="btn text-white px-4 py-2" style="background-color: #5C4033;">
-                                        <i class="fas fa-plus-circle me-2"></i>Create Shelf
-                                    </button>
+                                    <div href="javascript:history.back(-2)">
+                                        <button type="submit" asp-action="Add" asp-controller="Shelf" class="btn text-white px-4 py-2" style="background-color: #5C4033;">
+                                            <i class="fas fa-plus-circle me-2"></i>Създай шкаф
+                                        </button>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>

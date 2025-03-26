@@ -13,6 +13,6 @@ namespace BookDiary.Models.ViewModels
         public List<NewsCreateViewModel> News { get; set; }
         public List<UserIndexViewModel> Users { get; set; }
         public List<CurrentReadIndexViewModel> CurrentReads { get; set; }
-        public List<BookSeriesViewModel> ReadBooks {  get; set; }   
+        public List<BookSeriesViewModel>? ReadBooks {  get; set; }   
     }
 }

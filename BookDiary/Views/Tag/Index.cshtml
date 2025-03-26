@@ -6,7 +6,7 @@
             <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
                 <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2 class="mb-0 fw-bold"><i class="fas fa-tags me-2"></i>Всички тагове</h2>
+                        <h2 class="mb-0 fw-bold"><i class="fas fa-tags me-2"></i>Всички характеристики</h2>
                         <a asp-controller="Add" asp-action="Delete" class="btn btn-light btn-sm">
                             <i class="fas fa-plus-circle me-1"></i> Добави таг
                         </a>
@@ -17,7 +17,6 @@
                         <table class="table table-hover align-middle mb-0 tag-table">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center" width="80">Id</th>
                                     <th scope="col">Име</th>
                                     <th scope="col" class="text-center" width="250">Действия</th>
                                 </tr>
@@ -26,7 +25,6 @@
                                 @foreach (var tag in Model)
                                 {
                                     <tr>
-                                        <td class="text-center fw-bold">@tag.Id</td>
                                         <td>@tag.Name</td>
                                         <td>
                                             <div class="d-flex justify-content-center gap-2">

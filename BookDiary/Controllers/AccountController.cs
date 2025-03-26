@@ -108,10 +108,12 @@ namespace BookDiary.Controllers
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, isPersistent: false, lockoutOnFailure: false);
             if (result.Succeeded)
             {
+                TempData["success"] = "Успешно влязохте в профила си!";
                 return RedirectToAction("LoggedIndex", "Home");
             }
 
             ModelState.AddModelError(nameof(model.Email), "Invalid email or password.");
+
             return View(model);
         }
 

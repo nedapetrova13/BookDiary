@@ -5,13 +5,13 @@
         <div class="col-lg-6">
             <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
                 <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
-                    <h2 class="mb-0 fw-bold"><i class="fas fa-tag me-2"></i>Редактиране на таг</h2>
+                    <h2 class="mb-0 fw-bold"><i class="fas fa-tag me-2"></i>Редактиране на характеристика</h2>
                 </div>
                 <div class="card-body p-4">
                     <form method="post">
                         <div class="mb-4">
                             <div class="form-floating">
-                                <input type="text" asp-for="Name" class="form-control border-0 border-bottom rounded-0" placeholder="Име на таг" />
+                                <input type="text" asp-for="Name" class="form-control border-0 border-bottom rounded-0" required placeholder="Име на характеристика" />
                                 <label asp-for="Name">Име</label>
                             </div>
                             <span asp-validation-for="Name" class="text-danger"></span>

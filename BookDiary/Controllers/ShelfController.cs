@@ -11,6 +11,7 @@ using BookDiary.Models.ViewModels.ShelfViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookDiary.Controllers
@@ -71,7 +72,8 @@ namespace BookDiary.Controllers
                 Description = model.Description,
             };
             await _shelfService.Add(shelf);
-            return RedirectToAction("Index");
+            TempData["success"] = "Успешно добавен шкаф!";
+            return View();
         }
 
         [HttpPost]
@@ -79,8 +81,8 @@ namespace BookDiary.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(User);
 
-            var book = _bookService.GetById(bookid);
-            var isshelf = _shelfService.GetAll().Any(x=>x.Name=="Прочетени книги" && x.UserId==currentUser.Id);
+            var book = await _bookService.GetById(bookid);
+            var isshelf =  _shelfService.GetAll().Any(x=>x.Name=="Прочетени книги" && x.UserId==currentUser.Id);
             if (!isshelf)
             {
                 var shelf = new Shelf
@@ -100,17 +102,26 @@ namespace BookDiary.Controllers
             else
             {
                 Shelf sh = await _shelfService.Get(x => x.Name == "Прочетени книги" && x.UserId == currentUser.Id);
-                var bs = new ShelfBook
+                var books = await _shelfBookService.Get(x=>x.BookId == bookid && x.ShelfId==sh.Id);                          
+
+                
+                if (books==null)
                 {
-                    BookId = bookid,
-                    ShelfId = sh.Id
-                };
-                await _shelfBookService.Add(bs);
+                    var bs = new ShelfBook
+                    {
+                        BookId = bookid,
+                        ShelfId = sh.Id
+                    };
+                    await _shelfBookService.Add(bs);
+                }
+                else
+                {
+                    TempData["error"] = "книгата вече е прочетена";
+                }
             }
             var currentRead = await _currentReadService.Get(x => x.UserId == currentUser.Id && x.BookId == bookid);
             if (currentRead != null)
             {
-
                 await _currentReadService.DeleteCurrentRead(bookid, currentUser.Id);
             }
             return RedirectToAction("Index");

@@ -32,7 +32,6 @@
             public DbSet<Author> Authors { get; set; }
             public DbSet<Book> Books { get; set; }
             public DbSet<BookTag> BooksTags { get; set; }
-            public DbSet<City> Cities { get; set; }
             public DbSet<Comment> Comments { get; set; }
             public DbSet<CurrentRead> CurrentReads { get; set; }
             public DbSet<Genre> Genres { get; set; }
@@ -40,9 +39,6 @@
             public DbSet<News> News { get; set; }
             public DbSet<Notes> Notes { get; set; }
             public DbSet<PublishingHouse> PublishingHouses { get; set; }
-            public DbSet<Question> Questions { get; set; }
-            public DbSet<QuestionGenre> QuestionsGenres { get; set; }
-            public DbSet<QuestionGenreBook> QuestionsGenresBooks { get; set; }
             public DbSet<Series> Series { get; set; }
             public DbSet<Shelf> Shelves { get; set; }
             public DbSet<ShelfBook> ShelvesBooks { get; set; }
@@ -58,24 +54,7 @@
                   .WithMany(b => b.Books)
                   .HasForeignKey(k => k.AuthorId)
                   .OnDelete(DeleteBehavior.Cascade);
-                builder.Entity<User>()
-                    .HasOne(u => u.Book)
-                    .WithMany(b => b.Users)
-                    .HasForeignKey(u => u.FavouriteBookId)
-                    .OnDelete(DeleteBehavior.SetNull);
-
-                /*builder.Entity<Author>()
-                    .HasOne(a => a.City)
-                    .WithMany(x => x.Authors)
-                    .HasForeignKey(x => x.CityId)
-                    .OnDelete(DeleteBehavior.NoAction);*/
-
-             /*   builder.Entity<User>()
-                    .HasOne(x => x.City)
-                    .WithMany(x => x.Users)
-                    .HasForeignKey(x => x.CityId)
-                    .OnDelete(DeleteBehavior.NoAction);*/
-
+               
                 builder.Entity<Book>()
                     .HasOne(x => x.Genre)
                     .WithMany(x => x.Books)
@@ -133,38 +112,7 @@
 
                
 
-                builder.Entity<QuestionGenre>()
-                    .HasKey(x => new { x.QuestionId, x.GenreId });
-                builder.Entity<QuestionGenre>()
-                    .HasOne(x => x.Genre)
-                    .WithMany(x => x.QuestionGenres)
-                    .HasForeignKey(x => x.GenreId)
-                    .OnDelete(DeleteBehavior.NoAction);
-                builder.Entity<QuestionGenre>()
-                    .HasOne(x => x.Question)
-                    .WithMany(x => x.QuestionGenres)
-                    .HasForeignKey(x => x.QuestionId)
-                    .OnDelete(DeleteBehavior.NoAction);
-
-                builder.Entity<QuestionGenreBook>()
-                    .HasKey(qgb => new { qgb.BookId, qgb.QuestionId, qgb.GenreId });
-                builder.Entity<QuestionGenreBook>()
-                    .HasOne(qgb => qgb.QuestionGenre)
-                    .WithMany(qg => qg.QuestionGenreBooks)
-                    .HasForeignKey(qgb => new { qgb.QuestionId, qgb.GenreId })
-                    .OnDelete(DeleteBehavior.NoAction);
-
-                builder.Entity<QuestionGenreBook>()
-                    .HasOne(qgb => qgb.Book)
-                    .WithMany(b => b.QuestionGenreBooks)
-                    .HasForeignKey(qgb => qgb.BookId)
-                    .OnDelete(DeleteBehavior.NoAction);
-
-                builder.Entity<QuestionGenreBook>()
-                    .HasOne(x => x.User)
-                    .WithMany(x => x.QuestionGenreBooks)
-                    .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.NoAction);
+               
 
                 builder.Entity<BookTag>()
                 .HasKey(bt => new { bt.BookId, bt.TagId }); // Composite Key

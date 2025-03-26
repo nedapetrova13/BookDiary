@@ -238,17 +238,17 @@ namespace BookDiary.Controllers
                 .SelectMany(b => b.BookTags.Select(bt => bt.Tag))
                 .ToList();
 
-            // Get all tags safely (list of Tag objects)
+            
             var allTags = _tagService.GetAll().ToList();
 
-            // Get available tags (tags that are NOT assigned to the book)
+           
             var availableTags = allTags.Except(selectedTags).ToList();
 
             var model = new AssignTagsToBookViewModel
             {
                 BookId = BookId,
-                SelectedTags = selectedTags,  // List<Tag>
-                AvailableTags = availableTags // List<Tag>
+                SelectedTags = selectedTags,  
+                AvailableTags = availableTags 
                
             };
 
@@ -362,7 +362,13 @@ namespace BookDiary.Controllers
                 };
                 comuser.Add(com);
             }
+
+            Shelf sh = await _shelfService.Get(x => x.Name == "Прочетени книги" && x.UserId == currentUser.Id);
+            var books = await _shelfBookService.Get(x => x.BookId == bookcvm.Id && x.ShelfId == sh.Id);
+
+
             
+
             var book = new BookAdminViewModel()
             {
                 Id = bookcvm.Id,
@@ -378,6 +384,14 @@ namespace BookDiary.Controllers
                 PublishingHouseName= publishinghouse,
                 CommentUsers = comuser
             };
+            if (books == null)
+            {
+                book.IsRead = false;
+            }
+            else
+            {
+                book.IsRead = true;
+            }
             if (series != null)
             {
                 book.SeriesName = series.Title;

@@ -337,7 +337,7 @@
                 <h1 class="series-title">@Model.Title</h1>
                 <div class="series-badge">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>
-                    <span>Book Series</span>
+                    <span>Поредица</span>
                 </div>
             </div>
 
@@ -346,7 +346,7 @@
 
     <!-- Description -->
     <div class="description-section">
-        <h2 class="section-title">Description</h2>
+        <h2 class="section-title">Описание</h2>
         <div class="description-content">
             @Model.Description
         </div>
@@ -355,7 +355,7 @@
 
 <!-- Books in Series -->
 <div>
-    <h2 class="books-section-title">Books in this Series</h2>
+    <h2 class="books-section-title">Книги в тази поредица</h2>
     @if (Model.Books != null && Model.Books.Any())
     {
         <div class="books-grid">
@@ -376,30 +376,14 @@
         @if (User.IsInRole(SD.AdminRole))
         {
             <div class="no-books-message">
-                <p>No books have been added to this series yet.</p>
+                <p>Все още няма книги от тази поредица</p>
                 <a asp-area="" asp-controller="Book" asp-action="Add" class="btn btn-add" style="margin-top: 1rem;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 5v14M5 12h14"></path>
                     </svg>
-                    Add a Book
+                    Добави книга
                 </a>
             </div>
         }
     }
 </div>
-@if (User.IsInRole(SD.AdminRole))
-{
-
-
-    @if (Model.Books != null && Model.Books.Any())
-    {
-        <div class="add-book-button-container">
-            <a asp-area="" asp-controller="Book" asp-action="Add" class="btn btn-add">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 5v14M5 12h14"></path>
-                </svg>
-                Add New Book to Series
-            </a>
-        </div>
-    }
-}
