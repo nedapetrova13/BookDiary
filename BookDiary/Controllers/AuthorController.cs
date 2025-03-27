@@ -100,19 +100,29 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(AuthorEditViewModel aevm)
         {
-            var author = new Author
+            if (aevm.Name == null || aevm.BirthDate > DateTime.UtcNow || aevm.Bio == null || aevm.Email == null || aevm.ProfilePictureURL == null || aevm.Gender == null || aevm.WebSiteLink == null)
             {
-                Id=aevm.Id,
-                Name = aevm.Name,
-                BirthDate = aevm.BirthDate,
-                Bio = aevm.Bio,
-                Email = aevm.Email,
-                ProfilePictureURL = aevm.ProfilePictureURL,
-                Gender = aevm.Gender,
-                WebSiteLink = aevm.WebSiteLink
-            };
-            await _authorService.Update(author);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+
+                return View(aevm);
+            }
+            else
+            {
+                var author = new Author
+                {
+                    Id = aevm.Id,
+                    Name = aevm.Name,
+                    BirthDate = aevm.BirthDate,
+                    Bio = aevm.Bio,
+                    Email = aevm.Email,
+                    ProfilePictureURL = aevm.ProfilePictureURL,
+                    Gender = aevm.Gender,
+                    WebSiteLink = aevm.WebSiteLink
+                };
+                await _authorService.Update(author);
+                return RedirectToAction("Index");
+            }
+               
 
         }
         [Authorize(Roles = "Admin")]

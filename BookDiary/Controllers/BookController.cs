@@ -134,26 +134,35 @@ namespace BookDiary.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Add(BookCreateViewModel bookcvm)
-        {
-            var book = new Book
+        { 
+            if(bookcvm.Title==null || bookcvm.Description==null || bookcvm.AuthorId==0 || bookcvm.GenreId==0 || bookcvm.SeriesId==0 || bookcvm.CoverImageURL==null || bookcvm.BookPages<=0 || bookcvm.Chapters<=0 || bookcvm.LanguageId==0 || bookcvm.PublishingHouseId == 0)
             {
-                Title = bookcvm.Title,
-                Description = bookcvm.Description,
-                AuthorId = bookcvm.AuthorId,
-                GenreId = bookcvm.GenreId,
-                SeriesId = bookcvm.SeriesId,
-                CoverImageURL = bookcvm.CoverImageURL,
-                BookPages = bookcvm.BookPages,
-                Chapters = bookcvm.Chapters,
-                LanguageId=bookcvm.LanguageId,
-                PublishingHouseId=bookcvm.PublishingHouseId
-                
-            };
+                TempData["error"] = "Невалидни данни";
 
-            await _bookService.Add(book);
-            
-            return RedirectToAction("Index");
-            
+                return View(bookcvm);
+            }
+            else
+            {
+                var book = new Book
+                {
+                    Title = bookcvm.Title,
+                    Description = bookcvm.Description,
+                    AuthorId = bookcvm.AuthorId,
+                    GenreId = bookcvm.GenreId,
+                    SeriesId = bookcvm.SeriesId,
+                    CoverImageURL = bookcvm.CoverImageURL,
+                    BookPages = bookcvm.BookPages,
+                    Chapters = bookcvm.Chapters,
+                    LanguageId = bookcvm.LanguageId,
+                    PublishingHouseId = bookcvm.PublishingHouseId
+
+                };
+
+                await _bookService.Add(book);
+
+                return RedirectToAction("Index");
+
+            }
         }
         [Authorize(Roles = "Admin")]
 
@@ -193,27 +202,36 @@ namespace BookDiary.Controllers
         [Authorize(Roles = "Admin")]
 
         [HttpPost]
-            public async Task<IActionResult> Edit(BookEditViewModel model)
+        public async Task<IActionResult> Edit(BookEditViewModel model)
+        {
+            if (model.Title == null || model.Description == null || model.AuthorId == 0 || model.GenreId == 0 || model.SeriesId == 0 || model.CoverImageURL == null || model.BookPages <= 0 || model.Chapters <= 0 || model.LanguageId == 0 || model.PublishingHouseId == 0)
             {
-            var book = new Book
-            {
-                Id = model.Id,
-                Title = model.Title,
-                Description = model.Description,
-                AuthorId = model.AuthorId,
-                SeriesId = model.SeriesId,
-                BookPages = model.BookPages,
-                Chapters = model.Chapters,
-                GenreId = model.GenreId,
-                CoverImageURL = model.CoverImageURL,
-                LanguageId=model.LanguageId,
-                PublishingHouseId=model.PublishingHouseId
-            };
+                TempData["error"] = "Невалидни данни";
 
-                    await _bookService.Update(book);
-                    return RedirectToAction("Index");
+                return View(model);
+            }
+            else
+            {
+                var book = new Book
+                {
+                    Id = model.Id,
+                    Title = model.Title,
+                    Description = model.Description,
+                    AuthorId = model.AuthorId,
+                    SeriesId = model.SeriesId,
+                    BookPages = model.BookPages,
+                    Chapters = model.Chapters,
+                    GenreId = model.GenreId,
+                    CoverImageURL = model.CoverImageURL,
+                    LanguageId = model.LanguageId,
+                    PublishingHouseId = model.PublishingHouseId
+                };
+
+                await _bookService.Update(book);
+                return RedirectToAction("Index");
 
             }
+        }
         [Authorize(Roles = "Admin")]
 
         [HttpPost]
