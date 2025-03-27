@@ -15,14 +15,13 @@ namespace BookDiary.Controllers
         public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager
-            ) // Make imageService optional
+            ) 
         {
             _userManager = userManager;
             _signInManager = signInManager;
             
         }
 
-        // GET: /Account/Register
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
@@ -30,7 +29,6 @@ namespace BookDiary.Controllers
             return View(new RegisterViewModel());
         }
 
-        // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -40,7 +38,6 @@ namespace BookDiary.Controllers
                 return View(model);
             }
 
-            // Check if email already exists
             var existingUser = await _userManager.FindByEmailAsync(model.Email);
             if (existingUser != null)
             {
@@ -48,7 +45,6 @@ namespace BookDiary.Controllers
                 return View(model);
             }
 
-            // Create new user
             var user = new User
             {
                 UserName = model.Name, 
@@ -59,19 +55,13 @@ namespace BookDiary.Controllers
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                // Assign "User" role to the new user
                 await _userManager.AddToRoleAsync(user, "User");
 
-                // Handle profile picture upload if provided
-               
-
-                // Sign in the user after registration
                 await _signInManager.SignInAsync(user, isPersistent: false);
 
                 return RedirectToAction("LoggedIndex", "Home");
             }
 
-            // If registration fails, add errors to ModelState
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
@@ -80,7 +70,6 @@ namespace BookDiary.Controllers
             return View(model);
         }
 
-        // GET: /Account/Login
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login()
@@ -88,7 +77,6 @@ namespace BookDiary.Controllers
             return View(new LoginViewModel());
         }
 
-        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -117,7 +105,6 @@ namespace BookDiary.Controllers
             return View(model);
         }
 
-        // POST: /Account/Logout
         [HttpPost]
         public async Task<IActionResult> Logout()
         {

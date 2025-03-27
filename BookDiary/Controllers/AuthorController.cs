@@ -8,7 +8,9 @@ using BookDiary.Models.ViewModels.NewsViewModels;
 using BookDiary.Models.ViewModels.SeriesViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Collections.ObjectModel;
+using System.Net.NetworkInformation;
 
 namespace BookDiary.Controllers
 {
@@ -25,16 +27,16 @@ namespace BookDiary.Controllers
         {
             var auList = _authorService.GetAll();
 
-            var viewModelList = auList.Select(news => new AuthorCreateViewModel
+            var viewModelList = auList.Select(au => new AuthorCreateViewModel
             {
-                Name = news.Name,
-                BirthDate = news.BirthDate,
-                Bio = news.Bio,
-                Email = news.Email,
-                Gender = news.Gender,
-                ProfilePictureURL = news.ProfilePictureURL,
-                WebSiteLink = news.WebSiteLink,
-                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+                Name = au.Name,
+                BirthDate = au.BirthDate,
+                Bio = au.Bio,
+                Email = au.Email,
+                Gender = au.Gender,
+                ProfilePictureURL = au.ProfilePictureURL,
+                WebSiteLink = au.WebSiteLink,
+                Id = au.Id 
             }).ToList();
 
             return View(viewModelList);
@@ -51,17 +53,28 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AuthorCreateViewModel acvm)
         {
-            var author = new Author
+            if (acvm.Name == null || acvm.BirthDate > DateTime.UtcNow || acvm.Bio == null || acvm.Email == null || acvm.ProfilePictureURL == null || acvm.Gender == null || acvm.WebSiteLink == null)
             {
-                Name = acvm.Name,
-                BirthDate = acvm.BirthDate,
-                Bio = acvm.Bio,
-                Email = acvm.Email,
-                ProfilePictureURL = acvm.ProfilePictureURL,
-                Gender = acvm.Gender,
-                WebSiteLink = acvm.WebSiteLink
-            };
-            await _authorService.Add(author);
+                TempData["error"] = "Невалидни данни";
+
+                return View(acvm);
+            }
+            else
+            {
+                var author = new Author
+                {
+                    Name = acvm.Name,
+                    BirthDate = acvm.BirthDate,
+                    Bio = acvm.Bio,
+                    Email = acvm.Email,
+                    ProfilePictureURL = acvm.ProfilePictureURL,
+                    Gender = acvm.Gender,
+                    WebSiteLink = acvm.WebSiteLink
+                };
+                await _authorService.Add(author);
+
+                
+            }
             return RedirectToAction("Index");
         }
         [Authorize(Roles = "Admin")]
