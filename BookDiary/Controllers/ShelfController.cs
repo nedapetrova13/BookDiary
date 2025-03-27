@@ -73,7 +73,7 @@ namespace BookDiary.Controllers
             };
             await _shelfService.Add(shelf);
             TempData["success"] = "Успешно добавен шкаф!";
-            return View();
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

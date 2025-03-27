@@ -11,5 +11,6 @@ namespace BookDiary.Core.IServices
     {
         // Task<IEnumerable<User>> GetAllUsers();
         Task<User> GetByIdUser(string id);
+        Task DeleteUser(string id);
     }
 }

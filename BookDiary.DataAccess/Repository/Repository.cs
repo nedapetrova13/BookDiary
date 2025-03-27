@@ -41,12 +41,22 @@ namespace BookDiary.DataAccess.Repository
         public async Task DeleteMapping<TMapping>(Expression<Func<TMapping, bool>> predicate) where TMapping : class
         {
             var entity = _context.Set<TMapping>().FirstOrDefault(predicate);
-
             if (entity != null)
             {
                 _context.Set<TMapping>().Remove(entity);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task DeleteUser(string id)
+        {
+            var entity = dbSet.Find(id);
+            if (entity == null)
+            {
+                throw new ArgumentException("Id is null!");
+            }
+            dbSet.Remove(entity);
+            await this._context.SaveChangesAsync();
         }
 
         public async Task<List<T>> Find(Expression<Func<T, bool>> filter)

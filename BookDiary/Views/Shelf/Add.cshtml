@@ -32,10 +32,8 @@
                                         <i class="fas fa-times me-2"></i>Отказ
                                     </a>
                                     <div>
-                                        <!-- Add Button -->
                                         <button type="submit" asp-action="Add" asp-controller="Shelf"
-                                                class="btn text-white px-4 py-2" style="background-color: #5C4033;"
-                                                onclick="setTimeout(() => history.go(-1), 100);">
+                                                class="btn text-white px-4 py-2" style="background-color: #5C4033;">
                                             <i class="fas fa-plus-circle me-2"></i> Създай шкаф
                                         </button>
                                     </div>
@@ -55,7 +53,6 @@
     }
     <script>
         $(document).ready(function() {
-            // Add animation effects to form controls
             $(".form-control, .form-select").focus(function() {
                 $(this).parent().addClass("border-bottom-0");
                 $(this).addClass("shadow-sm");
@@ -63,8 +60,6 @@
                 $(this).parent().removeClass("border-bottom-0");
                 $(this).removeClass("shadow-sm");
             });
-
-            // Add subtle animation when the page loads
             $(".card").hide().fadeIn(800);
         });
     </script>

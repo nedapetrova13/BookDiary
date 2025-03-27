@@ -28,6 +28,12 @@ namespace BookDiary.Core.Services
             await _repo.Delete(id);
         }
 
+        public async Task DeleteComment(int bookid, string userid)
+        {
+            await _repo.DeleteMapping<Comment>(bt => bt.BookId == bookid && bt.UserId == userid);
+        }
+        
+
         public async Task<List<Comment>> Find(Expression<Func<Comment, bool>> filter)
         {
             return await _repo.Find(filter);

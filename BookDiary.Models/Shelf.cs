@@ -15,6 +15,8 @@ namespace BookDiary.Models
         [Required(ErrorMessage = "Името е заядължително")]
         public string Name { get; set; }    
         public ICollection<ShelfBook>? ShelfBooks { get; set; }
+        [Required(ErrorMessage = "Полето е задължително")]
+
         public string Description { get; set; }
         [ForeignKey(nameof(User))]
         public string UserId { get; set; }

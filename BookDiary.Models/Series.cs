@@ -14,6 +14,8 @@ namespace BookDiary.Models
         [Required(ErrorMessage = "Името е задължително")]
         public string Title {  get; set; }  
         public ICollection<Book> Books { get; set; }
+        [Required(ErrorMessage = "Полето е задължително")]
+
         public string Description { get; set; } 
     }
 }

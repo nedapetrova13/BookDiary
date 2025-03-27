@@ -14,10 +14,10 @@
         public class ApplicationDbContext:IdentityDbContext<User>
         {
             private bool seedDb;
-
+            public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) { }
             public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, bool seedDb = true) : base(options)
             {
-                /*if (this.Database.IsRelational())
+                if (this.Database.IsRelational())
                 {
                     this.Database.Migrate();
                 }
@@ -26,7 +26,7 @@
                     this.Database.EnsureCreated();
                 }
 
-                this.seedDb = seedDb;*/
+                this.seedDb = seedDb;
              }
           
             public DbSet<Author> Authors { get; set; }

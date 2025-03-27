@@ -43,14 +43,14 @@
                                     <label asp-for="ProfilePictureURL" class="form-label fw-bold mb-2">Профилна снимка</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light border-0"><i class="fas fa-image"></i></span>
-                                        <input type="text" asp-for="ProfilePictureURL" class="form-control border-0 border-bottom rounded-0" placeholder="URL адрес на снимката" />
+                                        <input type="text" asp-for="ProfilePictureURL" class="form-control border-0 border-bottom rounded-0" required placeholder="URL адрес на снимката" />
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="mb-4">
                                     <label asp-for="Bio" class="form-label fw-bold mb-2">Биография</label>
-                                    <textarea asp-for="Bio" class="form-control border-0 shadow-sm" style="min-height: 120px;" placeholder="Въведете биография на автора..."></textarea>
+                                    <textarea asp-for="Bio" class="form-control border-0 shadow-sm" required style="min-height: 120px;" placeholder="Въведете биография на автора..."></textarea>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -58,7 +58,7 @@
                                     <label asp-for="WebSiteLink" class="form-label fw-bold mb-2">Уебсайт</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light border-0"><i class="fas fa-globe"></i></span>
-                                        <input type="url" asp-for="WebSiteLink" class="form-control border-0 border-bottom rounded-0" placeholder="https://example.com" />
+                                        <input type="url" asp-for="WebSiteLink" class="form-control border-0 border-bottom rounded-0" required placeholder="https://example.com" />
                                     </div>
                                 </div>
                             </div>

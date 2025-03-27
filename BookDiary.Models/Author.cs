@@ -22,10 +22,16 @@ namespace BookDiary.Models
         public DateTime BirthDate { get; set; }
         [Required(ErrorMessage = "Email е заядължителен")]
         public string Email {  get; set; }
+        [Required(ErrorMessage = "Полето е задължително")]
+
         public string ProfilePictureURL { get; set; }
         [EnumDataType(typeof(GenderEnum))]
         public string? Gender { get; set; }
+        [Required(ErrorMessage = "Полето е задължително")]
+
         public string Bio {  get; set; }
+        [Required(ErrorMessage = "Полето е задължително")]
+
         public string WebSiteLink { get; set; }
         public ICollection<Series>? Series { get; set; }
     }

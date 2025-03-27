@@ -19,5 +19,6 @@ namespace BookDiary.DataAccess.Repository
         Task<List<T>> Find(Expression<Func<T, bool>> filter);
         Task<T> Get(Expression<Func<T, bool>> filter);
         Task DeleteMapping<TMapping>(Expression<Func<TMapping, bool>> predicate) where TMapping : class;
+        Task DeleteUser(string id);
     }
 }

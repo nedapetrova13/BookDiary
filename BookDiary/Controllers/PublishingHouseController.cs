@@ -72,6 +72,7 @@ namespace BookDiary.Controllers
             {
                 Id = phevm.Id,
                 Name = phevm.Name,
+                YearFounded=phevm.YearFounded
             };
             await _publishingHouseService.Update(model);
             return RedirectToAction("Index");

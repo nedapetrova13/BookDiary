@@ -14,6 +14,7 @@ namespace BookDiary.Models
         [Required(ErrorMessage = "Името е заядължително")]
         public string Title {  get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
+        [Required(ErrorMessage = "Полето е задължително")]
         public string Content {  get; set; }
        
 

@@ -57,34 +57,48 @@ namespace BookDiary.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
 
             Shelf sh = await _shelfService.Get(x => x.Name == "Прочетени книги" && x.UserId == currentUser.Id);
-            var books = await _shelfBookService.Get(x => x.BookId == bookid && x.ShelfId == sh.Id);
-
-
-            if (books == null)
+            if (sh != null)
             {
-               
-                var currentreads = await _currentReadService.Get(x => x.UserId == currentUser.Id && x.BookId == bookid);
-                if (currentreads == null)
+                var books = await _shelfBookService.Get(x => x.BookId == bookid && x.ShelfId == sh.Id);
+                if (books == null)
                 {
-                    CurrentRead cr = new CurrentRead
+
+                    var currentreads = await _currentReadService.Get(x => x.UserId == currentUser.Id && x.BookId == bookid);
+                    if (currentreads == null)
                     {
-                        BookId = bookid,
-                        UserId = currentUser.Id,
-                        CurrentPage = 0
-                    };
-                    await _currentReadService.Add(cr);
+                        CurrentRead cr = new CurrentRead
+                        {
+                            BookId = bookid,
+                            UserId = currentUser.Id,
+                            CurrentPage = 0
+                        };
+                        await _currentReadService.Add(cr);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index");
+
+                    }
                 }
                 else
                 {
-                    return RedirectToAction("Index");
-
+                    TempData["error"] = "книгата вече е прочетена";
                 }
+
             }
             else
             {
-                TempData["error"] = "книгата вече е прочетена";
+                CurrentRead cr = new CurrentRead
+                {
+                    BookId = bookid,
+                    UserId = currentUser.Id,
+                    CurrentPage = 0
+                };
+                await _currentReadService.Add(cr);
+                return RedirectToAction("Index");
             }
 
+            
             return RedirectToAction("Index");
         }
         [HttpPost]

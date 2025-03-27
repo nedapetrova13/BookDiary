@@ -62,19 +62,11 @@ namespace BookDiary.Controllers
         }
         public async Task<IActionResult> Edit()
         {
-            var books =  _bookService.GetAll();
-
-            // Create SelectList with correct parameters
-            ViewBag.Books = new SelectList(books, "Id", "Title"); // Use Title instead of Name
-
             var currentUser = await _userManager.GetUserAsync(User);
             var user = new EditProfileViewModel
             {
                 Id = currentUser.Id,
-                Name = currentUser.Name,
                 Bio = currentUser.Bio,
-                Birthdate = currentUser.Birthdate,
-                // Initialize FavouriteBook to avoid null reference
             };
 
             if (currentUser.ProfilePictureURL != null)
@@ -95,10 +87,7 @@ namespace BookDiary.Controllers
             {
                 return RedirectToAction("Index", "Home", null);
             }
-            currentUser.Name = model.Name;
             currentUser.Bio = model.Bio;
-            currentUser.Birthdate = model.Birthdate;
-            currentUser.ProfilePictureURL = model.ProfilePictureURL;
             var result = await _userManager.UpdateAsync(currentUser);
             if (result.Succeeded)
             {
@@ -108,6 +97,23 @@ namespace BookDiary.Controllers
             {
                 return RedirectToAction("Index", "Home", null);
             }
+        }
+        [Authorize(Roles = "Admin")]
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            bool isValidUser =  _userService.GetAll().Any(x=>x.Id==userId);
+
+            if (!isValidUser)
+            {
+                TempData["error"] = "Този потребител не съществува.";
+                return RedirectToAction("Index");
+            }
+
+            await _userService.DeleteUser(userId);
+
+            return RedirectToAction("LoggedIndex","Home");
         }
     }
 }

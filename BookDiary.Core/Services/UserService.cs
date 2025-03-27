@@ -57,6 +57,10 @@ namespace BookDiary.Core.Services
             var result = await _repo.GetByIdUser(id);
             return result;
         }
-       
+
+        public async Task DeleteUser(string id)
+        {
+            await _repo.DeleteUser(id);
+        }
     }
 }

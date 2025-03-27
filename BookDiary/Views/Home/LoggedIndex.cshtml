@@ -989,14 +989,16 @@
                                 <div class="user-info">
                                     <h5>@u.Name</h5>
                                 </div>
-                                <div class="user-actions">
-                                    <button class="btn-icon" title="Изтрий"><i class="bi bi-chat"></i></button>
+                                <div>
+                                    <form method="post" asp-controller="Profile" asp-action="DeleteUser" style="display:inline;">
+                                        <button class="button" class="btn btn-delete btn-sm" asp-action="DeleteUser" asp-controller="Profile" asp-route-userId="@u.Id">
+                                                    <i class="fas fa-trash-alt me-1"></i> Изтрий
+                                               </button>
+                                        </form>
                                 </div>
                             </div>
                         }
-                        <div class="view-all-link">
-                            <a href="@Url.Action("Index", "User")">Виж всички потребители <i class="bi bi-arrow-right"></i></a>
-                        </div>
+                        
                     </div>
                 </div>
 

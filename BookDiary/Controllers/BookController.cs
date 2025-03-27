@@ -272,24 +272,10 @@ namespace BookDiary.Controllers
 
                 await _bookTagService.Add(booktag);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Info", new { bookId = model.BookId });
         }
-        [Authorize(Roles = "Admin")]
 
-        [HttpGet]
-        public async Task<IActionResult> AssignLangandPH(int id)
-        {
-            var languages = _languageService.GetAll();
-            var publishinghouses = _pubHouseService.GetAll();
-            ViewBag.Languages = new SelectList(languages, "Id", "Name");
-            ViewBag.PublishingHouses = new SelectList(publishinghouses, "Id", "Name");
-            var model = new BookLanguagePHVM
-            {
-                BookId = id,
-            };
-            return View(model);
-        }
-        
+
 
         public async Task<IActionResult> Info(int bookId)
         {
@@ -466,7 +452,8 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteComment(int bookId, int commentid)
         {
-            await _commentService.Delete(commentid);
+            Comment comment = _commentService.GetAll().Where(x=>x.Id==commentid).FirstOrDefault();
+            await _commentService.DeleteComment(bookId,comment.UserId);
             return RedirectToAction("Info", new { BookId = bookId });
         }
         

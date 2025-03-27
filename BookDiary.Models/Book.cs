@@ -22,6 +22,7 @@ namespace BookDiary.Models
         [ForeignKey(nameof(Series))]
         public int? SeriesId { get; set; }
         public Series? Series { get; set; }
+        [Required(ErrorMessage = "Полето е задължително")]
         public string CoverImageURL { get; set; }
         [ForeignKey(nameof(Genre))]
         public int GenreId { get; set; }
@@ -32,14 +33,16 @@ namespace BookDiary.Models
         [ForeignKey(nameof(Language))]
         public int LanguageId { get; set; }
         public Language Language { get; set; }
-        public int BookPages { get; set; }
+        [Required(ErrorMessage = "Полето е задължително")]
+        public int BookPages { get; set; } = 0!;
         [EnumDataType(typeof(BookFormatEnum))]
         public string? BookFormat { get; set; }
         [Required(ErrorMessage = "Описанието е заядължително")]
         public string Description {  get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<CurrentRead> CurrentReads { get; set; }
-        public int Chapters {  get; set; }
+        [Required(ErrorMessage = "Полето е задължително")]
+        public int Chapters { get; set; } = 0!;
         public ICollection<Notes> Notes { get; set; }
         public ICollection<BookTag> BookTags { get; set; }
         public ICollection<ShelfBook> ShelfBooks { get; set; }

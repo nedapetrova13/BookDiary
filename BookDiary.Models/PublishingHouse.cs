@@ -13,6 +13,7 @@ namespace BookDiary.Models
         public int Id { get; set; }
         [Required(ErrorMessage = "Името е заядължително")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Годината е задължителнa")]
         public int YearFounded { get; set; }
         public ICollection<Book> Books { get; set; }  
 

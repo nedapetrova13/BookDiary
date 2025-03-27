@@ -15,7 +15,9 @@ namespace BookDiary.Models
         [ForeignKey(nameof(User))]
         public string UserId { get; set; }
         public User User { get; set; }
+        [Required(ErrorMessage = "Главата е задължителна")]
         public int BookChapter {  get; set; }
+        [Required(ErrorMessage = "Полето е задължително")]
         public string NoteContent { get; set; }
         [Required(ErrorMessage = "Името е заядължително")]
         public string Title { get; set; }
