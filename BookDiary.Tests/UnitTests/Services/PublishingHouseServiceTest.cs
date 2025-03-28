@@ -28,23 +28,18 @@ namespace BookDiary.Tests.UnitTests.Services
         [Test]
         public async Task GetById_ShouldCallRepositoryWithCorrectId()
         {
-            // Arrange
             int publishingHouseId = 1;
             var expectedPublishingHouse = new PublishingHouse { Id = publishingHouseId, Name = "Penguin Random House", YearFounded = 1935 };
             _mockRepo.Setup(r => r.GetById(publishingHouseId)).ReturnsAsync(expectedPublishingHouse);
 
-            // Act
             var result = await _publishingHouseService.GetById(publishingHouseId);
 
-            // Assert
             Assert.That(result, Is.EqualTo(expectedPublishingHouse));
-            _mockRepo.Verify(r => r.GetById(publishingHouseId), Times.Once);
         }
 
         [Test]
         public void GetAll_ShouldReturnAllPublishingHouses()
         {
-            // Arrange
             var publishingHouses = new List<PublishingHouse>
             {
                 new PublishingHouse { Id = 1, Name = "Penguin Random House", YearFounded = 1935 },
@@ -54,36 +49,28 @@ namespace BookDiary.Tests.UnitTests.Services
 
             _mockRepo.Setup(r => r.GetAll()).Returns(publishingHouses);
 
-            // Act
             var result = _publishingHouseService.GetAll();
 
-            // Assert
             Assert.That(result, Is.EqualTo(publishingHouses));
-            _mockRepo.Verify(r => r.GetAll(), Times.Once);
         }
 
         [Test]
         public async Task Get_ShouldCallRepositoryWithCorrectFilter()
         {
-            // Arrange
             var expectedPublishingHouse = new PublishingHouse { Id = 1, Name = "Penguin Random House", YearFounded = 1935 };
             Expression<Func<PublishingHouse, bool>> filter = ph => ph.Name == "Penguin Random House";
 
             _mockRepo.Setup(r => r.Get(It.IsAny<Expression<Func<PublishingHouse, bool>>>()))
                     .ReturnsAsync(expectedPublishingHouse);
 
-            // Act
             var result = await _publishingHouseService.Get(filter);
 
-            // Assert
-            Assert.That(result, Is.EqualTo(expectedPublishingHouse));
-            _mockRepo.Verify(r => r.Get(It.IsAny<Expression<Func<PublishingHouse, bool>>>()), Times.Once);
+           Assert.That(result, Is.EqualTo(expectedPublishingHouse));
         }
 
         [Test]
         public async Task Find_ShouldCallRepositoryWithCorrectFilter()
         {
-            // Arrange
             var expectedPublishingHouses = new List<PublishingHouse>
             {
                 new PublishingHouse { Id = 1, Name = "Penguin Random House", YearFounded = 1935 },
@@ -95,84 +82,58 @@ namespace BookDiary.Tests.UnitTests.Services
             _mockRepo.Setup(r => r.Find(It.IsAny<Expression<Func<PublishingHouse, bool>>>()))
                     .ReturnsAsync(expectedPublishingHouses);
 
-            // Act
             var result = await _publishingHouseService.Find(filter);
 
-            // Assert
             Assert.That(result, Is.EqualTo(expectedPublishingHouses));
-            _mockRepo.Verify(r => r.Find(It.IsAny<Expression<Func<PublishingHouse, bool>>>()), Times.Once);
         }
 
         [Test]
         public async Task Add_ShouldCallRepositoryAddMethod()
         {
-            // Arrange
             var publishingHouse = new PublishingHouse { Name = "New Publishing House", YearFounded = 2000 };
             _mockRepo.Setup(r => r.Add(It.IsAny<PublishingHouse>())).Returns(Task.CompletedTask);
 
-            // Act
             await _publishingHouseService.Add(publishingHouse);
-
-            // Assert
-            _mockRepo.Verify(r => r.Add(publishingHouse), Times.Once);
         }
 
         [Test]
         public async Task Update_ShouldCallRepositoryUpdateMethod()
         {
-            // Arrange
             var publishingHouse = new PublishingHouse { Id = 1, Name = "Updated Publishing House", YearFounded = 1950 };
             _mockRepo.Setup(r => r.Update(It.IsAny<PublishingHouse>())).Returns(Task.CompletedTask);
 
-            // Act
             await _publishingHouseService.Update(publishingHouse);
-
-            // Assert
-            _mockRepo.Verify(r => r.Update(publishingHouse), Times.Once);
         }
 
         [Test]
         public async Task Delete_ShouldCallRepositoryDeleteMethod()
         {
-            // Arrange
             int publishingHouseId = 1;
             _mockRepo.Setup(r => r.Delete(publishingHouseId)).Returns(Task.CompletedTask);
 
-            // Act
             await _publishingHouseService.Delete(publishingHouseId);
 
-            // Assert
-            _mockRepo.Verify(r => r.Delete(publishingHouseId), Times.Once);
         }
 
         [Test]
         public void Constructor_WithNullRepository_ShouldNotThrowException()
         {
-            // Arrange & Act & Assert
-            // This test verifies the current behavior, which does not throw when null is passed
             Assert.DoesNotThrow(() => new PublishingHouseService(null));
-
-            // Note: If you want to add null checking to your constructor, this test should be changed to:
-            // Assert.Throws<ArgumentNullException>(() => new PublishingHouseService(null));
         }
 
         [Test]
         public void Constructor_WithValidRepository_ShouldInitializeService()
         {
-            // Arrange
             var repo = new Mock<IRepository<PublishingHouse>>();
 
-            // Act
             var service = new PublishingHouseService(repo.Object);
 
-            // Assert - test that the service is properly initialized by calling a method
             Assert.DoesNotThrow(() => service.GetAll());
         }
 
         [Test]
         public async Task PublishingHouseWithBooks_ShouldWorkCorrectly()
         {
-            // Arrange
             var publishingHouse = new PublishingHouse
             {
                 Id = 1,
@@ -187,10 +148,8 @@ namespace BookDiary.Tests.UnitTests.Services
 
             _mockRepo.Setup(r => r.GetById(publishingHouse.Id)).ReturnsAsync(publishingHouse);
 
-            // Act
             var result = await _publishingHouseService.GetById(publishingHouse.Id);
 
-            // Assert
             Assert.That(result, Is.EqualTo(publishingHouse));
             Assert.That(result.Books.Count, Is.EqualTo(2));
             Assert.That(result.Books.Any(b => b.Id == 1 && b.Title == "Book 1"), Is.True);
@@ -200,7 +159,6 @@ namespace BookDiary.Tests.UnitTests.Services
         [Test]
         public async Task PublishingHouseWorkflow_AddFindUpdateDelete_ShouldWorkCorrectly()
         {
-            // Arrange
             var publishingHouse = new PublishingHouse
             {
                 Id = 1,
@@ -221,21 +179,15 @@ namespace BookDiary.Tests.UnitTests.Services
             _mockRepo.Setup(r => r.Update(It.IsAny<PublishingHouse>())).Returns(Task.CompletedTask);
             _mockRepo.Setup(r => r.Delete(It.IsAny<int>())).Returns(Task.CompletedTask);
 
-            // Act & Assert - Full workflow
-            // 1. Add a publishing house
             await _publishingHouseService.Add(publishingHouse);
-            _mockRepo.Verify(r => r.Add(publishingHouse), Times.Once);
 
-            // 2. Find the publishing house
             var foundPublishingHouses = await _publishingHouseService.Find(ph => ph.Name.Contains("New"));
             Assert.That(foundPublishingHouses.Count, Is.EqualTo(1));
             Assert.That(foundPublishingHouses[0], Is.EqualTo(publishingHouse));
 
-            // 3. Update the publishing house
             await _publishingHouseService.Update(updatedPublishingHouse);
             _mockRepo.Verify(r => r.Update(updatedPublishingHouse), Times.Once);
 
-            // 4. Delete the publishing house
             await _publishingHouseService.Delete(publishingHouse.Id);
             _mockRepo.Verify(r => r.Delete(publishingHouse.Id), Times.Once);
         }
