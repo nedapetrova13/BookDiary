@@ -69,8 +69,8 @@ namespace BookDiary.Controllers
             }
             else
             {
-                var isExists = _shelfService.Get(x=>x.Name == model.Name && x.UserId==currentUser.Id);
-                if(isExists == null)
+                bool isExists = _shelfService.GetAll().Where(x=>x.Name == model.Name && x.UserId==currentUser.Id).Any();
+                if(!isExists)
                 {
                     var shelf = new Shelf
                     {
@@ -208,8 +208,8 @@ namespace BookDiary.Controllers
             }
             else
             {
-                var isExists = _shelfService.Get(x => x.Name == scvm.Name && x.UserId == currentUser.Id);
-                if (isExists == null)
+                bool isExists = _shelfService.GetAll().Where(x => x.Name == scvm.Name && x.UserId == currentUser.Id).Any();
+                if (!isExists)
                 {
                     var model = new Shelf
                     {

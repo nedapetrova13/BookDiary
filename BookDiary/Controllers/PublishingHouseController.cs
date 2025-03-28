@@ -50,8 +50,8 @@ namespace BookDiary.Controllers
             }
             else
             {
-                var isExists = _publishingHouseService.Get(x=>x.Name == phcvm.Name);
-                if (isExists == null)
+                bool isExists = _publishingHouseService.GetAll().Where(x => x.Name == phcvm.Name).Any();
+                if (!isExists)
                 {
                     var pubhouse = new PublishingHouse
                     {
@@ -93,8 +93,8 @@ namespace BookDiary.Controllers
             }
             else
             {
-                var isExists = _publishingHouseService.Get(x => x.Name == phevm.Name);
-                if (isExists == null)
+                bool isExists = _publishingHouseService.GetAll().Where(x => x.Name == phevm.Name).Any();
+                if (!isExists)
                 {
                     var model = new PublishingHouse
                     {

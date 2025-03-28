@@ -48,8 +48,8 @@ namespace BookDiary.Controllers
             }
             else
             {
-                var isExists = _newsService.Get(x=>x.Title == ncvm.Title);
-                if(isExists == null)
+                bool isExists = _newsService.GetAll().Where(x => x.Title == ncvm.Title).Any();
+                if(!isExists)
                 {
                     var news = new News
                     {
@@ -94,8 +94,8 @@ namespace BookDiary.Controllers
             }
             else
             {
-                var isExists = _newsService.Get(x => x.Title == nevm.Title);
-                if (isExists == null)
+                bool isExists = _newsService.GetAll().Where(x => x.Title == nevm.Title).Any();
+                if (!isExists)
                 {
                     var model = new News
                     {

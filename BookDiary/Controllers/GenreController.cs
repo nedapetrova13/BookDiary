@@ -49,8 +49,8 @@ namespace BookDiary.Controllers
             }
             else
             {
-                var isExists = _genreService.Get(x=>x.Name == gcvm.Name);
-                if (isExists == null)
+                bool isExists = _genreService.GetAll().Where(x => x.Name == gcvm.Name).Any();
+                if (!isExists)
                 {
                     var genre = new Genre
                     {
@@ -89,8 +89,8 @@ namespace BookDiary.Controllers
             }
             else
             {
-                var isExists = _genreService.Get(x => x.Name == gevm.Name);
-                if (isExists == null)
+                bool isExists = _genreService.GetAll().Where(x => x.Name == gevm.Name).Any();
+                if (!isExists)
                 {
                     var model = new Genre
                     {

@@ -49,8 +49,8 @@ namespace BookDiary.Controllers
             }
             else
             {
-                var isExists = _service.Get(x=>x.Name == lcvm.Name);
-                if (isExists == null)
+                bool isExists = _service.GetAll().Where(x => x.Name == lcvm.Name).Any();
+                if (!isExists)
                 {
                     var language = new Language
                     {
@@ -92,8 +92,8 @@ namespace BookDiary.Controllers
             }
             else
             {
-                var isExists = _service.Get(x => x.Name == levm.Name);
-                if (isExists == null)
+                bool isExists = _service.GetAll().Where(x => x.Name == levm.Name).Any();
+                if (!isExists)
                 {
                     var model = new Language
                     {
