@@ -12,17 +12,24 @@ namespace BookDiary.Models
     {
         [Key]
         public int Id {  get; set; }
-   
+
+        [Required(ErrorMessage = "Полето е задължително")]
+
         [ForeignKey(nameof(User))]
         public string UserId { get; set; }
         public User User { get; set; }
+
+        [Required(ErrorMessage = "Полето е задължително")]
+        public string Content {  get; set; }
+
+        [Required(ErrorMessage = "Оценката е задължителна")]
+        [Range(1, 5, ErrorMessage = "Оценката трябва да е положително число")]
+
+        public int Rating { get; set; } = 0!;
+
         [Required(ErrorMessage = "Полето е задължително")]
 
-        public string Content {  get; set; }
-        [Required(ErrorMessage = "Оценката е задължителна")]
-
-        public int Rating { get; set; }
-         [ForeignKey(nameof(Book))]
+        [ForeignKey(nameof(Book))]
         public int BookId { get; set; }
         public Book Book { get; set; }
       

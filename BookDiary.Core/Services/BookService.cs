@@ -17,12 +17,12 @@ namespace BookDiary.Core.Services
         private readonly IRepository<Book> _repo;
         private readonly IRepository<BookTag> _btrepo;
         private readonly IRepository<Tag> _tagrepo;
-        
+
         public BookService(IRepository<Book> repo, IRepository<BookTag> btrepo, IRepository<Tag> tagrepo)
         {
-            this._repo = repo;
-            this._btrepo = btrepo;
-            this._tagrepo = tagrepo;
+            this._repo = repo ?? throw new ArgumentNullException(nameof(repo));
+            this._btrepo = btrepo ?? throw new ArgumentNullException(nameof(btrepo));
+            this._tagrepo = tagrepo ?? throw new ArgumentNullException(nameof(tagrepo));
         }
 
         public async Task Add(Book entity)

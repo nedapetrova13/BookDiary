@@ -34,14 +34,16 @@ namespace BookDiary.Models
         public int LanguageId { get; set; }
         public Language Language { get; set; }
         [Required(ErrorMessage = "Полето е задължително")]
+        [Range(1, int.MaxValue, ErrorMessage = "Страниците трябва да са положително число")]
+
         public int BookPages { get; set; } = 0!;
-        [EnumDataType(typeof(BookFormatEnum))]
-        public string? BookFormat { get; set; }
+        
         [Required(ErrorMessage = "Описанието е заядължително")]
         public string Description {  get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<CurrentRead> CurrentReads { get; set; }
         [Required(ErrorMessage = "Полето е задължително")]
+        [Range(1, int.MaxValue, ErrorMessage = "Главата трябва да е положително число")]
         public int Chapters { get; set; } = 0!;
         public ICollection<Notes> Notes { get; set; }
         public ICollection<BookTag> BookTags { get; set; }

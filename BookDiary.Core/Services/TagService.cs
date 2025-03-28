@@ -59,17 +59,7 @@ namespace BookDiary.Core.Services
         }
 
         
-        private bool ValidateTag(Tag tag)
-        {
-            if (!TagValidator.ValidateInput(tag.Name))
-            {
-                return false;   
-            }
-            else
-            {
-                return true;
-            }
-        }
+       
         
     }
 }

@@ -327,11 +327,7 @@ namespace BookDiary.Controllers
            .Select(a => a.Series)
            .FirstOrDefault();
            
-            var format = _bookService.GetAll()
-             .Where(b => b.Id == bookId)
-             .Select(b => b.BookFormat.ToString()) // Convert the enum to a string
-             .FirstOrDefault();
-            
+           
             var language = _bookService.GetAll()
                 .Where(b => b.Id == bookId)
                .Include(bt => bt.Language)

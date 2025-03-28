@@ -16,6 +16,7 @@ namespace BookDiary.Models
         public string UserId { get; set; }
         public User User { get; set; }
         [Required(ErrorMessage = "Главата е задължителна")]
+        [Range(1, int.MaxValue, ErrorMessage = "Главата трябва да е положително число")]
         public int BookChapter {  get; set; }
         [Required(ErrorMessage = "Полето е задължително")]
         public string NoteContent { get; set; }

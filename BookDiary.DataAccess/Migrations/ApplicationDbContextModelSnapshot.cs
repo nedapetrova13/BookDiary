@@ -72,9 +72,6 @@ namespace BookDiary.DataAccess.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
-                    b.Property<string>("BookFormat")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("BookPages")
                         .HasColumnType("int");
 

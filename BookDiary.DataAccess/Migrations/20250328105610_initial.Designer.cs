@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookDiary.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250328065516_initial")]
+    [Migration("20250328105610_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -74,9 +74,6 @@ namespace BookDiary.DataAccess.Migrations
 
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
-
-                    b.Property<string>("BookFormat")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("BookPages")
                         .HasColumnType("int");

@@ -304,7 +304,6 @@ namespace BookDiary.DataAccess.Migrations
                     PublishingHouseId = table.Column<int>(type: "int", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: false),
                     BookPages = table.Column<int>(type: "int", nullable: false),
-                    BookFormat = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Chapters = table.Column<int>(type: "int", nullable: false)
                 },
