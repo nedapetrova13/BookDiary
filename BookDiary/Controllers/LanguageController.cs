@@ -25,7 +25,7 @@ namespace BookDiary.Controllers
             var viewModelList = languageList.Select(news => new LanguageCreateViewModel
             {
                 Name = news.Name,
-                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+                Id = news.Id
             }).ToList();
 
             return View(viewModelList);
@@ -42,12 +42,30 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(LanguageCreateViewModel lcvm)
         {
-            var language = new Language
+            if (lcvm.Name == null)
             {
-                Name = lcvm.Name
-            };
-            await _service.Add(language);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(lcvm);
+            }
+            else
+            {
+                var isExists = _service.Get(x=>x.Name == lcvm.Name);
+                if (isExists == null)
+                {
+                    var language = new Language
+                    {
+                        Name = lcvm.Name
+                    };
+                    await _service.Add(language);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Вече съществува такъв език";
+                    return View(lcvm);
+                }
+            }
+            
         }
         [Authorize(Roles = "Admin")]
 
@@ -55,6 +73,7 @@ namespace BookDiary.Controllers
         {
 
             var language = await _service.GetById(id);
+
             var model = new LanguageEditViewModel
             {
                 Name = language.Name
@@ -66,13 +85,30 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(LanguageEditViewModel levm)
         {
-            var model = new Language
+            if (levm.Name == null)
             {
-                Id = levm.Id,
-                Name = levm.Name
-            };
-            await _service.Update(model);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(levm);
+            }
+            else
+            {
+                var isExists = _service.Get(x => x.Name == levm.Name);
+                if (isExists == null)
+                {
+                    var model = new Language
+                    {
+                        Id = levm.Id,
+                        Name = levm.Name
+                    };
+                    await _service.Update(model);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Вече съществува такъв език";
+                    return View(levm);
+                }
+            }
         }
         [Authorize(Roles = "Admin")]
 

@@ -38,7 +38,6 @@ namespace BookDiary.Controllers
 
         public async Task<IActionResult> Index(string userid)
         {
-            //var user = _userService.GetByIdUser(userid);
             var shelfList = _shelfService.GetAll();
             var currentUser = await _userManager.GetUserAsync(User);
                
@@ -63,17 +62,33 @@ namespace BookDiary.Controllers
         public  async Task<IActionResult> Add(ShelfCreateViewModel model)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-
-            var shelf = new Shelf
+            if (model.Name == null || model.Description == null)
             {
-                Name = model.Name,
-                Id = model.Id,
-                UserId = currentUser.Id,
-                Description = model.Description,
-            };
-            await _shelfService.Add(shelf);
-            TempData["success"] = "Успешно добавен шкаф!";
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(model);
+            }
+            else
+            {
+                var isExists = _shelfService.Get(x=>x.Name == model.Name && x.UserId==currentUser.Id);
+                if(isExists == null)
+                {
+                    var shelf = new Shelf
+                    {
+                        Name = model.Name,
+                        Id = model.Id,
+                        UserId = currentUser.Id,
+                        Description = model.Description,
+                    };
+                    await _shelfService.Add(shelf);
+                    TempData["success"] = "Успешно добавен шкаф!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Вече имате шкаф с такова име";
+                    return View(model);
+                }
+            }
         }
 
         [HttpPost]
@@ -186,17 +201,32 @@ namespace BookDiary.Controllers
         public async Task<IActionResult> Edit(ShelfCreateViewModel scvm)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-
-            var model = new Shelf
+            if (scvm.Name == null || scvm.Description == null)
             {
-                Id = scvm.Id,
-                Name = scvm.Name,
-                Description = scvm.Description,
-                UserId=currentUser.Id
-            };
-            await _shelfService.Update(model);
-            return RedirectToAction("Index");
-
+                TempData["error"] = "Невалидни данни";
+                return View(scvm);
+            }
+            else
+            {
+                var isExists = _shelfService.Get(x => x.Name == scvm.Name && x.UserId == currentUser.Id);
+                if (isExists == null)
+                {
+                    var model = new Shelf
+                    {
+                        Id = scvm.Id,
+                        Name = scvm.Name,
+                        Description = scvm.Description,
+                        UserId = currentUser.Id
+                    };
+                    await _shelfService.Update(model);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Вече имате шкаф с такова име";
+                    return View(scvm);
+                }
+            }
         }
         [HttpPost]
         public async Task<IActionResult> DeleteShelfBook(int bookId, int shelfid)

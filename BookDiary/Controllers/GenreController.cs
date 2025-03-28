@@ -25,7 +25,7 @@ namespace BookDiary.Controllers
             var viewModelList = genreList.Select(news => new GenreCreateViewModel
             {
                 Name = news.Name,
-                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+                Id = news.Id 
             }).ToList();
 
             return View(viewModelList);
@@ -42,12 +42,29 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(GenreCreateViewModel gcvm)
         {
-            var genre = new Genre
+            if (gcvm.Name == null)
             {
-                Name = gcvm.Name
-            };
-            await _genreService.Add(genre);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(gcvm);
+            }
+            else
+            {
+                var isExists = _genreService.Get(x=>x.Name == gcvm.Name);
+                if (isExists == null)
+                {
+                    var genre = new Genre
+                    {
+                        Name = gcvm.Name
+                    };
+                    await _genreService.Add(genre);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Този жанр вече съществува";
+                    return View(gcvm);
+                }
+            }
         }
         [Authorize(Roles = "Admin")]
 
@@ -65,13 +82,30 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(GenreEditViewModel gevm) 
         {
-            var model = new Genre
+            if (gevm.Name == null)
             {
-                Id = gevm.Id,
-                Name = gevm.Name
-            };
-            await _genreService.Update(model);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(gevm);
+            }
+            else
+            {
+                var isExists = _genreService.Get(x => x.Name == gevm.Name);
+                if (isExists == null)
+                {
+                    var model = new Genre
+                    {
+                        Id = gevm.Id,
+                        Name = gevm.Name
+                    };
+                    await _genreService.Update(model);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Вече съществува такъв жанр";
+                    return View(gevm);
+                }
+            }
         }
 
         [HttpPost]

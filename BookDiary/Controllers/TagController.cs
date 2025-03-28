@@ -25,7 +25,7 @@ namespace BookDiary.Controllers
             var viewModelList = tagList.Select(news => new TagCreateViewModel
             {
                 Name = news.Name,
-                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+                Id = news.Id 
             }).ToList();
 
             return View(viewModelList);
@@ -42,12 +42,29 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(TagCreateViewModel tcvm)
         {
-            var tag = new Tag
+            if (tcvm.Name == null)
             {
-                Name = tcvm.Name,
-            };
-            await _tagService.Add(tag);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(tcvm);
+            }
+            else
+            {
+                bool isExists = _tagService.GetAll().Where(x => x.Name == tcvm.Name).Any();
+                if (!isExists)
+                {
+                    var tag = new Tag
+                    {
+                        Name = tcvm.Name,
+                    };
+                    await _tagService.Add(tag);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Вече съществува такава характеристика";
+                    return View(tcvm);
+                }
+            }
         }
         [Authorize(Roles = "Admin")]
 
@@ -65,13 +82,30 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(TagEditViewModel tagModel)
         {
-            var model = new Tag
+            if (tagModel.Name == null)
             {
-                Id = tagModel.Id,
-                Name = tagModel.Name,
-            };
-            await _tagService.Update(model);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(tagModel);
+            }
+            else
+            {
+                bool isExists = _tagService.GetAll().Where(x => x.Name == tagModel.Name).Any();
+                if (!isExists)
+                {
+                    var model = new Tag
+                    {
+                        Id = tagModel.Id,
+                        Name = tagModel.Name,
+                    };
+                    await _tagService.Update(model);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Вече съществува такава характеристика";
+                    return View(tagModel);
+                }
+            } 
         }
         [Authorize(Roles = "Admin")]
 

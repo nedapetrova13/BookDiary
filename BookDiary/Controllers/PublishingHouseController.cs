@@ -26,7 +26,7 @@ namespace BookDiary.Controllers
             {
                 Name = news.Name,
                 YearFounded = news.YearFounded,
-                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+                Id = news.Id
             }).ToList();
 
             return View(viewModelList);
@@ -43,13 +43,31 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(PublishingHouseCreateViewModel phcvm)
         {
-            var pubhouse = new PublishingHouse
+            if(phcvm.YearFounded<1000 || phcvm.YearFounded>2099 || phcvm.Name == null)
             {
-                Name = phcvm.Name,
-                YearFounded = phcvm.YearFounded,
-            };
-            await _publishingHouseService.Add(pubhouse);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(phcvm);
+            }
+            else
+            {
+                var isExists = _publishingHouseService.Get(x=>x.Name == phcvm.Name);
+                if (isExists == null)
+                {
+                    var pubhouse = new PublishingHouse
+                    {
+                        Name = phcvm.Name,
+                        YearFounded = phcvm.YearFounded,
+                    };
+                    await _publishingHouseService.Add(pubhouse);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Вече съшествува такова издателство";
+                    return View(phcvm);
+                }
+            }
+            
         }
         [Authorize(Roles = "Admin")]
 
@@ -68,14 +86,31 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(PublishingHouseEditViewModel phevm)
         {
-            var model = new PublishingHouse
+            if (phevm.YearFounded < 1000 || phevm.YearFounded > 2099 || phevm.Name == null)
             {
-                Id = phevm.Id,
-                Name = phevm.Name,
-                YearFounded=phevm.YearFounded
-            };
-            await _publishingHouseService.Update(model);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(phevm);
+            }
+            else
+            {
+                var isExists = _publishingHouseService.Get(x => x.Name == phevm.Name);
+                if (isExists == null)
+                {
+                    var model = new PublishingHouse
+                    {
+                        Id = phevm.Id,
+                        Name = phevm.Name,
+                        YearFounded = phevm.YearFounded
+                    };
+                    await _publishingHouseService.Update(model);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Вече съшествува такова издателство";
+                    return View(phevm);
+                }
+            }
         }
         [Authorize(Roles = "Admin")]
 

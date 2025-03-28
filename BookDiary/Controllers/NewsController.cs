@@ -23,7 +23,7 @@ namespace BookDiary.Controllers
             {
                 Title = news.Title,
                 Content = news.Content,
-                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+                Id = news.Id 
             }).ToList();
 
             return View(viewModelList);
@@ -41,13 +41,30 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(NewsCreateViewModel ncvm)
         {
-            var news = new News
+            if(ncvm.Title==null || ncvm.Content == null)
             {
-                Title = ncvm.Title,
-                Content = ncvm.Content,
-            };
-            await _newsService.Add(news);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(ncvm);
+            }
+            else
+            {
+                var isExists = _newsService.Get(x=>x.Title == ncvm.Title);
+                if(isExists == null)
+                {
+                    var news = new News
+                    {
+                        Title = ncvm.Title,
+                        Content = ncvm.Content,
+                    };
+                    await _newsService.Add(news);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Вече съществува новина с такова име";
+                    return View(ncvm);
+                }
+            }
         }
         [Authorize(Roles = "Admin")]
 
@@ -70,15 +87,31 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(NewsEditViewModel nevm)
         {
-            var model = new News
+            if(nevm.Title==null || nevm.Content == null)
             {
-                Id = nevm.Id,
-                Title = nevm.Title,
-                Content = nevm.Content,
-            };
-            await _newsService.Update(model);
-            return RedirectToAction("Index");
-            
+                TempData["error"] = "Невалидни данни";
+                return View(nevm);
+            }
+            else
+            {
+                var isExists = _newsService.Get(x => x.Title == nevm.Title);
+                if (isExists == null)
+                {
+                    var model = new News
+                    {
+                        Id = nevm.Id,
+                        Title = nevm.Title,
+                        Content = nevm.Content,
+                    };
+                    await _newsService.Update(model);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Вече съществува новина с такова име";
+                    return View(nevm);
+                }
+            }
         }
         [Authorize(Roles = "Admin")]
 

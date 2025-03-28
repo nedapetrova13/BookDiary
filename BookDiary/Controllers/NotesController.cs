@@ -37,17 +37,24 @@ namespace BookDiary.Controllers
         public async Task<IActionResult> Add(CreateNoteViewModel note)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-
-            Notes notes = new Notes
+            if (note.UserId == null || note.BookId == 0 || note.BookChapter <= 0 || note.NoteContent == null || note.Title == null)
             {
-                UserId = currentUser.Id,
-                BookId=note.BookId,
-                BookChapter=note.BookChapter,
-                NoteContent=note.NoteContent,
-                Title=note.Title,
-            };
-            await _notesService.Add(notes);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(note);
+            }
+            else
+            {
+                Notes notes = new Notes
+                {
+                    UserId = currentUser.Id,
+                    BookId = note.BookId,
+                    BookChapter = note.BookChapter,
+                    NoteContent = note.NoteContent,
+                    Title = note.Title,
+                };
+                await _notesService.Add(notes);
+                return RedirectToAction("Index");
+            }
         }
         public async Task<IActionResult> Index()
         {
@@ -108,18 +115,26 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(CreateNoteViewModel model)
         {
-            var note = new Notes
+            if (model.UserId == null || model.BookId == 0 || model.BookChapter <= 0 || model.NoteContent == null || model.Title == null)
             {
-                Id = model.Id,
-                Title = model.Title,
-                BookId = model.BookId,
-                BookChapter = model.BookChapter,
-                NoteContent = model.NoteContent,
-                UserId = model.UserId
-            };
-            await _notesService.Update(note);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(model);
+            }
+            else
+            {
+                var note = new Notes
+                {
+                    Id = model.Id,
+                    Title = model.Title,
+                    BookId = model.BookId,
+                    BookChapter = model.BookChapter,
+                    NoteContent = model.NoteContent,
+                    UserId = model.UserId
+                };
+                await _notesService.Update(note);
+                return RedirectToAction("Index");
 
+            }
         }
 
         [HttpPost]

@@ -35,8 +35,6 @@ namespace BookDiary.Controllers
             private readonly IUserService _userService;
             private readonly ICurrentReadService _currentReadService;
 
-
-
         public BookController(IBookService bookService,IUserService userService,ICurrentReadService currentReadService, UserManager<User> userManager, ICommentService commentService, IShelfBookService shelfBookService, IShelfService shelfService,IAuthorService authorService,IGenreService genreService,ISeriesService seriesService,ITagService tagService, IBookTagService bookTagService,ILanguageService languageService, IPublishingHouseService pubHouseService)
         {
                 _bookService = bookService;
@@ -79,7 +77,7 @@ namespace BookDiary.Controllers
             if ((filter.TagId != null))
             {
                 query = query.AsQueryable()
-                             .Include(x => x.BookTags) // Load BookTags properly
+                             .Include(x => x.BookTags) 
                              .Where(x => x.BookTags.Any(b => b.TagId == filter.TagId));
             }
             if (filter.PublishingHouseId != null)
@@ -143,6 +141,7 @@ namespace BookDiary.Controllers
             }
             else
             {
+               
                 var book = new Book
                 {
                     Title = bookcvm.Title,
@@ -429,7 +428,6 @@ namespace BookDiary.Controllers
             return RedirectToAction("Info", new { bookId = bookid });
         }
 
-
         [HttpGet]
         public async Task<IActionResult> AddComment(int BookId)
         {
@@ -442,31 +440,38 @@ namespace BookDiary.Controllers
             return View(comment);
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> AddComment(CommentViewModel comment)
         {
             var currentUser = await _userManager.GetUserAsync(User);
 
             var existingComment = await _commentService.Find(x => x.BookId == comment.BookId && x.UserId == currentUser.Id);
-            if (existingComment.Any()) 
+            if (existingComment.Any())
             {
                 TempData["error"] = "Вече сте коментирали тази книга!";
                 return RedirectToAction("Info", new { bookId = comment.BookId });
             }
-
-            Comment com = new Comment
+            if (comment.BookId == 0 || comment.UserId == null || comment.Content == null || comment.Rating == 0)
             {
-                UserId = currentUser.Id,
-                Content = comment.Content,
-                Rating = comment.Rating,
-                BookId = comment.BookId,
-            };
-            await _commentService.Add(com);
+                TempData["error"] = "Невалидни данни";
+                return RedirectToAction("Info", new { bookId = comment.BookId });
+            }
+            else
+            {
+                Comment com = new Comment
+                {
+                    UserId = currentUser.Id,
+                    Content = comment.Content,
+                    Rating = comment.Rating,
+                    BookId = comment.BookId,
+                };
+                await _commentService.Add(com);
 
-            return RedirectToAction("Info", new { bookId = comment.BookId });
+                return RedirectToAction("Info", new { bookId = comment.BookId });
+            }
+
         }
+
         [HttpPost]
         public async Task<IActionResult> DeleteComment(int bookId, int commentid)
         {

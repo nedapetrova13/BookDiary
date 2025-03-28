@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookDiary.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250327173840_initial")]
+    [Migration("20250328065516_initial")]
     partial class initial
     {
         /// <inheritdoc />

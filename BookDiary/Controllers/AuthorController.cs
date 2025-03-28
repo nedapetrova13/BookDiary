@@ -61,17 +61,26 @@ namespace BookDiary.Controllers
             }
             else
             {
-                var author = new Author
+                bool isExists = _authorService.GetAll().Where(x=>x.Name == acvm.Name).Any();
+                if (!isExists)
                 {
-                    Name = acvm.Name,
-                    BirthDate = acvm.BirthDate,
-                    Bio = acvm.Bio,
-                    Email = acvm.Email,
-                    ProfilePictureURL = acvm.ProfilePictureURL,
-                    Gender = acvm.Gender,
-                    WebSiteLink = acvm.WebSiteLink
-                };
-                await _authorService.Add(author);
+                    var author = new Author
+                    {
+                        Name = acvm.Name,
+                        BirthDate = acvm.BirthDate,
+                        Bio = acvm.Bio,
+                        Email = acvm.Email,
+                        ProfilePictureURL = acvm.ProfilePictureURL,
+                        Gender = acvm.Gender,
+                        WebSiteLink = acvm.WebSiteLink
+                    };
+                    await _authorService.Add(author);
+                }
+                else
+                {
+                    TempData["error"] = "Вече съществува автор с такова име";
+                    return View(acvm);
+                }
 
                 
             }
@@ -108,19 +117,29 @@ namespace BookDiary.Controllers
             }
             else
             {
-                var author = new Author
+                bool isExists = _authorService.GetAll().Where(x => x.Name == aevm.Name).Any();
+                if (!isExists)
                 {
-                    Id = aevm.Id,
-                    Name = aevm.Name,
-                    BirthDate = aevm.BirthDate,
-                    Bio = aevm.Bio,
-                    Email = aevm.Email,
-                    ProfilePictureURL = aevm.ProfilePictureURL,
-                    Gender = aevm.Gender,
-                    WebSiteLink = aevm.WebSiteLink
-                };
-                await _authorService.Update(author);
-                return RedirectToAction("Index");
+                    var author = new Author
+                    {
+                        Id = aevm.Id,
+                        Name = aevm.Name,
+                        BirthDate = aevm.BirthDate,
+                        Bio = aevm.Bio,
+                        Email = aevm.Email,
+                        ProfilePictureURL = aevm.ProfilePictureURL,
+                        Gender = aevm.Gender,
+                        WebSiteLink = aevm.WebSiteLink
+                    };
+                    await _authorService.Update(author);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Вече съществува автор с такова име";
+
+                    return View(aevm);
+                }
             }
                
 

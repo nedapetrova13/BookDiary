@@ -87,7 +87,16 @@ namespace BookDiary.Controllers
             {
                 return RedirectToAction("Index", "Home", null);
             }
-            currentUser.Bio = model.Bio;
+            if (model.Bio != null)
+            {
+                currentUser.Bio = model.Bio;
+
+            }
+            else
+            {
+                TempData["error"] = "Невалидни данни";
+                return View(model);
+            }
             var result = await _userManager.UpdateAsync(currentUser);
             if (result.Succeeded)
             {

@@ -31,7 +31,7 @@ namespace BookDiary.Controllers
             {
                 Title = news.Title,
                  Description = news.Description,
-                Id = news.Id // Ensure Id is mapped for Edit/Delete actions
+                Id = news.Id 
             }).ToList();
 
             return View(viewModelList);
@@ -48,13 +48,22 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(SeriesCreateViewModel scvm)
         {
-            var series = new Series
+            if (scvm.Title == null || scvm.Description == null)
             {
-                Title = scvm.Title,
-                Description = scvm.Description,
-            };
-            await _seriesService.Add(series);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(scvm);
+            }
+            else
+            {
+                var series = new Series
+                {
+                    Title = scvm.Title,
+                    Description = scvm.Description,
+                };
+                await _seriesService.Add(series);
+                return RedirectToAction("Index");
+            }
+            
         }
         [Authorize(Roles = "Admin")]
 
@@ -73,14 +82,23 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(SeriesEditViewModel sevm)
         {
-            var model = new Series
+            if (sevm.Title == null || sevm.Description == null)
             {
-                Id = sevm.Id,
-                Title = sevm.Title,
-                Description = sevm.Description,
-            };
-            await _seriesService.Update(model);
-            return RedirectToAction("Index");
+                TempData["error"] = "Невалидни данни";
+                return View(sevm);
+            }
+            else
+            {
+                var model = new Series
+                {
+                    Id = sevm.Id,
+                    Title = sevm.Title,
+                    Description = sevm.Description,
+                };
+                await _seriesService.Update(model);
+                return RedirectToAction("Index");
+
+            }
 
         }
 

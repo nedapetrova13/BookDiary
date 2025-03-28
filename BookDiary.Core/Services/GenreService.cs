@@ -33,9 +33,9 @@ namespace BookDiary.Core.Services
             return await _repo.Find(filter);    
         }
 
-        public Task<Genre> Get(Expression<Func<Genre, bool>> filter)
+        public  async Task<Genre> Get(Expression<Func<Genre, bool>> filter)
         {
-            throw new NotImplementedException();
+            return await _repo.Get(filter);
         }
 
         public IQueryable<Genre> GetAll()
