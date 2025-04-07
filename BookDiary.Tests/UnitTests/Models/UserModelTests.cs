@@ -16,10 +16,8 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Constructor_Default_PropertiesInitializedCorrectly()
         {
-            // Arrange & Act
             var user = new User();
 
-            // Assert
             Assert.That(user.Name, Is.Null);
             Assert.That(user.Birthdate, Is.EqualTo(default(DateTime)));
             Assert.That(user.Gender, Is.Null);
@@ -38,7 +36,7 @@ namespace BookDiary.Tests.UnitTests.Models
         public void Properties_SetAndGet_ValuesMatchExpected(
             string name, string birthdate, string gender, string profilePic, string bio)
         {
-            // Arrange
+           
             var user = new User
             {
                 Name = name,
@@ -48,7 +46,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 Bio = bio
             };
 
-            // Act & Assert
             Assert.That(user.Name, Is.EqualTo(name));
             Assert.That(user.Birthdate.Date, Is.EqualTo(DateTime.Parse(birthdate).Date));
             Assert.That(user.Gender, Is.EqualTo(gender));
@@ -59,7 +56,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void IdentityUserProperties_Inherited_AccessibleAndSettable()
         {
-            // Arrange
             var userId = Guid.NewGuid().ToString();
             var email = "test@example.com";
             var userName = "testuser";
@@ -73,7 +69,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 PhoneNumber = phoneNumber
             };
 
-            // Act & Assert
             Assert.That(user.Id, Is.EqualTo(userId));
             Assert.That(user.Email, Is.EqualTo(email));
             Assert.That(user.UserName, Is.EqualTo(userName));
@@ -83,7 +78,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void CollectionProperties_InitializeEmpty_WorksCorrectly()
         {
-            // Arrange
             var user = new User
             {
                 Shelves = new List<Shelf>(),
@@ -92,7 +86,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 MyComments = new List<Comment>()
             };
 
-            // Act & Assert
             Assert.That(user.Shelves, Is.Not.Null);
             Assert.That(user.Shelves.Count, Is.EqualTo(0));
             Assert.That(user.CurrentReads, Is.Not.Null);
@@ -106,7 +99,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void CollectionProperties_AddItems_WorksCorrectly()
         {
-            // Arrange
             var user = new User
             {
                 Shelves = new List<Shelf>(),
@@ -120,13 +112,11 @@ namespace BookDiary.Tests.UnitTests.Models
             var note = new Notes { Id = 1, Title = "Test Note" };
             var comment = new Comment { Id = 1, Content = "Test Comment" };
 
-            // Act
             user.Shelves.Add(shelf);
             user.CurrentReads.Add(currentRead);
             user.Notes.Add(note);
             user.MyComments.Add(comment);
 
-            // Assert
             Assert.That(user.Shelves.Count, Is.EqualTo(1));
             Assert.That(user.Shelves.First(), Is.SameAs(shelf));
 
@@ -146,16 +136,14 @@ namespace BookDiary.Tests.UnitTests.Models
         [TestCase("   ")]
         public void Name_RequiredValidation_ValidationFails(string invalidName)
         {
-            // Arrange
             var user = new User
             {
                 Name = invalidName
             };
 
-            // Act
+            
             var validationResults = ValidateModel(user);
 
-            // Assert
             Assert.That(validationResults.Any(v => v.MemberNames.Contains("Name")), Is.True);
             Assert.That(validationResults.Any(v => v.ErrorMessage == "Името е задължително"), Is.True);
         }
@@ -165,17 +153,14 @@ namespace BookDiary.Tests.UnitTests.Models
         [TestCase("NotAnEnum")]
         public void Gender_EnumValidation_ValidationFails(string invalidGender)
         {
-            // Arrange
             var user = new User
             {
                 Name = "Test User",
                 Gender = invalidGender
             };
 
-            // Act
             var validationResults = ValidateModel(user);
 
-            // Assert
             Assert.That(validationResults.Any(v => v.MemberNames.Contains("Gender")), Is.True);
         }
 
@@ -184,29 +169,24 @@ namespace BookDiary.Tests.UnitTests.Models
         [TestCase("Жена")]
         public void Gender_ValidEnumValues_ValidationPasses(string validGender)
         {
-            // Arrange
             var user = new User
             {
                 Name = "Test User",
                 Gender = validGender
             };
 
-            // Act
             var validationResults = ValidateModel(user);
 
-            // Assert
             Assert.That(validationResults.Any(v => v.MemberNames.Contains("Gender")), Is.False);
         }
 
         [Test]
         public void Constructor_WithParameters_SetsPropertiesCorrectly()
         {
-            // Arrange
             var name = "Test User";
             var birthdate = new DateTime(1990, 1, 1);
             var gender = "Male";
 
-            // Act
             var user = new User
             {
                 Name = name,
@@ -214,13 +194,11 @@ namespace BookDiary.Tests.UnitTests.Models
                 Gender = gender
             };
 
-            // Assert
             Assert.That(user.Name, Is.EqualTo(name));
             Assert.That(user.Birthdate, Is.EqualTo(birthdate));
             Assert.That(user.Gender, Is.EqualTo(gender));
         }
 
-        // Helper method to validate model
         private IList<ValidationResult> ValidateModel(object model)
         {
             var validationResults = new List<ValidationResult>();

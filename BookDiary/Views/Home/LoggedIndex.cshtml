@@ -839,7 +839,6 @@
                 </div>
             </div>
 
-            <!-- Currently Reading Section -->
             <div class="currently-reading mb-5">
                 <h4 class="section-title">Четете в момента</h4>
                 <div class="current-reads-container" id="currentReadsContainer">
@@ -892,9 +891,7 @@
                 </div>
             </div>
 
-            <!-- User Dashboard Content Row -->
             <div class="content-row">
-                <!-- Recently Read Books Section -->
                 <div class="recent-books-section">
                     <h4 class="section-title">Наскоро прочетени</h4>
                     <div class="recent-books-container">
@@ -914,9 +911,7 @@
                                     </div>
                                 </div>
                             }
-                            <div class="view-all-link">
-                                <a href="@Url.Action("ReadBooks", "Shelf")">Виж всички прочетени книги <i class="bi bi-arrow-right"></i></a>
-                            </div>
+                           
                         } 
                          else
                         { 
@@ -931,7 +926,6 @@
                     </div>
                 </div>
 
-                <!-- News Section -->
                 <div class="news-section">
                     <h4 class="section-title">Последни новини</h4>
                     <div class="news-container user-news">
@@ -946,7 +940,6 @@
                                         <span class="news-date">
                                         </span>
                                         <a href="@Url.Action("Details", "News", new { id = news.Id })" class="read-more">
-                                            Прочети още <i class="bi bi-arrow-right"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -975,7 +968,6 @@
         @if (User.IsInRole(SD.AdminRole))
         {
             <div class="content-row">
-                <!-- Users Section -->
                 <div class="users-section">
                     <h4 class="section-title">Потребители</h4>
                     <div class="users-container">
@@ -1028,4 +1020,3 @@
     </div>
 </div>
 
-<!-- Custom styles -->

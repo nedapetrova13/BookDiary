@@ -115,8 +115,7 @@
                
 
                 builder.Entity<BookTag>()
-                .HasKey(bt => new { bt.BookId, bt.TagId }); // Composite Key
-
+                .HasKey(bt => new { bt.BookId, bt.TagId }); 
                 builder.Entity<BookTag>()
                     .HasOne(bt => bt.Book)
                     .WithMany(b => b.BookTags)

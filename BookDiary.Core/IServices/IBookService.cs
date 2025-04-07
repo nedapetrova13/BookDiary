@@ -9,7 +9,6 @@ namespace BookDiary.Core.IServices
 {
     public interface IBookService:IService<Book>
     {
-        //Task<IEnumerable<Book>> GetAllBooks();
         Task AddTagToBook(string bookname,string tagname);
     }
 }

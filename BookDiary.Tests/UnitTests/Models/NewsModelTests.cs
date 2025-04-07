@@ -13,26 +13,21 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void News_IdProperty_ShouldHaveKeyAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(News).GetProperty("Id");
 
-            // Act
             var keyAttribute = propertyInfo.GetCustomAttributes(typeof(KeyAttribute), false).FirstOrDefault();
 
-            // Assert
             Assert.IsNotNull(keyAttribute, "Id property should have KeyAttribute");
         }
 
         [Test]
         public void News_TitleProperty_ShouldHaveRequiredAttribute()
         {
-            // Arrange
+            
             var propertyInfo = typeof(News).GetProperty("Title");
 
-            // Act
             var requiredAttribute = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault() as RequiredAttribute;
 
-            // Assert
             Assert.IsNotNull(requiredAttribute, "Title property should have RequiredAttribute");
             Assert.AreEqual("Името е заядължително", requiredAttribute.ErrorMessage);
         }
@@ -40,13 +35,10 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void News_ContentProperty_ShouldHaveRequiredAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(News).GetProperty("Content");
 
-            // Act
             var requiredAttribute = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault() as RequiredAttribute;
 
-            // Assert
             Assert.IsNotNull(requiredAttribute, "Content property should have RequiredAttribute");
             Assert.AreEqual("Полето е задължително", requiredAttribute.ErrorMessage);
         }
@@ -54,10 +46,8 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void News_CreatedProperty_ShouldHaveDefaultValue()
         {
-            // Arrange
             var news = new News();
 
-            // Act & Assert
             Assert.That(news.Created, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromSeconds(1)));
         }
 
@@ -67,7 +57,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [TestCase(4, "Award Winners", "List of recent literary award winners")]
         public void News_PropertiesSetCorrectly_ReturnsExpectedValues(int id, string title, string content)
         {
-            // Arrange
             var created = DateTime.Now;
             var news = new News
             {
@@ -77,7 +66,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 Created = created
             };
 
-            // Act & Assert
             Assert.AreEqual(id, news.Id);
             Assert.AreEqual(title, news.Title);
             Assert.AreEqual(content, news.Content);
@@ -87,7 +75,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void News_Validation_InvalidWithMissingRequiredProperties()
         {
-            // Arrange
             var news = new News
             {
                 Id = 1
@@ -95,10 +82,8 @@ namespace BookDiary.Tests.UnitTests.Models
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(news);
 
-            // Act
             var isValid = Validator.TryValidateObject(news, validationContext, validationResults, true);
 
-            // Assert
             Assert.IsFalse(isValid);
             Assert.AreEqual(2, validationResults.Count);
             Assert.IsTrue(validationResults.Any(vr => vr.ErrorMessage == "Името е заядължително"));
@@ -108,7 +93,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void News_Validation_InvalidWithMissingTitle()
         {
-            // Arrange
             var news = new News
             {
                 Id = 1,
@@ -117,10 +101,8 @@ namespace BookDiary.Tests.UnitTests.Models
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(news);
 
-            // Act
             var isValid = Validator.TryValidateObject(news, validationContext, validationResults, true);
 
-            // Assert
             Assert.IsFalse(isValid);
             Assert.AreEqual(1, validationResults.Count);
             Assert.IsTrue(validationResults.Any(vr => vr.ErrorMessage == "Името е заядължително"));
@@ -129,7 +111,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void News_Validation_InvalidWithMissingContent()
         {
-            // Arrange
             var news = new News
             {
                 Id = 1,
@@ -138,10 +119,8 @@ namespace BookDiary.Tests.UnitTests.Models
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(news);
 
-            // Act
             var isValid = Validator.TryValidateObject(news, validationContext, validationResults, true);
 
-            // Assert
             Assert.IsFalse(isValid);
             Assert.AreEqual(1, validationResults.Count);
             Assert.IsTrue(validationResults.Any(vr => vr.ErrorMessage == "Полето е задължително"));
@@ -150,7 +129,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void News_Validation_ValidWithAllRequiredProperties()
         {
-            // Arrange
             var news = new News
             {
                 Id = 1,
@@ -160,10 +138,8 @@ namespace BookDiary.Tests.UnitTests.Models
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(news);
 
-            // Act
             var isValid = Validator.TryValidateObject(news, validationContext, validationResults, true);
 
-            // Assert
             Assert.IsTrue(isValid);
             Assert.IsEmpty(validationResults);
         }
@@ -171,20 +147,16 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void News_CreatedDateTimeIsAutomaticallySet_WhenNotExplicitlyProvided()
         {
-            // Arrange
             var beforeCreation = DateTime.Now.AddSeconds(-1);
 
-            // Act
             var news = new News
             {
                 Id = 1,
                 Title = "Test Title",
                 Content = "Test Content"
-                // Not setting Created explicitly
             };
             var afterCreation = DateTime.Now.AddSeconds(1);
 
-            // Assert
             Assert.That(news.Created, Is.GreaterThanOrEqualTo(beforeCreation));
             Assert.That(news.Created, Is.LessThanOrEqualTo(afterCreation));
         }
@@ -192,10 +164,8 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void News_CreatedDateTime_CanBeOverridden()
         {
-            // Arrange
             var specificDate = new DateTime(2023, 1, 1, 12, 0, 0);
 
-            // Act
             var news = new News
             {
                 Id = 1,
@@ -204,7 +174,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 Created = specificDate
             };
 
-            // Assert
             Assert.AreEqual(specificDate, news.Created);
         }
 
@@ -212,7 +181,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [TestCase("   ")]
         public void News_EmptyOrNullTitle_ShouldFailValidation(string invalidTitle)
         {
-            // Arrange
             var news = new News
             {
                 Id = 1,
@@ -222,10 +190,8 @@ namespace BookDiary.Tests.UnitTests.Models
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(news);
 
-            // Act
             var isValid = Validator.TryValidateObject(news, validationContext, validationResults, true);
 
-            // Assert
             Assert.IsFalse(isValid);
             Assert.IsTrue(validationResults.Any(vr => vr.ErrorMessage == "Името е заядължително"));
         }
@@ -234,7 +200,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [TestCase("   ")]
         public void News_EmptyOrNullContent_ShouldFailValidation(string invalidContent)
         {
-            // Arrange
             var news = new News
             {
                 Id = 1,
@@ -244,10 +209,8 @@ namespace BookDiary.Tests.UnitTests.Models
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(news);
 
-            // Act
             var isValid = Validator.TryValidateObject(news, validationContext, validationResults, true);
 
-            // Assert
             Assert.IsFalse(isValid);
             Assert.IsTrue(validationResults.Any(vr => vr.ErrorMessage == "Полето е задължително"));
         }

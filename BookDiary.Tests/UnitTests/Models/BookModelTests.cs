@@ -15,26 +15,20 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_IdProperty_ShouldHaveKeyAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Book).GetProperty("Id");
 
-            // Act
             var keyAttribute = propertyInfo.GetCustomAttributes(typeof(KeyAttribute), false).FirstOrDefault();
 
-            // Assert
             Assert.IsNotNull(keyAttribute, "Id property should have KeyAttribute");
         }
 
         [Test]
         public void Book_TitleProperty_ShouldHaveRequiredAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Book).GetProperty("Title");
 
-            // Act
             var requiredAttribute = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault() as RequiredAttribute;
 
-            // Assert
             Assert.IsNotNull(requiredAttribute, "Title property should have RequiredAttribute");
             Assert.AreEqual("Името е заядължително", requiredAttribute.ErrorMessage);
         }
@@ -42,13 +36,10 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_CoverImageURLProperty_ShouldHaveRequiredAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Book).GetProperty("CoverImageURL");
 
-            // Act
             var requiredAttribute = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault() as RequiredAttribute;
 
-            // Assert
             Assert.IsNotNull(requiredAttribute, "CoverImageURL property should have RequiredAttribute");
             Assert.AreEqual("Полето е задължително", requiredAttribute.ErrorMessage);
         }
@@ -56,13 +47,10 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_BookPagesProperty_ShouldHaveRequiredAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Book).GetProperty("BookPages");
 
-            // Act
             var requiredAttribute = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault() as RequiredAttribute;
 
-            // Assert
             Assert.IsNotNull(requiredAttribute, "BookPages property should have RequiredAttribute");
             Assert.AreEqual("Полето е задължително", requiredAttribute.ErrorMessage);
         }
@@ -70,13 +58,10 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_DescriptionProperty_ShouldHaveRequiredAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Book).GetProperty("Description");
 
-            // Act
             var requiredAttribute = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault() as RequiredAttribute;
 
-            // Assert
             Assert.IsNotNull(requiredAttribute, "Description property should have RequiredAttribute");
             Assert.AreEqual("Описанието е заядължително", requiredAttribute.ErrorMessage);
         }
@@ -84,13 +69,10 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_ChaptersProperty_ShouldHaveRequiredAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Book).GetProperty("Chapters");
 
-            // Act
             var requiredAttribute = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault() as RequiredAttribute;
 
-            // Assert
             Assert.IsNotNull(requiredAttribute, "Chapters property should have RequiredAttribute");
             Assert.AreEqual("Полето е задължително", requiredAttribute.ErrorMessage);
         }
@@ -98,13 +80,10 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_AuthorIdProperty_ShouldHaveForeignKeyAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Book).GetProperty("AuthorId");
 
-            // Act
             var foreignKeyAttribute = propertyInfo.GetCustomAttributes(typeof(ForeignKeyAttribute), false).FirstOrDefault() as ForeignKeyAttribute;
 
-            // Assert
             Assert.IsNotNull(foreignKeyAttribute, "AuthorId property should have ForeignKeyAttribute");
             Assert.AreEqual("Author", foreignKeyAttribute.Name);
         }
@@ -112,13 +91,10 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_SeriesIdProperty_ShouldHaveForeignKeyAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Book).GetProperty("SeriesId");
 
-            // Act
             var foreignKeyAttribute = propertyInfo.GetCustomAttributes(typeof(ForeignKeyAttribute), false).FirstOrDefault() as ForeignKeyAttribute;
 
-            // Assert
             Assert.IsNotNull(foreignKeyAttribute, "SeriesId property should have ForeignKeyAttribute");
             Assert.AreEqual("Series", foreignKeyAttribute.Name);
         }
@@ -126,13 +102,10 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_GenreIdProperty_ShouldHaveForeignKeyAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Book).GetProperty("GenreId");
 
-            // Act
             var foreignKeyAttribute = propertyInfo.GetCustomAttributes(typeof(ForeignKeyAttribute), false).FirstOrDefault() as ForeignKeyAttribute;
 
-            // Assert
             Assert.IsNotNull(foreignKeyAttribute, "GenreId property should have ForeignKeyAttribute");
             Assert.AreEqual("Genre", foreignKeyAttribute.Name);
         }
@@ -140,13 +113,10 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_PublishingHouseIdProperty_ShouldHaveForeignKeyAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Book).GetProperty("PublishingHouseId");
 
-            // Act
             var foreignKeyAttribute = propertyInfo.GetCustomAttributes(typeof(ForeignKeyAttribute), false).FirstOrDefault() as ForeignKeyAttribute;
 
-            // Assert
             Assert.IsNotNull(foreignKeyAttribute, "PublishingHouseId property should have ForeignKeyAttribute");
             Assert.AreEqual("PublishingHouse", foreignKeyAttribute.Name);
         }
@@ -154,13 +124,10 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_LanguageIdProperty_ShouldHaveForeignKeyAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Book).GetProperty("LanguageId");
 
-            // Act
             var foreignKeyAttribute = propertyInfo.GetCustomAttributes(typeof(ForeignKeyAttribute), false).FirstOrDefault() as ForeignKeyAttribute;
 
-            // Assert
             Assert.IsNotNull(foreignKeyAttribute, "LanguageId property should have ForeignKeyAttribute");
             Assert.AreEqual("Language", foreignKeyAttribute.Name);
         }
@@ -175,7 +142,6 @@ namespace BookDiary.Tests.UnitTests.Models
             int publishingHouseId, int languageId, int bookPages, string bookFormat,
             string description, int chapters)
         {
-            // Arrange
             var author = new Author { Id = authorId, Name = "Test Author" };
             var genre = new Genre { Id = genreId, Name = "Test Genre" };
             var publishingHouse = new PublishingHouse { Id = publishingHouseId, Name = "Test Publishing House" };
@@ -205,7 +171,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 ShelfBooks = new List<ShelfBook>()
             };
 
-            // Act & Assert
             Assert.AreEqual(id, book.Id);
             Assert.AreEqual(title, book.Title);
             Assert.AreEqual(authorId, book.AuthorId);
@@ -236,7 +201,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_SeriesProperty_CanBeNull()
         {
-            // Arrange
             var book = new Book
             {
                 Id = 1,
@@ -253,7 +217,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 Series = null
             };
 
-            // Act & Assert
             Assert.IsNull(book.SeriesId);
             Assert.IsNull(book.Series);
         }
@@ -261,7 +224,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_SeriesProperty_CanBeSet()
         {
-            // Arrange
             var series = new Series { Id = 1, Title = "Test Series", Description = "Test Description" };
             var book = new Book
             {
@@ -279,7 +241,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 Series = series
             };
 
-            // Act & Assert
             Assert.AreEqual(1, book.SeriesId);
             Assert.AreEqual(series, book.Series);
         }
@@ -287,7 +248,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_CommentsCollection_CanAddAndRemoveComments()
         {
-            // Arrange
             var book = new Book
             {
                 Id = 1,
@@ -306,19 +266,15 @@ namespace BookDiary.Tests.UnitTests.Models
             var comment1 = new Comment { Id = 1, BookId = 1, Content = "Great book!", Rating = 5 };
             var comment2 = new Comment { Id = 2, BookId = 1, Content = "Enjoyed it.", Rating = 4 };
 
-            // Act
             book.Comments.Add(comment1);
             book.Comments.Add(comment2);
 
-            // Assert
             Assert.AreEqual(2, book.Comments.Count);
             Assert.IsTrue(book.Comments.Contains(comment1));
             Assert.IsTrue(book.Comments.Contains(comment2));
 
-            // Act
             book.Comments.Remove(comment1);
 
-            // Assert
             Assert.AreEqual(1, book.Comments.Count);
             Assert.IsFalse(book.Comments.Contains(comment1));
             Assert.IsTrue(book.Comments.Contains(comment2));
@@ -327,7 +283,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_Validation_InvalidWithMissingRequiredProperties()
         {
-            // Arrange
             var book = new Book
             {
                 Id = 1,
@@ -339,12 +294,10 @@ namespace BookDiary.Tests.UnitTests.Models
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(book);
 
-            // Act
             var isValid = Validator.TryValidateObject(book, validationContext, validationResults, true);
 
-            // Assert
             Assert.IsFalse(isValid);
-            Assert.AreEqual(5, validationResults.Count); // Title, CoverImageURL, BookPages, Description, Chapters
+            Assert.AreEqual(5, validationResults.Count); 
             Assert.IsTrue(validationResults.Any(vr => vr.ErrorMessage == "Името е заядължително"));
             Assert.IsTrue(validationResults.Any(vr => vr.ErrorMessage == "Полето е задължително"));
             Assert.IsTrue(validationResults.Any(vr => vr.ErrorMessage == "Описанието е заядължително"));
@@ -353,7 +306,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_Validation_ValidWithAllRequiredProperties()
         {
-            // Arrange
             var book = new Book
             {
                 Id = 1,
@@ -370,10 +322,8 @@ namespace BookDiary.Tests.UnitTests.Models
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(book);
 
-            // Act
             var isValid = Validator.TryValidateObject(book, validationContext, validationResults, true);
 
-            // Assert
             Assert.IsTrue(isValid);
             Assert.IsEmpty(validationResults);
         }
@@ -382,7 +332,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [TestCase("   ")]
         public void Book_EmptyOrNullTitle_ShouldFailValidation(string invalidTitle)
         {
-            // Arrange
             var book = new Book
             {
                 Id = 1,
@@ -399,10 +348,8 @@ namespace BookDiary.Tests.UnitTests.Models
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(book);
 
-            // Act
             var isValid = Validator.TryValidateObject(book, validationContext, validationResults, true);
 
-            // Assert
             Assert.IsFalse(isValid);
             Assert.IsTrue(validationResults.Any(vr => vr.ErrorMessage == "Името е заядължително"));
         }
@@ -412,10 +359,8 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_DefaultValues_ShouldBeSetCorrectly()
         {
-            // Arrange
             var book = new Book();
 
-            // Act & Assert
             Assert.AreEqual(0, book.BookPages);
             Assert.AreEqual(0, book.Chapters);
         }
@@ -423,7 +368,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Book_MultipleCollections_ShouldWorkCorrectly()
         {
-            // Arrange
             var book = new Book
             {
                 Id = 1,
@@ -443,7 +387,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 ShelfBooks = new List<ShelfBook>()
             };
 
-            // Add items to multiple collections
             var comment = new Comment { Id = 1, BookId = 1, Content = "Great book!", Rating = 5 };
             var bookTag = new BookTag { BookId = 1, TagId = 1 };
             var shelfBook = new ShelfBook { BookId = 1, ShelfId = 1 };
@@ -452,7 +395,6 @@ namespace BookDiary.Tests.UnitTests.Models
             book.BookTags.Add(bookTag);
             book.ShelfBooks.Add(shelfBook);
 
-            // Act & Assert
             Assert.AreEqual(1, book.Comments.Count);
             Assert.AreEqual(1, book.BookTags.Count);
             Assert.AreEqual(1, book.ShelfBooks.Count);

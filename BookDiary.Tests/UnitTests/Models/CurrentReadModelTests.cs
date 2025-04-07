@@ -14,10 +14,8 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Constructor_Default_PropertiesInitializedCorrectly()
         {
-            // Arrange & Act
             var currentRead = new CurrentRead();
 
-            // Assert
             Assert.That(currentRead.Id, Is.EqualTo(0));
             Assert.That(currentRead.BookId, Is.EqualTo(0));
             Assert.That(currentRead.Book, Is.Null);
@@ -32,7 +30,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [TestCase(3, 15, 100, "user789")]
         public void Properties_SetAndGet_ValuesMatchExpected(int id, int bookId, int currentPage, string userId)
         {
-            // Arrange
             var currentRead = new CurrentRead
             {
                 Id = id,
@@ -41,7 +38,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 UserId = userId
             };
 
-            // Act & Assert
             Assert.That(currentRead.Id, Is.EqualTo(id));
             Assert.That(currentRead.BookId, Is.EqualTo(bookId));
             Assert.That(currentRead.CurrentPage, Is.EqualTo(currentPage));
@@ -51,7 +47,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void NavigationProperties_SetAndGet_ValuesMatchExpected()
         {
-            // Arrange
             var book = new Book { Id = 1, Title = "Test Book" };
             var user = new User { Id = "user123", UserName = "TestUser" };
 
@@ -61,7 +56,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 User = user
             };
 
-            // Act & Assert
             Assert.That(currentRead.Book, Is.SameAs(book));
             Assert.That(currentRead.User, Is.SameAs(user));
         }
@@ -71,18 +65,13 @@ namespace BookDiary.Tests.UnitTests.Models
         [TestCase(-100)]
         public void CurrentPage_NegativeValue_ThrowsValidationException(int invalidPage)
         {
-            // Arrange
             var currentRead = new CurrentRead { CurrentPage = invalidPage };
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(currentRead);
 
-            // Act
             var isValid = Validator.TryValidateObject(currentRead, validationContext, validationResults, true);
 
-            // Assert
             Assert.That(isValid, Is.False);
-            // Note: This test assumes you'll add a Range validation attribute to CurrentPage
-            // If you haven't added validation attributes, this test will fail
         }
 
         [Test]
@@ -91,7 +80,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [TestCase(1, 1, "")]
         public void RequiredProperties_MissingValues_ValidationFails(int bookId, int currentPage, string userId)
         {
-            // Arrange
             var currentRead = new CurrentRead
             {
                 BookId = bookId,
@@ -99,38 +87,31 @@ namespace BookDiary.Tests.UnitTests.Models
                 UserId = userId
             };
 
-            // Act & Assert
             var validationResults = ValidateModel(currentRead);
 
-            // Note: This test assumes you'll add Required validation attributes
-            // If you haven't added validation attributes, this test will fail
             Assert.That(validationResults.Count, Is.GreaterThan(0));
         }
 
         [Test]
         public void ForeignKeysAndNavigation_ManuallySetBoth_ValuesMatch()
         {
-            // Arrange
             var book = new Book { Id = 5 };
             var user = new User { Id = "user123" };
 
             var currentRead = new CurrentRead
             {
-                // Set both the navigation property and the foreign key
                 Book = book,
                 BookId = book.Id,
                 User = user,
                 UserId = user.Id
             };
 
-            // Act & Assert
             Assert.That(currentRead.BookId, Is.EqualTo(book.Id));
             Assert.That(currentRead.UserId, Is.EqualTo(user.Id));
             Assert.That(currentRead.Book, Is.SameAs(book));
             Assert.That(currentRead.User, Is.SameAs(user));
         }
 
-        // Helper method to validate model
         private IList<ValidationResult> ValidateModel(object model)
         {
             var validationResults = new List<ValidationResult>();

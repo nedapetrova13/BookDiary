@@ -40,7 +40,7 @@ namespace BookDiary.Tests.UnitTests.Services
         [Test]
         public void GetAll_ShouldReturnAllSeries()
         {
-             var seriesList = new List<Series>
+            var seriesList = new List<Series>
             {
                 new Series { Id = 1, Title = "Harry Potter" },
                 new Series { Id = 2, Title = "Lord of the Rings" },
@@ -117,10 +117,10 @@ namespace BookDiary.Tests.UnitTests.Services
         [Test]
         public void Constructor_WithNullRepository_ShouldNotThrowException()
         {
-            
+
             Assert.DoesNotThrow(() => new SeriesService(null));
 
-            
+
         }
 
         [Test]
@@ -189,6 +189,7 @@ namespace BookDiary.Tests.UnitTests.Services
             await _seriesService.Update(updatedSeries);
 
             await _seriesService.Delete(series.Id);
-=        }
+       }
+    
     }
 }

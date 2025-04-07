@@ -14,10 +14,8 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Constructor_Default_PropertiesInitializedCorrectly()
         {
-            // Arrange & Act
             var notes = new Notes();
 
-            // Assert
             Assert.That(notes.Id, Is.EqualTo(0));
             Assert.That(notes.UserId, Is.Null);
             Assert.That(notes.User, Is.Null);
@@ -35,7 +33,6 @@ namespace BookDiary.Tests.UnitTests.Models
         public void Properties_SetAndGet_ValuesMatchExpected(
             int id, string userId, int bookChapter, string noteContent, string title, int bookId)
         {
-            // Arrange
             var notes = new Notes
             {
                 Id = id,
@@ -46,7 +43,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 BookId = bookId
             };
 
-            // Act & Assert
             Assert.That(notes.Id, Is.EqualTo(id));
             Assert.That(notes.UserId, Is.EqualTo(userId));
             Assert.That(notes.BookChapter, Is.EqualTo(bookChapter));
@@ -58,7 +54,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void NavigationProperties_SetAndGet_ValuesMatchExpected()
         {
-            // Arrange
             var book = new Book { Id = 1, Title = "Test Book" };
             var user = new User { Id = "user123", UserName = "TestUser" };
 
@@ -68,7 +63,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 User = user
             };
 
-            // Act & Assert
             Assert.That(notes.Book, Is.SameAs(book));
             Assert.That(notes.User, Is.SameAs(user));
         }
@@ -81,7 +75,6 @@ namespace BookDiary.Tests.UnitTests.Models
         public void RequiredFields_MissingValues_ValidationFails(
             string userId, int bookChapter, string noteContent, string title, int bookId)
         {
-            // Arrange
             var notes = new Notes
             {
                 UserId = userId,
@@ -91,13 +84,10 @@ namespace BookDiary.Tests.UnitTests.Models
                 BookId = bookId
             };
 
-            // Act
             var validationResults = ValidateModel(notes);
 
-            // Assert
             Assert.That(validationResults.Count, Is.GreaterThan(0));
 
-            // Check for specific error messages
             if (string.IsNullOrEmpty(noteContent))
             {
                 Assert.That(validationResults.Any(vr => vr.ErrorMessage == "Полето е задължително"), Is.True);
@@ -113,7 +103,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [TestCase(0)]
         public void BookChapter_ZeroOrNegative_ShouldFail(int invalidChapter)
         {
-            // Arrange
             var notes = new Notes
             {
                 UserId = "user123",
@@ -123,13 +112,8 @@ namespace BookDiary.Tests.UnitTests.Models
                 BookId = 1
             };
 
-            // Act
             var validationResults = ValidateModel(notes);
 
-            // Assert
-            // This test will only pass if you add a Range validation attribute to BookChapter
-            // For example: [Range(1, int.MaxValue, ErrorMessage = "Главата трябва да е положително число")]
-            // If you haven't added such validation, this test will fail
             Assert.That(validationResults.Any(v => v.MemberNames.Contains("BookChapter")), Is.True,
                 "BookChapter should have validation errors for zero or negative values");
         }
@@ -137,27 +121,23 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void ForeignKeysAndNavigation_ManuallySetBoth_ValuesMatch()
         {
-            // Arrange
             var book = new Book { Id = 5 };
             var user = new User { Id = "user123" };
 
             var notes = new Notes
             {
-                // Explicitly set both navigation properties and foreign keys
                 Book = book,
                 BookId = book.Id,
                 User = user,
                 UserId = user.Id
             };
 
-            // Act & Assert
             Assert.That(notes.BookId, Is.EqualTo(book.Id));
             Assert.That(notes.UserId, Is.EqualTo(user.Id));
             Assert.That(notes.Book, Is.SameAs(book));
             Assert.That(notes.User, Is.SameAs(user));
         }
 
-        // Helper method to validate model
         private IList<ValidationResult> ValidateModel(object model)
         {
             var validationResults = new List<ValidationResult>();

@@ -118,7 +118,8 @@ namespace BookDiary.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
 
             CurrentRead currentread = await  _currentReadService.Get(x => x.BookId == bookid && x.UserId == currentUser.Id);
-            var maxpages = currentread.Book.BookPages;
+            Book book = await _bookService.GetById(currentread.BookId);
+            var maxpages = book.BookPages;
             if (pages < 0 || pages>maxpages)
             {
                 TempData["error"] = "книгата вече е прочетена";

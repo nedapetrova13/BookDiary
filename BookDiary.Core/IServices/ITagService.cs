@@ -9,6 +9,5 @@ namespace BookDiary.Core.IServices
 {
     public interface ITagService:IService<Tag>
     {
-        //Task<IEnumerable<Tag>> GetAllTags();
     }
 }

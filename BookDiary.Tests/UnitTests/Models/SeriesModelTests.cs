@@ -12,26 +12,20 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Series_IdProperty_ShouldHaveKeyAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Series).GetProperty("Id");
 
-            // Act
             var keyAttribute = propertyInfo.GetCustomAttributes(typeof(KeyAttribute), false).FirstOrDefault();
 
-            // Assert
             Assert.IsNotNull(keyAttribute, "Id property should have KeyAttribute");
         }
 
         [Test]
         public void Series_TitleProperty_ShouldHaveRequiredAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Series).GetProperty("Title");
 
-            // Act
             var requiredAttribute = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault() as RequiredAttribute;
 
-            // Assert
             Assert.IsNotNull(requiredAttribute, "Title property should have RequiredAttribute");
             Assert.AreEqual("Името е задължително", requiredAttribute.ErrorMessage);
         }
@@ -39,13 +33,10 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Series_DescriptionProperty_ShouldHaveRequiredAttribute()
         {
-            // Arrange
             var propertyInfo = typeof(Series).GetProperty("Description");
 
-            // Act
             var requiredAttribute = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault() as RequiredAttribute;
 
-            // Assert
             Assert.IsNotNull(requiredAttribute, "Description property should have RequiredAttribute");
             Assert.AreEqual("Полето е задължително", requiredAttribute.ErrorMessage);
         }
@@ -55,7 +46,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [TestCase(3, "Game of Thrones", "A fantasy series by George R.R. Martin")]
         public void Series_PropertiesSetCorrectly_ReturnsExpectedValues(int id, string title, string description)
         {
-            // Arrange
             var series = new Series
             {
                 Id = id,
@@ -64,7 +54,6 @@ namespace BookDiary.Tests.UnitTests.Models
                 Books = new List<Book>()
             };
 
-            // Act & Assert
             Assert.AreEqual(id, series.Id);
             Assert.AreEqual(title, series.Title);
             Assert.AreEqual(description, series.Description);
@@ -75,7 +64,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Series_BooksCollection_CanAddAndRemoveBooks()
         {
-            // Arrange
             var series = new Series
             {
                 Id = 1,
@@ -87,19 +75,16 @@ namespace BookDiary.Tests.UnitTests.Models
             var book1 = new Book { Id = 1, Title = "Book 1" };
             var book2 = new Book { Id = 2, Title = "Book 2" };
 
-            // Act
             series.Books.Add(book1);
             series.Books.Add(book2);
 
-            // Assert
             Assert.AreEqual(2, series.Books.Count);
             Assert.IsTrue(series.Books.Contains(book1));
             Assert.IsTrue(series.Books.Contains(book2));
 
-            // Act
+            
             series.Books.Remove(book1);
 
-            // Assert
             Assert.AreEqual(1, series.Books.Count);
             Assert.IsFalse(series.Books.Contains(book1));
             Assert.IsTrue(series.Books.Contains(book2));
@@ -108,7 +93,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Series_Validation_InvalidWithMissingRequiredProperties()
         {
-            // Arrange
             var series = new Series
             {
                 Id = 1
@@ -116,10 +100,8 @@ namespace BookDiary.Tests.UnitTests.Models
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(series);
 
-            // Act
             var isValid = Validator.TryValidateObject(series, validationContext, validationResults, true);
 
-            // Assert
             Assert.IsFalse(isValid);
             Assert.AreEqual(2, validationResults.Count);
             Assert.IsTrue(validationResults.Any(vr => vr.ErrorMessage == "Името е задължително"));
@@ -129,7 +111,6 @@ namespace BookDiary.Tests.UnitTests.Models
         [Test]
         public void Series_Validation_ValidWithAllRequiredProperties()
         {
-            // Arrange
             var series = new Series
             {
                 Id = 1,
@@ -140,10 +121,8 @@ namespace BookDiary.Tests.UnitTests.Models
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(series);
 
-            // Act
             var isValid = Validator.TryValidateObject(series, validationContext, validationResults, true);
 
-            // Assert
             Assert.IsTrue(isValid);
             Assert.IsEmpty(validationResults);
         }

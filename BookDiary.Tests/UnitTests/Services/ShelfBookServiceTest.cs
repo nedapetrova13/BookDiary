@@ -166,7 +166,7 @@ namespace BookDiary.Tests.UnitTests.Services
                 .Returns(Task.CompletedTask);
 
             await _shelfBookService.Add(shelfBook);
-\
+
             var foundShelfBooks = await _shelfBookService.Find(sb => sb.BookId == bookId && sb.ShelfId == shelfId);
             Assert.That(foundShelfBooks.Count, Is.EqualTo(1));
             Assert.That(foundShelfBooks[0], Is.EqualTo(shelfBook));

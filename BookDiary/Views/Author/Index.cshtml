@@ -20,9 +20,7 @@
             <div class="image-container">
                 <img src="@au.ProfilePictureURL" alt="Author Image">
                 <div class="overlay">
-                    <div class="author-info">
-                        <h3>@au.Name</h3>
-                    </div>
+                    
                 </div>
             </div>
             <div class="card-content">
@@ -93,7 +91,6 @@
         transform: scale(1.05);
     }
 
-    /* Overlay effect on hover */
     .overlay {
         position: absolute;
         top: 0;
@@ -129,7 +126,6 @@
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
 
-    /* Card content styling */
     .card-content {
         padding: 1rem;
         text-align: center;
@@ -148,7 +144,6 @@
         white-space: nowrap;
     }
 
-    /* Button styling */
     .view-more-btn {
         padding: 0.7rem 1rem;
         background-color: var(--primary-color);
@@ -173,7 +168,6 @@
             transform: translateY(0);
         }
 
-    /* Add responsive design for smaller screens */
     media (max-width: 768px) {
         .authors-container
 
@@ -219,7 +213,6 @@
 
     }
 
-    /* Optional: Add animation-on-scroll library support */
     [data-aos] {
         opacity: 0;
         transition-property: opacity, transform;
@@ -230,9 +223,7 @@
         }
 </style>
 
-<!-- Optional: Add AOS (Animation On Scroll) library if you want staggered animations -->
 <script>
-    // Check if AOS is already included, if not, don't worry about it
     document.addEventListener('DOMContentLoaded', function() {
         if (typeof AOS !== 'undefined') {
             AOS.init({
@@ -241,7 +232,6 @@
                 once: true
             });
         } else {
-            // Remove the data-aos attributes as they're not needed
             document.querySelectorAll('[data-aos]').forEach(element => {
                 element.removeAttribute('data-aos');
             });

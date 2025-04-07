@@ -2,7 +2,6 @@
 
 <div class="container py-4">
     <div class="row">
-        <!-- Shelf Information Column -->
         <div class="col-md-4">
             <div class="card border-0 shadow-lg mb-4">
                 <div class="card-header bg-gradient text-white p-4" style="background-color: #8B6B4F;">
@@ -104,7 +103,6 @@
         color: #5C4033;
     }
 
-    /* Bookshelf styling */
     .bookshelf {
         background-color: #8B6B4F;
         border-radius: 8px;
@@ -118,11 +116,11 @@
         border-bottom: 20px solid #5C4033;
     }
 
-    /* Book spine styling */
+   
     .book-spine {
-        height: 230px; /* Increased height */
-        width: 55px; /* Increased width */
-        margin: 0 5px; /* More spacing between books */
+        height: 230px; 
+        width: 55px;
+        margin: 0 5px; 
         background-color: #DEB887;
         border-radius: 4px 0 0 4px;
         box-shadow: -3px 3px 7px rgba(0, 0, 0, 0.2);
@@ -147,10 +145,10 @@
 
     .spine-text {
         position: absolute;
-        width: 230px; /* Match height of spine */
-        height: 45px; /* More space for text */
-        top: 95px; /* Adjusted for new dimensions */
-        left: -90px; /* Adjusted for new dimensions */
+        width: 230px; 
+        height: 45px; 
+        top: 95px;
+        left: -90px; 
         transform: rotate(90deg);
         display: flex;
         flex-direction: column;
@@ -160,7 +158,7 @@
     }
 
     .spine-title {
-        font-size: 14px; /* Larger font */
+        font-size: 14px; 
         font-weight: bold;
         color: #5C4033;
         white-space: nowrap;
@@ -170,7 +168,7 @@
     }
 
     .spine-author {
-        font-size: 11px; /* Larger font */
+        font-size: 11px; 
         font-style: italic;
         color: #8B4513;
         white-space: nowrap;
@@ -178,7 +176,6 @@
         text-overflow: ellipsis;
     }
 
-    /* Book preview styling */
     .book-preview-container {
         display: none;
         margin-bottom: 20px;
@@ -239,7 +236,6 @@
         margin-bottom: 20px;
     }
 
-    /* Button styling */
     .btn-danger {
         background-color: #dc3545;
         border-color: #dc3545;
@@ -253,7 +249,7 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-    /* For mobile view */
+ 
     media (max-width: 768px) {
         .bookshelf
 
@@ -296,16 +292,13 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            // Add animation for page load
             $(".card").hide().fadeIn(500);
             $(".book-spine").each(function(index) {
                 $(this).hide().delay(50 * index).fadeIn(300);
 
-                // Assign random heights to book spines for visual variety
                 var randomHeight = Math.floor(Math.random() * 40) + 200; // 200-240px
                 $(this).css('height', randomHeight + 'px');
 
-                // Assign random colors to book spines
                 const colors = [
                     '#DEB887', '#D2B48C', '#CD853F', '#C19A6B', '#E9C699',
                     '#D3A77D', '#B88A5D', '#AE784F', '#D4985E', '#BC8F8F'
@@ -314,26 +307,20 @@
                 $(this).css('background-color', randomColor);
             });
 
-            // Book spine click handler
             $(".book-spine").click(function() {
-                // Remove active class from all spines
                 $(".book-spine").removeClass("active");
-                // Add active class to the clicked spine
                 $(this).addClass("active");
 
-                // Get book data
                 const title = $(this).data("title");
                 const author = $(this).data("author");
                 const imageUrl = $(this).data("image");
                 const bookId = $(this).data("id");
 
-                // Update preview content
                 $(".preview-title").text(title);
                 $(".preview-author").text(author);
                 $(".view-book-btn").attr("href", "/Book/Info/" + bookId);
                 $(".book-id-input").val(bookId);
 
-                // Handle cover image
                 if (imageUrl && imageUrl !== "null" && imageUrl !== "") {
                     $(".cover-image").attr("src", imageUrl).show();
                     $(".cover-fallback").hide();
@@ -341,31 +328,25 @@
                     $(".cover-image").hide();
                     $(".cover-fallback").css("display", "flex");
 
-                    // Create a fallback with the first letter
                     const firstLetter = title.charAt(0).toUpperCase();
                     $(".cover-initial").text(firstLetter);
 
-                    // Set the background color based on the first letter
                     $(".cover-fallback").css("background-color", getColorFromLetter(firstLetter));
                 }
 
-                // Show the preview container
                 $(".book-preview-container").fadeIn(300);
             });
 
-            // Select the first book by default
             if ($(".book-spine").length > 0) {
                 $(".book-spine").first().click();
             }
 
-            // Function to get a color based on the first letter of the book title
             function getColorFromLetter(letter) {
                 const colors = [
                     '#8B4513', '#A0522D', '#D2B48C', '#DEB887', '#CD853F',
                     '#C19A6B', '#836953', '#6B4226', '#BC8F8F'
                 ];
 
-                // Get a consistent color based on the letter
                 const index = letter.charCodeAt(0) % colors.length;
                 return colors[index];
             }

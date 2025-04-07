@@ -9,7 +9,6 @@ namespace BookDiary.Core.IServices
 {
     public interface ICurrentReadService:IService<CurrentRead>
     {
-        //ask<IEnumerable<CurrentRead>> GetAllCurrentReads();
         Task DeleteCurrentRead(int bookid, string userid);
 
     }
