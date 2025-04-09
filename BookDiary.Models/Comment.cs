@@ -10,6 +10,8 @@ namespace BookDiary.Models
 {
     public class Comment
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
         [Key]
         public int Id {  get; set; }
 

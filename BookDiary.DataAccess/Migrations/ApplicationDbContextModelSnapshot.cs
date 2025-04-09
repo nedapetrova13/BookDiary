@@ -154,7 +154,10 @@ namespace BookDiary.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
@@ -687,7 +690,7 @@ namespace BookDiary.DataAccess.Migrations
                     b.HasOne("BookDiary.Models.User", "User")
                         .WithMany("MyComments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");

@@ -447,7 +447,7 @@ namespace BookDiary.Controllers
                 TempData["error"] = "Вече сте коментирали тази книга!";
                 return RedirectToAction("Info", new { bookId = comment.BookId });
             }
-            if (comment.BookId == 0 || comment.UserId == null || comment.Content == null || comment.Rating == 0)
+            if (comment.BookId == 0 || comment.Content == null || comment.Rating == 0)
             {
                 TempData["error"] = "Невалидни данни";
                 return RedirectToAction("Info", new { bookId = comment.BookId });

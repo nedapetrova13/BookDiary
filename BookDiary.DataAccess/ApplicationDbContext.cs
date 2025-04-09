@@ -131,11 +131,7 @@
                 builder.Entity<Comment>()
                         .HasKey(x => new { x.UserId, x.BookId });
 
-                builder.Entity<Comment>()
-                    .HasOne(x => x.User)
-                    .WithMany(x => x.MyComments)
-                    .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                
                 builder.Entity<Comment>()
                     .HasOne(x => x.Book)
                     .WithMany(x => x.Comments)
