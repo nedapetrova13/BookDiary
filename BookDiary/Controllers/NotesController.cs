@@ -37,7 +37,7 @@ namespace BookDiary.Controllers
         public async Task<IActionResult> Add(CreateNoteViewModel note)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            if (note.UserId == null || note.BookId == 0 || note.BookChapter <= 0 || note.NoteContent == null || note.Title == null)
+            if ( note.BookId == 0 || note.BookChapter <= 0 || note.NoteContent == null || note.Title == null)
             {
                 TempData["error"] = "Невалидни данни";
                 return View(note);

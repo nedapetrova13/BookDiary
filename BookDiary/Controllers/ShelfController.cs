@@ -208,7 +208,7 @@ namespace BookDiary.Controllers
             }
             else
             {
-                bool isExists = _shelfService.GetAll().Where(x => x.Name == scvm.Name && x.UserId == currentUser.Id).Any();
+                bool isExists = _shelfService.GetAll().Where(x => x.Name == scvm.Name && x.UserId == currentUser.Id && x.Description==scvm.Description).Any();
                 if (!isExists)
                 {
                     var model = new Shelf

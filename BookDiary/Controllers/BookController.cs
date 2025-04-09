@@ -413,8 +413,8 @@ namespace BookDiary.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBookToShelf(int bookid, int shelfId)
         {
-            var book = _bookService.GetById(bookid);
-            var shelf = _shelfService.GetById(shelfId);
+            var book = await _bookService.GetById(bookid);
+            var shelf = await _shelfService.GetById(shelfId);
             var bs = new ShelfBook
             {
                 BookId = bookid,
