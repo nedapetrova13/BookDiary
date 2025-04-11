@@ -11,7 +11,7 @@ namespace BookDiary.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required(ErrorMessage = "Името е заядължително")]
+        [Required(ErrorMessage = "Името е задължително")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Годината е задължителнa")]
         public int YearFounded { get; set; }

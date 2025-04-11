@@ -41,15 +41,15 @@ namespace BookDiary.Controllers
 
             return View(viewModelList);
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Add()
         {
             var model = new AuthorCreateViewModel();
             return View(model);
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Add(AuthorCreateViewModel acvm)
         {
@@ -86,6 +86,7 @@ namespace BookDiary.Controllers
             }
             return RedirectToAction("Index");
         }
+
         [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Edit(int id)
@@ -144,6 +145,7 @@ namespace BookDiary.Controllers
                
 
         }
+
         [Authorize(Roles = "Admin")]
 
         [HttpPost]
@@ -152,6 +154,7 @@ namespace BookDiary.Controllers
             await _authorService.Delete(id);
             return RedirectToAction("Index");
         }
+
         public async Task<IActionResult> Info(string authorName)
         {
             var authormodel = await _authorService.Get(x => x.Name == authorName);
