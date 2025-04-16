@@ -118,9 +118,7 @@ namespace BookDiary.Controllers
             }
             else
             {
-                bool isExists = _authorService.GetAll().Where(x => x.Name == aevm.Name).Any();
-                if (!isExists)
-                {
+                
                     var author = new Author
                     {
                         Id = aevm.Id,
@@ -134,13 +132,8 @@ namespace BookDiary.Controllers
                     };
                     await _authorService.Update(author);
                     return RedirectToAction("Index");
-                }
-                else
-                {
-                    TempData["error"] = "Вече съществува автор с такова име";
-
-                    return View(aevm);
-                }
+                
+               
             }
                
 
